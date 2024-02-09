@@ -106,7 +106,7 @@ class TestCoasterVehicle:
     def test_roll(self):
         """
         Drive out the roll calculation.
-        First triangle is not vertical.
+        First data triangle is not vertical.
         Correct angle is 16.1 degrees counterclockwise as shown.
         """
         back, up, front = fetch(tilt_45, 0)
