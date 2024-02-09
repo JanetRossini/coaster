@@ -1,3 +1,5 @@
+from math import sqrt
+
 import pytest
 
 from v_vector import Vector
@@ -17,6 +19,11 @@ class TestVMathVector:
         v2 = Vector((10, 20, 30))
         sum = v1 + v2
         assert sum == Vector((11, 22, 33))
+
+    def test_vector_length(self):
+        v = Vector((1, 2, 3))
+        length_squared = 1 * 1 + 2 * 2 + 3 * 3
+        assert v.length*v.length == pytest.approx(length_squared, abs=0.0001)
 
     def test_vector_sub_and_neg(self):
         v1 = Vector((1, 2, 3))
