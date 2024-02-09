@@ -253,6 +253,15 @@ class TestCoasterVehicle:
         # writer.make_output()
         assert False
 
+    def test_big_string(self):
+        program = """
+//LSD_500_0
+get_data() {
+   // do something;
+}
+"""
+        assert program == "\n//LSD_500_0\nget_data() {\n   // do something;\n}\n"
+
 
 class Co:
     def __init__(self, vector):
