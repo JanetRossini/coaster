@@ -381,10 +381,3 @@ default {
 """
 
 # VtFileWriter ends here
-
-
-
-
-
-
-
