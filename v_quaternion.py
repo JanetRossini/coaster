@@ -1,5 +1,4 @@
 from math import sin, cos, acos, sqrt
-
 from v_vector import Vector
 
 """

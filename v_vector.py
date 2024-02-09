@@ -4,6 +4,8 @@ from math import sqrt
 class Vector:
     def __init__(self, seq):
         self.seq = tuple(seq)
+        if len(self.seq) != 3:
+            raise TypeError('only 3D Vectors supported.')
 
     def __repr__(self):
         return f"Vector({self.seq})"

@@ -14,6 +14,10 @@ class TestVMathVector:
         assert v1 == v2
         assert v1 != v3
 
+    def test_vector_size(self):
+        with pytest.raises(TypeError) as info:
+            v1 = Vector((1, 2))
+
     def test_vector_add(self):
         v1 = Vector((1, 2, 3))
         v2 = Vector((10, 20, 30))
