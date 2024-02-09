@@ -273,7 +273,7 @@ get_data() {
         size = 4
         writer = VtFileWriter(verts, filepath, "test", size)
         writer.write_files()
-        # writer.make_output()
+        # writer.make_output()  # uncomment to look at things
         # assert False
 
 
