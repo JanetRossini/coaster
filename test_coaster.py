@@ -8,6 +8,26 @@ from vehicle import Vehicle
 
 
 class TestCoasterVehicle:
+    """
+    This is the sequence of tests I wrote, one at a time,
+    during the creation of the Vehicle class. Each one
+    got me a step closer to what I wanted.
+
+    It's worth noting that I have about a million lines
+    of experimentation and nearly-working tests and code
+    in another project. When I was sure I could get it right,
+    I created this project to provide a decent package for
+    what we need.
+
+    I would not usually do all this commentary because my
+    partner or team would be sitting together when we created
+    all this, so they'd know what had happened. The comments
+    can be ignored, or might raise questions or provide ideas
+    about how I work.
+
+    Basically, write one test to show that some idea works,
+    make it work, repeat with another test.
+    """
 
     def test_hookup(self):
         """
@@ -62,12 +82,18 @@ class TestCoasterVehicle:
         assert yaw_removed.forward.y == pytest.approx(0, abs=0.001)
 
     def test_vehicle_pitch(self):
+        """
+        Same thing, for pitch
+        """
         back, up, front = fetch(tilt_45, 0)
         vehicle = Vehicle(back, up, front)
         pitch_removed = vehicle._new_vehicle_without_pitch()
         assert pitch_removed.forward.z == pytest.approx(0, abs=0.001)
 
     def test_vehicle_with_roll_only(self):
+        """
+        Drive out combining yaw and pitch to return roll only.
+        """
         back, up, front = fetch(tilt_45, 0)
         vehicle = Vehicle(back, up, front)
         roll_only = vehicle._new_vehicle_with_roll_only()
@@ -75,12 +101,18 @@ class TestCoasterVehicle:
         assert roll_only.forward.z == pytest.approx(0, abs=0.001)
 
     def test_roll(self):
+        """
+        Drive out the roll calculation.
+        """
         back, up, front = fetch(tilt_45, 0)
         vehicle = Vehicle(back, up, front)
         roll_degrees = vehicle.roll_degrees()
         assert roll_degrees == pytest.approx(16.1, abs=0.1)
 
     def test_all_roll(self):
+        """
+        Grand finale, all values are -45 apart, starting oddly.
+        """
         prior = 0
         print()
         for i in range(0,9):
