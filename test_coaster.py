@@ -252,6 +252,11 @@ get_data() {
 """
         assert program == "\n//LSD_500_0\nget_data() {\n   // do something;\n}\n"
 
+    def test_format(self):
+        file_number = 3
+        script_number = f"integer SCRIPT_NUMBER = {file_number};\n"
+        assert script_number == "integer SCRIPT_NUMBER = 3;\n"
+
     def test_write_files(self):
         vectors = tilt_45
         verts = [Co(vector) for vector in vectors]
@@ -288,21 +293,27 @@ class VtFileWriter:
             start = file_number*self.size
             end = (file_number+1)*self.size
             lines = all_lines[start:end]
-            name = [self.base_name, str(self.size), str(file_number)]
+            name = [self.base_name, str(file_number)]
             file_name = "_".join(name) + ".lsl"
             full_path = os.path.join(self.path, file_name)
             with open(full_path, "w") as file:
-                self.write_one_file(file_name, lines, start, file)
+                self.write_one_file(file_name, file_number, lines, start, file)
                 print(f"File was written to {full_path}\n")
 
-    def write_one_file(self, file_name, lines, start, file):
+    def write_one_file(self, file_name, file_number, lines, start, file):
         from datetime import datetime
         now = datetime.now()
-        time_stamp = "// " + file_name + "\n// " + now.strftime("%Y-%m-%d %H:%M:%S")
-        file.write(time_stamp)
-        file.write(self.part_1)
+        file.write(f"// {file_name}\n")
+        time = now.strftime("%Y-%m-%d %H:%M:%S")
+        file.write(f"// {time}\n")
+        file.write("//     created by VtFileWriter\n")
+        file.write("//     JR 20240113\n\n")
+        file.write(f"integer SCRIPT_NUMBER = {file_number};\n")
+        file.write(f"integer CHUNK_SIZE = {self.size};\n\n")
+        file.write("list data = [\n")
         text = "\n,".join(lines)
         file.write(text)
+        file.write("\n];\n")
         file.write(self.part_2)
 
     @staticmethod
@@ -316,27 +327,7 @@ class VtFileWriter:
             lines.append(output)
         return lines
 
-    part_1 = """
-
-// created by Python: VtFileWriter
-// JR 20240112
-
-list data = [ // end of part 1
-"""
-
     part_2 = """
-]; // beginning of part 2
-
-integer CHUNK_SIZE = 0;
-integer SCRIPT_NUMBER = -1;
-
-get_parameters() {
-    string name = llGetScriptName();
-    list facts = llParseString2List(name, ["_"], []);
-    CHUNK_SIZE = llList2Integer(facts, 1);
-    SCRIPT_NUMBER = llList2Integer(facts, 2);
-}
-
 write_data() {
     integer limit = llGetListLength(data);
     integer out_key = CHUNK_SIZE*SCRIPT_NUMBER;
@@ -355,7 +346,6 @@ default {
     }
 
     state_entry() {
-        get_parameters();
         if (SCRIPT_NUMBER == 0) {
             llLinksetDataReset();
             write_data();

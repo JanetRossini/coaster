@@ -329,55 +329,87 @@ class RCG_OT_Exp_Banked_path(Operator):
 
 class VtFileWriter:
     def __init__(self, vertices, path, base_name, size):
-        self.verts = vertices
+        self.vertices = vertices
         self.path = path
         self.base_name = base_name
         self.size = size
 
     def write_files(self):
-        triples = [self.verts[i:i + 3] for i in range(0, len(self.verts) - 1, 2)]
+        coords = tuple(v.co for v in self.vertices)
+        triples = tuple(coords[i:i + 3] for i in range(0, len(coords) - 1, 2))
+        all_lines = self.make_lines(triples)
         count = ceil(len(triples)/self.size)
-        for i in range(count):
-            file_name = self.base_name + str(i) + ".lsl"
+        for file_number in range(count):
+            start = file_number*self.size
+            end = (file_number+1)*self.size
+            lines = all_lines[start:end]
+            name = [self.base_name, str(file_number)]
+            file_name = "_".join(name) + ".lsl"
             full_path = os.path.join(self.path, file_name)
-            start = i*self.size
-            end = (i+1)*self.size
-            self.write_chunk(triples, start, end, full_path)
+            with open(full_path, "w") as file:
+                self.write_one_file(file_name, file_number, lines, start, file)
+                print(f"File was written to {full_path}\n")
 
-    def write_chunk(self, all_triples, start, end, filepath):
-        triples = all_triples[start:end]
-        print(start, end, triples[0])
-        with open(filepath, "w") as file:
-            file.write("list vectdata = [\n")
-            back_0 = triples[0][0].co
-            comma = ""
-            for back_vertex, up_vertex, front_vertex in triples:
-                back = back_vertex.co
-                up = up_vertex.co
-                front = front_vertex.co
-                back_zeroed = back - back_0
-                roll = Vehicle(back, up, front).roll_degrees()
-                output = f"{comma}<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>\n"
-                file.write(output)
-                print(output)
-                comma = ","
-            print(f"File was written to {filepath}\n")
-            file.write("];\n")
-            file.write("\n")
-            file.write("default\n")
-            file.write("{\n")
-            file.write("  state_entry()\n")
-            file.write("  {\n")
-            file.write("    integer length = llGetListLength(vectdata);\n")
-            if start == 0:
-                file.write("    llLinksetDataReset();\n")
-            file.write(f"    integer a = {start};\n")
-            file.write("    integer b = a + length;\n")
-            file.write("    for(; a < b; ++a) {\n")
-            file.write('      llLinksetDataWrite("datakey"+(string)a,  llList2String( vectdata , a) );\n')
-            file.write("    }\n")
-            file.write("  }\n")
-            file.write("}\n")
+    def write_one_file(self, file_name, file_number, lines, start, file):
+        from datetime import datetime
+        now = datetime.now()
+        file.write(f"// {file_name}\n")
+        time = now.strftime("%Y-%m-%d %H:%M:%S")
+        file.write(f"// {time}\n")
+        file.write("//     created by VtFileWriter\n")
+        file.write("//     JR 20240113\n\n")
+        file.write(f"integer SCRIPT_NUMBER = {file_number};\n")
+        file.write(f"integer CHUNK_SIZE = {self.size};\n\n")
+        file.write("list data = [\n")
+        text = "\n,".join(lines)
+        file.write(text)
+        file.write("\n];\n")
+        file.write(self.part_2)
+
+    @staticmethod
+    def make_lines(coordinate_triples):
+        lines = []
+        back_zero = coordinate_triples[0][0]
+        for back, up, front in coordinate_triples:
+            back_zeroed = back - back_zero
+            roll = Vehicle(back, up, front).roll_degrees()
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
+            lines.append(output)
+        return lines
+
+    part_2 = """
+write_data() {
+    integer limit = llGetListLength(data);
+    integer out_key = CHUNK_SIZE*SCRIPT_NUMBER;
+    integer end_key = out_key + limit;
+    llSay(0, llGetScriptName() + " writing " + (string) out_key + " up to " + (string) end_key);
+    integer index;
+    for (index = 0; index < limit; index++, out_key++) {
+        llLinksetDataWrite("datakey"+(string) out_key,  llList2String( data , index));
+    }
+    llMessageLinked(LINK_THIS, SCRIPT_NUMBER + 1, "LOADING", NULL_KEY);
+}
+
+default {
+    on_rez(integer start_param) {
+        llResetScript();
+    }
+
+    state_entry() {
+        if (SCRIPT_NUMBER == 0) {
+            llLinksetDataReset();
+            write_data();
+        }
+    }
+
+    link_message(integer sender_num, integer num, string str, key id) {
+        if (str != "LOADING") return;
+        if (num != SCRIPT_NUMBER) return;
+        write_data();
+    }
+}
+"""
+
 
 class RCG_PT_sidebar(Panel):
     """Sidebar"""
