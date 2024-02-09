@@ -296,11 +296,9 @@ class VtFileWriter:
 
     @staticmethod
     def write_one_file(lines, start, file):
-        comma = ""
         file.write("list vectdata = [\n")
-        for line in lines:
-            file.write(comma + line)
-            comma = ","
+        text = "\n,".join(lines)
+        file.write(text)
         file.write("];\n")
         file.write("\n")
         file.write("default\n")
@@ -326,7 +324,7 @@ class VtFileWriter:
         for back, up, front in coordinate_triples:
             back_zeroed = back - back_zero
             roll = Vehicle(back, up, front).roll_degrees()
-            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>\n"
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
             lines.append(output)
         return lines
 
