@@ -111,7 +111,9 @@ class TestCoasterVehicle:
 
     def test_all_roll(self):
         """
-        Grand finale, all values are -45 apart, starting oddly.
+        Grand finale, all values are -45 apart, starting oddly,
+        because first one is counter-clockwise a bit but the rest
+        go around clockwise. 
         """
         prior = 0
         print()
