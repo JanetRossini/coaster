@@ -55,6 +55,11 @@ class Vehicle:
         direction vectors, we can create a new one with desired forward and upward
         by Vehicle(zero_vector, upward, forward). The __init__ just works out to
         retain the provided upward and forward. Nifty, once you get over it.
+
+    Note:
+        For reasons that I cannot quite explain, the yaw removal uses the
+        negative of the arc-tangent, and the pitch uses the positive.
+        This is what it took to make it work. I cannot quite visualize why.
     """
 
     def __init__(self, back, up, front):

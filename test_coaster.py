@@ -10,13 +10,21 @@ from vehicle import Vehicle
 class TestCoasterVehicle:
 
     def test_hookup(self):
+        """
+        just check to be sure the tests run.
+        I usually start with this
+        """
         assert 2+2 == 4
 
     def test_remove_yaw(self):
+        """
+        Test my theory of yaw removal via Quaternion
+        Note that we negate the angle when we create the Quaternion.
+        Note also quaternion@vector is multiplication. Surprised me too.
+        """
         # yaw is rotation around z, uses y and x
         # we want y == 0
         forward = Vector((1, 1, 1)).normalized()
-        # had to install mathutils for Vector to be recognized
         # top view is x horizontal, y vertical
         z_axis = Vector((0, 0, 1))
         rise = forward.y
@@ -27,6 +35,10 @@ class TestCoasterVehicle:
         assert f_no_yaw.y == pytest.approx(0, abs=0.001)
 
     def test_remove_pitch(self):
+        """
+        Test my theory of pitch removal.
+        Valuable because we do not negate the angle here.
+        """
         # pitch is rotation around y, uses z and x
         # we want z == 0
         forward = Vector((1, 2, 3)).normalized()
@@ -40,6 +52,10 @@ class TestCoasterVehicle:
         assert f_no_pitch.z == pytest.approx(0, abs=0.001)
 
     def test_vehicle_yaw(self):
+        """
+        I used this test to drive pushing the yaw quaternion to the class,
+        and to drive creating the new vehicle without yaw.
+        """
         back, up, front = fetch(tilt_45, 0)
         vehicle = Vehicle(back, up, front)
         yaw_removed = vehicle._new_vehicle_without_yaw()
@@ -49,6 +65,7 @@ class TestCoasterVehicle:
         back, up, front = fetch(tilt_45, 0)
         vehicle = Vehicle(back, up, front)
         pitch_removed = vehicle._new_vehicle_without_pitch()
+        assert pitch_removed.forward.z == pytest.approx(0, abs=0.001)
 
     def test_vehicle_with_roll_only(self):
         back, up, front = fetch(tilt_45, 0)
