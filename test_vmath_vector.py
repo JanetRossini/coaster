@@ -1,6 +1,6 @@
 import pytest
 
-from v_math import Vector
+from v_vector import Vector
 
 
 class TestVMathVector:
@@ -36,3 +36,14 @@ class TestVMathVector:
         assert vn.x == pytest.approx(0.27, abs=0.01)
         assert vn.y == pytest.approx(0.54, abs=0.01)
         assert vn.z == pytest.approx(0.80, abs=0.01)
+
+    def test_scalar_mul(self):
+        v1 = Vector((1, 2, 3))
+        assert v1*3 == Vector((3, 6, 9))
+        assert 2*v1 == Vector((2, 4, 6))
+
+    def test_cross_product(self):
+        v1 = Vector((1, 2, 3))
+        v2 = Vector((2, 3, 4))
+        v3 = v1.cross(v2)
+        assert v3 == Vector((-1, 2, -1))

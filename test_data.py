@@ -1,5 +1,5 @@
-from mathutils import Vector
-
+# from mathutils import Vector
+from v_vector import Vector
 """
 This is just the test data from Blender, converted into Python format.
 Tests only use the `tilt_45`, because of ages of work not shown here.

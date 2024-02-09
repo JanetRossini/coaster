@@ -26,6 +26,13 @@ class Vector:
     def __sub__(self, other):
         return self + -other
 
+    def __mul__(self, other):
+        seq = tuple(other*coord for coord in self.seq)
+        return Vector(seq)
+
+    def __rmul__(self, other):
+        return self*other
+
     @property
     def x(self):
         return self.seq[0]
@@ -45,3 +52,12 @@ class Vector:
     def normalized(self):
         norm = sqrt(self.x*self.x + self.y*self.y + self.z*self.z)
         return Vector((self.x/norm, self.y/norm, self.z/norm))
+
+    def cross(self, other):
+        a1, a2, a3 = self.seq
+        b1, b2, b3 = other.seq
+        c1 = a2*b3 - a3*b2
+        c2 = a3*b1 - a1*b3
+        c3 = a1*b2 - a2*b1
+        return Vector((c1, c2, c3))
+

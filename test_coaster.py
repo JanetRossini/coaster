@@ -1,9 +1,9 @@
-from math import atan2
-
+from math import atan2, radians
 
 import pytest
-from mathutils import Vector, Quaternion
-
+# from mathutils import Vector, Quaternion
+from v_vector import Vector
+from v_quaternion import Quaternion
 from test_data import tilt_45, fetch
 from vehicle import Vehicle
 
@@ -132,6 +132,23 @@ class TestCoasterVehicle:
                 diff = roll_degrees - prior
                 assert diff == pytest.approx(-45, abs=0.1) or diff == pytest.approx(315, abs=0.1)
             prior = roll_degrees
+
+    def test_real_cross(self):
+        v1 = Vector((1, 2,3))
+        v2 = Vector((2, 3, 4))
+        v3 = v1.cross(v2)
+        assert v3 == Vector((-1, 2, -1))
+
+    def test_real_quat(self):
+        v = Vector((1, 2, 3))
+        axis = Vector((0, 1, 0))
+        quat = Quaternion(axis, radians(90))
+        v2 = quat@v
+        assert v2.x == pytest.approx(3, abs=0.001)
+        assert v2.y == pytest.approx(2, abs=0.001)
+        assert v2.z == pytest.approx(-1, abs=0.001)
+
+
 
 
 

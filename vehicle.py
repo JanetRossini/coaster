@@ -1,6 +1,7 @@
 from math import atan2, degrees
-from mathutils import Vector, Quaternion
-
+# from mathutils import Vector, Quaternion
+from v_vector import Vector
+from v_quaternion import Quaternion
 
 class Vehicle:
     """
