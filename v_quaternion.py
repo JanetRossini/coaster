@@ -42,6 +42,4 @@ class Quaternion:
         assert isinstance(v, Vector)
         xyz = self.xyz
         t = 2 * xyz.cross(v)
-        result = v + self.w * t + xyz.cross(t)
-        return result
-
+        return v + self.w * t + xyz.cross(t)
