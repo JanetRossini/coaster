@@ -3,7 +3,7 @@ from math import sqrt
 
 class Vector:
     def __init__(self, seq):
-        self.seq = seq
+        self.seq = tuple(seq)
 
     def __repr__(self):
         return f"Vector({self.seq})"
@@ -11,23 +11,22 @@ class Vector:
     def __eq__(self, other):
         return self.seq == other.seq
 
-    def __getitem__(self, item):
-        return self.seq[item]
-
-    def __add__(self, other):
-        top_range = range(0, max(len(self.seq), len(other.seq)))
-        seq = tuple(self[i] + other[i] for i in top_range)
+    def __add__(self, v):
+        s_seq = self.seq
+        v_seq = v.seq
+        top_range = range(0, max(len(s_seq), len(v_seq)))
+        seq = (s_seq[i] + v_seq[i] for i in top_range)
         return Vector(seq)
 
     def __neg__(self):
-        seq = tuple(-c for c in self.seq)
+        seq = (-c for c in self.seq)
         return Vector(seq)
 
     def __sub__(self, other):
         return self + -other
 
     def __mul__(self, scalar):  # self * scalar
-        seq = tuple(scalar * coord for coord in self.seq)
+        seq = (scalar * coord for coord in self.seq)
         return Vector(seq)
 
     def __rmul__(self, scalar):  # scalar * self
@@ -53,14 +52,14 @@ class Vector:
         return sqrt(x*x + y*y + z*z)
 
     def normalized(self):
-        norm = sqrt(self.x*self.x + self.y*self.y + self.z*self.z)
-        return Vector((self.x/norm, self.y/norm, self.z/norm))
+        length = self.length
+        return Vector((self.x/length, self.y/length, self.z/length))
 
     def cross(self, other):
-        a1, a2, a3 = self.seq
-        b1, b2, b3 = other.seq
-        c1 = a2*b3 - a3*b2
-        c2 = a3*b1 - a1*b3
-        c3 = a1*b2 - a2*b1
-        return Vector((c1, c2, c3))
+        ax, ay, az = self.seq
+        bx, by, bz = other.seq
+        cx = ay*bz - az*by
+        cy = az*bx - ax*bz
+        cz = ax*by - ay*bx
+        return Vector((cx, cy, cz))
 
