@@ -20,7 +20,11 @@ Also from https://www.johndcook.com/blog/2021/06/16/faster-quaternion-rotations/
 he found it on molecular-matters.com :)
 """
 
+
 class Quaternion:
+    """
+    Minimal Quaternion, only supports quat@vector and little else.
+    """
     def __init__(self, axis, angle):
         norm = axis.normalized()
         half = angle / 2
