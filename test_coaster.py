@@ -257,6 +257,15 @@ get_data() {
         script_number = f"integer SCRIPT_NUMBER = {file_number};\n"
         assert script_number == "integer SCRIPT_NUMBER = 3;\n"
 
+    def test_fold(self):
+        s = list(range(10))
+        n = 4
+        l = [str(e) for e in s]
+        l1 = [",".join(l[i:i + n]) for i in range(0, len(s), n)]
+        l2 = ",\n".join(l1)
+        result = f"list data = [\n{l2}\n];"
+        assert result == 'list data = [\n0,1,2,3,\n4,5,6,7,\n8,9\n];'
+
     def test_write_files(self):
         vectors = tilt_45
         verts = [Co(vector) for vector in vectors]
@@ -277,6 +286,7 @@ class Co:
         return f"<{v.x}, {v.y}, {v.z}>"
 
 
+# VtFileWriter begins here
 class VtFileWriter:
     def __init__(self, vertices, path, base_name, size):
         self.vertices = vertices
@@ -297,24 +307,25 @@ class VtFileWriter:
             file_name = "_".join(name) + ".lsl"
             full_path = os.path.join(self.path, file_name)
             with open(full_path, "w") as file:
-                self.write_one_file(file_name, file_number, lines, start, file)
+                self.write_one_file(file_name, file_number, lines, file)
                 print(f"File was written to {full_path}\n")
 
-    def write_one_file(self, file_name, file_number, lines, start, file):
+    def write_one_file(self, file_name, file_number, lines, file):
         from datetime import datetime
         now = datetime.now()
         file.write(f"// {file_name}\n")
         time = now.strftime("%Y-%m-%d %H:%M:%S")
         file.write(f"// {time}\n")
-        file.write("//     created by VtFileWriter\n")
-        file.write("//     JR 20240113\n\n")
+        file.write("//    created by VtFileWriter\n")
+        file.write("//    JR 20240113\n")
+        file.write("//    Script names do not matter.\n\n")
         file.write(f"integer SCRIPT_NUMBER = {file_number};\n")
         file.write(f"integer CHUNK_SIZE = {self.size};\n\n")
         file.write("list data = [\n")
         text = "\n,".join(lines)
         file.write(text)
         file.write("\n];\n")
-        file.write(self.part_2)
+        file.write(self.fixed_part)
 
     @staticmethod
     def make_lines(coordinate_triples):
@@ -327,7 +338,9 @@ class VtFileWriter:
             lines.append(output)
         return lines
 
-    part_2 = """
+    fixed_part = """
+// nothing varies from here on down
+
 write_data() {
     integer limit = llGetListLength(data);
     integer out_key = CHUNK_SIZE*SCRIPT_NUMBER;
@@ -359,6 +372,8 @@ default {
     }
 }
 """
+
+# VtFileWriter ends here
 
 
 

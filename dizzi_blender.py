@@ -319,7 +319,7 @@ class RCG_OT_Exp_Banked_path(Operator):
 
         verts = obj_eval.data.vertices
         triples = [verts[i:i + 3] for i in range(0, len(verts) - 1, 2)]
-        size = 800
+        size = 500
         basename = "test_data"
         writer = VtFileWriter(verts, filepath, basename, size)
         writer.write_files()
@@ -327,6 +327,7 @@ class RCG_OT_Exp_Banked_path(Operator):
         return {'FINISHED'}
 
 
+# VtFileWriter begins here
 class VtFileWriter:
     def __init__(self, vertices, path, base_name, size):
         self.vertices = vertices
@@ -347,24 +348,25 @@ class VtFileWriter:
             file_name = "_".join(name) + ".lsl"
             full_path = os.path.join(self.path, file_name)
             with open(full_path, "w") as file:
-                self.write_one_file(file_name, file_number, lines, start, file)
+                self.write_one_file(file_name, file_number, lines, file)
                 print(f"File was written to {full_path}\n")
 
-    def write_one_file(self, file_name, file_number, lines, start, file):
+    def write_one_file(self, file_name, file_number, lines, file):
         from datetime import datetime
         now = datetime.now()
         file.write(f"// {file_name}\n")
         time = now.strftime("%Y-%m-%d %H:%M:%S")
         file.write(f"// {time}\n")
-        file.write("//     created by VtFileWriter\n")
-        file.write("//     JR 20240113\n\n")
+        file.write("//    created by VtFileWriter\n")
+        file.write("//    JR 20240113\n")
+        file.write("//    Script names do not matter.\n\n")
         file.write(f"integer SCRIPT_NUMBER = {file_number};\n")
         file.write(f"integer CHUNK_SIZE = {self.size};\n\n")
         file.write("list data = [\n")
         text = "\n,".join(lines)
         file.write(text)
         file.write("\n];\n")
-        file.write(self.part_2)
+        file.write(self.fixed_part)
 
     @staticmethod
     def make_lines(coordinate_triples):
@@ -377,7 +379,9 @@ class VtFileWriter:
             lines.append(output)
         return lines
 
-    part_2 = """
+    fixed_part = """
+// nothing varies from here on down
+
 write_data() {
     integer limit = llGetListLength(data);
     integer out_key = CHUNK_SIZE*SCRIPT_NUMBER;
@@ -409,6 +413,8 @@ default {
     }
 }
 """
+
+# VtFileWriter ends here
 
 
 class RCG_PT_sidebar(Panel):
