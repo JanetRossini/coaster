@@ -18,6 +18,13 @@ v' = v + q.w * t + cross(q.xyz, t)
 
 Also from https://www.johndcook.com/blog/2021/06/16/faster-quaternion-rotations/
 he found it on molecular-matters.com :)
+
+Also found this python code:
+https://github.com/KieranWynn/pyquaternion/blob/master/pyquaternion/quaternion.py
+This code appears to be a good example of what is *really* necessary to
+implement quaternions or any such data type robustly. 
+Our implementation here is not robust, just enough to give us what we need.
+Might use it for slerp.
 """
 
 
