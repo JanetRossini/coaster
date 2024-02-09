@@ -1,0 +1,3 @@
+git config --local user.name "Janet Rossini"
+git config --local user.email "<valkyriejanet@gmail.com>"
+git rebase -r --root --exec "git commit --amend --no-edit --reset-author"
