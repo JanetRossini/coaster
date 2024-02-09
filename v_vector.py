@@ -26,12 +26,12 @@ class Vector:
     def __sub__(self, other):
         return self + -other
 
-    def __mul__(self, other):
-        seq = tuple(other*coord for coord in self.seq)
+    def __mul__(self, scalar):  # self * scalar
+        seq = tuple(scalar * coord for coord in self.seq)
         return Vector(seq)
 
-    def __rmul__(self, other):
-        return self*other
+    def __rmul__(self, scalar):  # scalar * self
+        return self*scalar
 
     @property
     def x(self):
