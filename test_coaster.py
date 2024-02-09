@@ -75,6 +75,7 @@ class TestCoasterVehicle:
         """
         I used this test to drive pushing the yaw quaternion to the class,
         and to drive creating the new vehicle without yaw.
+        Removing yaw should zero the y value of the forward vector.
         """
         back, up, front = fetch(tilt_45, 0)
         vehicle = Vehicle(back, up, front)
@@ -83,7 +84,8 @@ class TestCoasterVehicle:
 
     def test_vehicle_pitch(self):
         """
-        Same thing, for pitch
+        Same thing, for pitch.
+        Removing pitch should zero the z angle of the forward vector.
         """
         back, up, front = fetch(tilt_45, 0)
         vehicle = Vehicle(back, up, front)
@@ -103,6 +105,8 @@ class TestCoasterVehicle:
     def test_roll(self):
         """
         Drive out the roll calculation.
+        First triangle is not vertical.
+        Correct angle is 16.1 degrees counterclockwise as shown.
         """
         back, up, front = fetch(tilt_45, 0)
         vehicle = Vehicle(back, up, front)
@@ -113,7 +117,7 @@ class TestCoasterVehicle:
         """
         Grand finale, all values are -45 apart, starting oddly,
         because first one is counter-clockwise a bit but the rest
-        go around clockwise. 
+        go around clockwise.
         """
         prior = 0
         print()
