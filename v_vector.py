@@ -8,12 +8,12 @@ class Vector:
     def __repr__(self):
         return f"Vector({self.seq})"
 
-    def __eq__(self, other):
-        return self.seq == other.seq
+    def __eq__(self, vector):
+        return self.seq == vector.seq
 
-    def __add__(self, v):
+    def __add__(self, vector):
         s_seq = self.seq
-        v_seq = v.seq
+        v_seq = vector.seq
         top_range = range(0, max(len(s_seq), len(v_seq)))
         seq = (s_seq[i] + v_seq[i] for i in top_range)
         return Vector(seq)
@@ -22,8 +22,8 @@ class Vector:
         seq = (-c for c in self.seq)
         return Vector(seq)
 
-    def __sub__(self, other):
-        return self + -other
+    def __sub__(self, vector):
+        return self + -vector
 
     def __mul__(self, scalar):  # self * scalar
         seq = (scalar * coord for coord in self.seq)
@@ -55,9 +55,9 @@ class Vector:
         length = self.length
         return Vector((self.x/length, self.y/length, self.z/length))
 
-    def cross(self, other):
+    def cross(self, b):
         ax, ay, az = self.seq
-        bx, by, bz = other.seq
+        bx, by, bz = b.seq
         cx = ay*bz - az*by
         cy = az*bx - ax*bz
         cz = ax*by - ay*bx
