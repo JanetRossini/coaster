@@ -298,7 +298,7 @@ class VtFileWriter:
     def write_one_file(self, file_name, lines, start, file):
         from datetime import datetime
         now = datetime.now()
-        time_stamp = "// " + file_name + " " + now.strftime("%Y-%m-%d %H:%M:%S")
+        time_stamp = "// " + file_name + "\n// " + now.strftime("%Y-%m-%d %H:%M:%S")
         file.write(time_stamp)
         file.write(self.part_1)
         text = "\n,".join(lines)
@@ -317,7 +317,8 @@ class VtFileWriter:
         return lines
 
     part_1 = """
-// Linkset Storage Data Writer
+
+// created by Python: VtFileWriter
 // JR 20240112
 
 list data = [ // end of part 1
@@ -334,17 +335,16 @@ get_parameters() {
     list facts = llParseString2List(name, ["_"], []);
     CHUNK_SIZE = llList2Integer(facts, 1);
     SCRIPT_NUMBER = llList2Integer(facts, 2);
-    // llSay(0, name + "->" + (string)CHUNK_SIZE + "," + (string)SCRIPT_NUMBER);
 }
 
 write_data() {
-    integer out_key = CHUNK_SIZE*SCRIPT_NUMBER;
     integer limit = llGetListLength(data);
+    integer out_key = CHUNK_SIZE*SCRIPT_NUMBER;
     integer end_key = out_key + limit;
     llSay(0, llGetScriptName() + " writing " + (string) out_key + " up to " + (string) end_key);
     integer index;
     for (index = 0; index < limit; index++, out_key++) {
-        llLinksetDataWrite("datakey"+(string)out_key,  llList2String( data , index));
+        llLinksetDataWrite("datakey"+(string) out_key,  llList2String( data , index));
     }
     llMessageLinked(LINK_THIS, SCRIPT_NUMBER + 1, "LOADING", NULL_KEY);
 }
@@ -363,14 +363,8 @@ default {
     }
 
     link_message(integer sender_num, integer num, string str, key id) {
-        if (str != "LOADING") {
-            // llSay(0, llGetScriptName() + " does not see loading");
-            return;
-        }
-        if (num != SCRIPT_NUMBER) {
-            // llSay(0, llGetScriptName() + " " + (string) num + " is not " + (string)SCRIPT_NUMBER);
-            return;
-        }
+        if (str != "LOADING") return;
+        if (num != SCRIPT_NUMBER) return;
         write_data();
     }
 }
