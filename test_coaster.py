@@ -252,7 +252,7 @@ get_data() {
 """
         assert program == "\n//LSD_500_0\nget_data() {\n   // do something;\n}\n"
 
-    def test_format(self):
+    def test_format_string(self):
         file_number = 3
         script_number = f"integer SCRIPT_NUMBER = {file_number};\n"
         assert script_number == "integer SCRIPT_NUMBER = 3;\n"
@@ -307,19 +307,20 @@ class VtFileWriter:
             file_name = "_".join(name) + ".lsl"
             full_path = os.path.join(self.path, file_name)
             with open(full_path, "w") as file:
-                self.write_one_file(file_name, file_number, lines, file)
+                self.write_one_file(file_name, file_number, count, lines, file)
                 print(f"File was written to {full_path}\n")
 
-    def write_one_file(self, file_name, file_number, lines, file):
+    def write_one_file(self, file_name, file_number, file_count, lines, file):
         from datetime import datetime
         now = datetime.now()
         file.write(f"// {file_name}\n")
         time = now.strftime("%Y-%m-%d %H:%M:%S")
         file.write(f"// {time}\n")
         file.write("//    created by VtFileWriter\n")
-        file.write("//    JR 20240113\n")
+        file.write("//    JR 20240115 - inert, last sends LOADING_DONE\n")
         file.write("//    Script names do not matter.\n\n")
         file.write(f"integer SCRIPT_NUMBER = {file_number};\n")
+        file.write(f"integer LAST_SCRIPT_NUMBER= {file_count-1};\n")
         file.write(f"integer CHUNK_SIZE = {self.size};\n\n")
         file.write("list data = [\n")
         text = "\n,".join(lines)
@@ -350,7 +351,13 @@ write_data() {
     for (index = 0; index < limit; index++, out_key++) {
         llLinksetDataWrite("datakey"+(string) out_key,  llList2String( data , index));
     }
-    llMessageLinked(LINK_THIS, SCRIPT_NUMBER + 1, "LOADING", NULL_KEY);
+    if (SCRIPT_NUMBER == LAST_SCRIPT_NUMBER) {
+        integer keyCount = llLinksetDataCountKeys(); 
+        llSay(0, "SIGNALLING LOADING_DONE " + (string) keyCount);
+        llMessageLinked(LINK_THIS, keyCount, "LOADING_DONE", NULL_KEY);
+    } else {
+        llMessageLinked(LINK_THIS, SCRIPT_NUMBER + 1, "LOADING", NULL_KEY);
+    }
 }
 
 default {
@@ -359,15 +366,15 @@ default {
     }
 
     state_entry() {
-        if (SCRIPT_NUMBER == 0) {
-            llLinksetDataReset();
-            write_data();
-        }
     }
 
     link_message(integer sender_num, integer num, string str, key id) {
         if (str != "LOADING") return;
         if (num != SCRIPT_NUMBER) return;
+        if (SCRIPT_NUMBER == 0) {
+            llLinksetDataReset();
+            llSay(0, "SCRIPT 0 Resetting LSD");
+        }
         write_data();
     }
 }
