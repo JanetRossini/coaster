@@ -1,5 +1,6 @@
 from math import atan2
 
+
 import pytest
 from mathutils import Vector, Quaternion
 
