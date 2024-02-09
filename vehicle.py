@@ -110,14 +110,23 @@ class Vehicle:
         return Vehicle(Vector((0, 0, 0)), new_upward, new_forward)
 
     def _pitch_quaternion(self):
+        """
+        Only valid when applied to a vehicle whose yaw is already removed.
+        I cannot explain this but I can demonstrate it. - JR
+        :return:
+        """
         y_axis = Vector((0, 1, 0))
         rise = self.forward.z
         run = self.forward.x
         angle = atan2(rise, run)
-        remove_pitch = Quaternion(y_axis, angle)  # why not -?
+        remove_pitch = Quaternion(y_axis, angle)
         return remove_pitch
 
     def _new_vehicle_with_roll_only(self):
+        """
+        Note that the rotations have to be applied in order, one after the other.
+        Computing both quaternions at the beginning will not work.
+        """
         return self._new_vehicle_without_yaw()._new_vehicle_without_pitch()
 
     def _roll_angle(self):
