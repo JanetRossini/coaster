@@ -243,6 +243,15 @@ class TestCoasterVehicle:
         assert len(slices[1]) == 500
         assert len(slices[2]) == 200
 
+    def test_big_string(self):
+        program = """
+//LSD_500_0
+get_data() {
+   // do something;
+}
+"""
+        assert program == "\n//LSD_500_0\nget_data() {\n   // do something;\n}\n"
+
     def test_write_files(self):
         vectors = tilt_45
         verts = [Co(vector) for vector in vectors]
@@ -252,15 +261,6 @@ class TestCoasterVehicle:
         writer.write_files()
         # writer.make_output()
         # assert False
-
-    def test_big_string(self):
-        program = """
-//LSD_500_0
-get_data() {
-   // do something;
-}
-"""
-        assert program == "\n//LSD_500_0\nget_data() {\n   // do something;\n}\n"
 
 
 class Co:
@@ -288,34 +288,22 @@ class VtFileWriter:
             start = file_number*self.size
             end = (file_number+1)*self.size
             lines = all_lines[start:end]
-            file_name = self.base_name + str(file_number) + ".lsl"
+            name = [self.base_name, str(self.size), str(file_number)]
+            file_name = "_".join(name) + ".lsl"
             full_path = os.path.join(self.path, file_name)
             with open(full_path, "w") as file:
-                self.write_one_file(lines, start, file)
+                self.write_one_file(file_name, lines, start, file)
                 print(f"File was written to {full_path}\n")
 
-    @staticmethod
-    def write_one_file(lines, start, file):
-        file.write("list vectdata = [\n")
+    def write_one_file(self, file_name, lines, start, file):
+        from datetime import datetime
+        now = datetime.now()
+        time_stamp = "// " + file_name + " " + now.strftime("%Y-%m-%d %H:%M:%S")
+        file.write(time_stamp)
+        file.write(self.part_1)
         text = "\n,".join(lines)
         file.write(text)
-        file.write("];\n")
-        file.write("\n")
-        file.write("default\n")
-        file.write("{\n")
-        file.write("  state_entry()\n")
-        file.write("  {\n")
-        file.write("    integer length = llGetListLength(vectdata);\n")
-        if start == 0:
-            file.write("    llLinksetDataReset();\n")
-        file.write(f"    integer outKey = {start};\n")
-        file.write(f"    integer inKey = 0;\n")
-        file.write("    integer limit = inKey + length;\n")
-        file.write("    for(; inKey < limit; ++outKey, ++inKey) {\n")
-        file.write('      llLinksetDataWrite("datakey"+(string)outKey,  llList2String( vectdata , inKey) );\n')
-        file.write("    }\n")
-        file.write("  }\n")
-        file.write("}\n")
+        file.write(self.part_2)
 
     @staticmethod
     def make_lines(coordinate_triples):
@@ -328,8 +316,65 @@ class VtFileWriter:
             lines.append(output)
         return lines
 
-    def file_top(self):
-        return
+    part_1 = """
+// Linkset Storage Data Writer
+// JR 20240112
+
+list data = [ // end of part 1
+"""
+
+    part_2 = """
+]; // beginning of part 2
+
+integer CHUNK_SIZE = 0;
+integer SCRIPT_NUMBER = -1;
+
+get_parameters() {
+    string name = llGetScriptName();
+    list facts = llParseString2List(name, ["_"], []);
+    CHUNK_SIZE = llList2Integer(facts, 1);
+    SCRIPT_NUMBER = llList2Integer(facts, 2);
+    // llSay(0, name + "->" + (string)CHUNK_SIZE + "," + (string)SCRIPT_NUMBER);
+}
+
+write_data() {
+    integer out_key = CHUNK_SIZE*SCRIPT_NUMBER;
+    integer limit = llGetListLength(data);
+    integer end_key = out_key + limit;
+    llSay(0, llGetScriptName() + " writing " + (string) out_key + " up to " + (string) end_key);
+    integer index;
+    for (index = 0; index < limit; index++, out_key++) {
+        llLinksetDataWrite("datakey"+(string)out_key,  llList2String( data , index));
+    }
+    llMessageLinked(LINK_THIS, SCRIPT_NUMBER + 1, "LOADING", NULL_KEY);
+}
+
+default {
+    on_rez(integer start_param) {
+        llResetScript();
+    }
+
+    state_entry() {
+        get_parameters();
+        if (SCRIPT_NUMBER == 0) {
+            llLinksetDataReset();
+            write_data();
+        }
+    }
+
+    link_message(integer sender_num, integer num, string str, key id) {
+        if (str != "LOADING") {
+            // llSay(0, llGetScriptName() + " does not see loading");
+            return;
+        }
+        if (num != SCRIPT_NUMBER) {
+            // llSay(0, llGetScriptName() + " " + (string) num + " is not " + (string)SCRIPT_NUMBER);
+            return;
+        }
+        write_data();
+    }
+}
+"""
 
 
 
