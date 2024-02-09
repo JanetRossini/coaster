@@ -60,9 +60,24 @@ class Vehicle:
         For reasons that I cannot quite explain, the yaw removal uses the
         negative of the arc-tangent, and the pitch uses the positive.
         This is what it took to make it work. I cannot quite visualize why.
+        (Later: I think it has to do with whether Y goes into the screen or out.)
+
+    Note:
+        I'm going to put the back, up, front members back into the class.
+        I want them for better testing. JR: 2023-10-21
+
+    Note:
+        I'm going to extract methods to get the two desired quaternions, for two reasons:
+        First, because I want to use them in my program that draws the pictures.
+        Second, because the methods that create them have kind of a two-phase aspect,
+        creating the quaternion and then applying it. Creating with a separate method
+        will express that duality better. JR: 2023-10-21
     """
 
     def __init__(self, back, up, front):
+        self.back = back
+        self.up = up
+        self.front = front
         self.forward = (front - back).normalized()
         self.upward = (up - back).normalized()
 

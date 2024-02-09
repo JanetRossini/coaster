@@ -100,6 +100,7 @@ class TestCoasterVehicle:
         back, up, front = fetch(tilt_45, 0)
         vehicle = Vehicle(back, up, front)
         roll_only = vehicle._new_vehicle_with_roll_only()
+        assert roll_only.forward.x == pytest.approx(1, abs=0.001)
         assert roll_only.forward.y == pytest.approx(0, abs=0.001)
         assert roll_only.forward.z == pytest.approx(0, abs=0.001)
 
