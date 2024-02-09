@@ -1,11 +1,20 @@
 from mathutils import Vector
 
+"""
+This is just the test data from Blender, converted into Python format.
+Tests only use the `tilt_45`, because of ages of work not shown here.
+"""
+
 
 def fetch(array, index):
-    # utility function to fetch data from array
+    """
+    :param array: the full array of data
+    :param index: 0, 1, 2, for the index of the three values you want
+    :return: array[2*index], array[2*index+1], array[2*index+2]
+    :return: back, up, front values of triangle[index]
+    """
     twindex = 2*index
     return array[twindex:twindex+3]
-    # return array[twindex], array[twindex+1], array[twindex+3]
 
 
 flat_45 = [
@@ -27,7 +36,7 @@ flat_45 = [
     Vector((3.500,0.354,0.354)),
     Vector((4.000,0.000,0.000)),
     Vector((4.000,0.000,0.500)),
-    Vector((4.500,0.000,0.000)),]
+    Vector((4.500,0.000,0.000))]
 tilt_45 = [
     Vector((0.000,0.000,0.000)),
     Vector((0.250,0.000,0.433)),
@@ -47,5 +56,5 @@ tilt_45 = [
     Vector((2.955,-1.444,-1.298)),
     Vector((3.000,-2.000,-1.732)),
     Vector((3.250,-2.000,-1.299)),
-    Vector((3.375,-2.250,-1.949)),]
+    Vector((3.375,-2.250,-1.949))]
 
