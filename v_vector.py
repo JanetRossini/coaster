@@ -47,7 +47,10 @@ class Vector:
 
     @property
     def length(self):
-        return sqrt(self.x*self.x + self.y*self.y + self.z*self.z)
+        x = self.x
+        y = self.y
+        z = self.z
+        return sqrt(x*x + y*y + z*z)
 
     def normalized(self):
         norm = sqrt(self.x*self.x + self.y*self.y + self.z*self.z)

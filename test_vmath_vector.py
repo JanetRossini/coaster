@@ -7,7 +7,7 @@ from v_vector import Vector
 
 class TestVMathVector:
 
-    def test_eq(self):
+    def test_vector_eq(self):
         v1 = Vector((1, 2, 3))
         v2 = Vector((1, 2, 3))
         v3 = Vector((2, 3, 4))
@@ -44,7 +44,7 @@ class TestVMathVector:
         assert vn.y == pytest.approx(0.54, abs=0.01)
         assert vn.z == pytest.approx(0.80, abs=0.01)
 
-    def test_scalar_mul(self):
+    def test_scalar_multiplication(self):
         v1 = Vector((1, 2, 3))
         assert v1*3 == Vector((3, 6, 9))
         assert 2*v1 == Vector((2, 4, 6))
