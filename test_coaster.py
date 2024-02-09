@@ -1,6 +1,8 @@
-from math import atan2, radians
+import os.path
+from math import atan2, radians, ceil
 
 import pytest
+
 # from mathutils import Vector, Quaternion
 from v_vector import Vector
 from v_quaternion import Quaternion
@@ -133,6 +135,26 @@ class TestCoasterVehicle:
                 assert diff == pytest.approx(-45, abs=0.1) or diff == pytest.approx(315, abs=0.1)
             prior = roll_degrees
 
+    def test_all_roll_from_verts(self):
+        prior = 0
+        verts = tilt_45
+        assert len(verts)%2 == 1  # must be odd
+        triples = [verts[i:i+3] for i in range(0, len(verts)-1, 2)]
+        for back, up, front in triples:
+            print("one trip", back, up, front)
+            roll = Vehicle(back, up, front).roll_degrees()
+            if prior:
+                diff = roll - prior
+                assert diff == pytest.approx(-45, abs=0.1) or diff == pytest.approx(315, abs=0.1)
+            prior = roll
+        # assert False
+
+    def test_format(self):
+        back = Vector((1.234, 2.345, 3.456))
+        roll = 129.0
+        result = f"<{back.x:.3f}, {back.y:.3f}, {back.z:.3f}, {roll:.0f}>\n"
+        assert result == "<1.234, 2.345, 3.456, 129>\n"
+
     def test_real_cross(self):
         v1 = Vector((1, 2,3))
         v2 = Vector((2, 3, 4))
@@ -147,6 +169,156 @@ class TestCoasterVehicle:
         assert v2.x == pytest.approx(3, abs=0.001)
         assert v2.y == pytest.approx(2, abs=0.001)
         assert v2.z == pytest.approx(-1, abs=0.001)
+
+    def test_partition(self):
+        def make_chunks(items, size):
+            i = 0
+            while i < len(items):
+                yield items[i:i + size]
+                i += size
+
+        trips = [(i, i + 1, i + 2) for i in range(0, 2000)]
+        chunks = list(make_chunks(trips, 800))
+        assert len(chunks) == 3
+        assert len(chunks[0]) == 800
+        assert len(chunks[1]) == 800
+        assert len(chunks[2]) == 400
+
+    def test_partition_comprehension(self):
+        trips = [(i, i + 1, i + 2) for i in range(0, 2000)]
+        size = 800
+        number_of_slices = (len(trips) + size - 1) // size
+        chunks = [trips[i*size:i*size+size] for i in range(number_of_slices)]
+        assert len(chunks) == 3
+        assert len(chunks[0]) == 800
+        assert len(chunks[1]) == 800
+        assert len(chunks[2]) == 400
+
+    def test_make_filename(self):
+        def make_filename(items):
+            formatted = f"base/dizzi/triples{items[0]:03d}-{items[1]:03d}.txt"
+            return formatted
+
+        assert make_filename((0, 800)) == "base/dizzi/triples000-800.txt"
+
+    def test_comp(self):
+        size = 500
+        count = ceil(1200/500)
+        assert count == 3
+        assert ceil(1000/500) == 2
+        count = ceil(1200/500)
+        assert count == 3
+        slices = [(i*size, i*size+size) for i in range(0, count)]
+        assert slices[0] == (0, 500)
+        assert slices[1] == (500, 1000)
+        assert slices[2] == (1000, 1500)
+
+    def test_triples(self):
+        size = 500
+        triples = [(i, i + 1, i + 2) for i in range(0, 1200)]
+        assert len(triples) == 1200
+        assert triples[0] == (0, 1, 2)
+        assert triples[1] == (1, 2, 3)
+        number_of_slices = ceil(len(triples) / size)
+        assert number_of_slices == 3
+        slices = [triples[i * size:i * size + size] for i in range(0, number_of_slices)]
+        assert len(slices[0]) == 500
+        assert len(slices[1]) == 500
+        assert len(slices[2]) == 200
+
+    def test_triples_loop(self):
+        size = 500
+        triples = [(i, i + 1, i + 2) for i in range(0, 1200)]
+        assert len(triples) == 1200
+        assert triples[0] == (0, 1, 2)
+        assert triples[1] == (1, 2, 3)
+        number_of_slices = ceil(len(triples) / size)
+        assert number_of_slices == 3
+        slices = []
+        for i in range(0, number_of_slices):
+            start = i*size
+            finish = i*size + size
+            slices.append(triples[start:finish])
+        assert len(slices[0]) == 500
+        assert len(slices[1]) == 500
+        assert len(slices[2]) == 200
+
+    def test_write_files(self):
+        vectors = tilt_45
+        verts = [Co(vector) for vector in vectors]
+        filepath = os.path.expanduser("~/Desktop")
+        size = 4
+        writer = VtFileWriter(verts, filepath, "test", size)
+        writer.write_files()
+        # writer.make_output()
+        assert False
+
+
+class Co:
+    def __init__(self, vector):
+        self.co = vector
+
+    def __repr__(self):
+        v = self.co
+        return f"<{v.x}, {v.y}, {v.z}>"
+
+
+class VtFileWriter:
+    def __init__(self, vertices, path, base_name, size):
+        self.vertices = vertices
+        self.path = path
+        self.base_name = base_name
+        self.size = size
+
+    def write_files(self):
+        coords = [v.co for v in self.vertices]
+        triples = [coords[i:i + 3] for i in range(0, len(coords) - 1, 2)]
+        all_lines = self.make_lines(triples)
+        count = ceil(len(triples)/self.size)
+        for file_number in range(count):
+            start = file_number*self.size
+            end = (file_number+1)*self.size
+            lines = all_lines[start:end]
+            file_name = self.base_name + str(file_number) + ".lsl"
+            full_path = os.path.join(self.path, file_name)
+            with open(full_path, "w") as file:
+                self.write_one_file(lines, start, file)
+                print(f"File was written to {full_path}\n")
+
+    @staticmethod
+    def write_one_file(lines, start, file):
+        comma = ""
+        file.write("list vectdata = [\n")
+        for line in lines:
+            file.write(comma + line)
+            comma = ","
+        file.write("];\n")
+        file.write("\n")
+        file.write("default\n")
+        file.write("{\n")
+        file.write("  state_entry()\n")
+        file.write("  {\n")
+        file.write("    integer length = llGetListLength(vectdata);\n")
+        if start == 0:
+            file.write("    llLinksetDataReset();\n")
+        file.write(f"    integer a = {start};\n")
+        file.write("    integer b = a + length;\n")
+        file.write("    for(; a < b; ++a) {\n")
+        file.write('      llLinksetDataWrite("datakey"+(string)a,  llList2String( vectdata , a) );\n')
+        file.write("    }\n")
+        file.write("  }\n")
+        file.write("}\n")
+
+    @staticmethod
+    def make_lines(coordinate_triples):
+        lines = []
+        back_zero = coordinate_triples[0][0]
+        for back, up, front in coordinate_triples:
+            back_zeroed = back - back_zero
+            roll = Vehicle(back, up, front).roll_degrees()
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>\n"
+            lines.append(output)
+        return lines
 
 
 
