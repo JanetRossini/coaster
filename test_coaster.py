@@ -346,14 +346,14 @@ write_data() {
     integer limit = llGetListLength(data);
     integer out_key = CHUNK_SIZE*SCRIPT_NUMBER;
     integer end_key = out_key + limit;
-    llSay(0, llGetScriptName() + " writing " + (string) out_key + " up to " + (string) end_key);
+    // llSay(0, llGetScriptName() + " writing " + (string) out_key + " up to " + (string) end_key);
     integer index;
     for (index = 0; index < limit; index++, out_key++) {
         llLinksetDataWrite("datakey"+(string) out_key,  llList2String( data , index));
     }
     if (SCRIPT_NUMBER == LAST_SCRIPT_NUMBER) {
         integer keyCount = llLinksetDataCountKeys(); 
-        llSay(0, "SIGNALLING LOADING_DONE " + (string) keyCount);
+        // llSay(0, "SIGNALLING LOADING_DONE " + (string) keyCount);
         llMessageLinked(LINK_THIS, keyCount, "LOADING_DONE", NULL_KEY);
     } else {
         llMessageLinked(LINK_THIS, SCRIPT_NUMBER + 1, "LOADING", NULL_KEY);
@@ -373,7 +373,7 @@ default {
         if (num != SCRIPT_NUMBER) return;
         if (SCRIPT_NUMBER == 0) {
             llLinksetDataReset();
-            llSay(0, "SCRIPT 0 Resetting LSD");
+            // llSay(0, "SCRIPT 0 Resetting LSD");
         }
         write_data();
     }
