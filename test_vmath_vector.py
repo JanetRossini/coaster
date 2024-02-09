@@ -17,6 +17,8 @@ class TestVMathVector:
     def test_vector_size(self):
         with pytest.raises(TypeError) as info:
             v1 = Vector((1, 2))
+        with pytest.raises(TypeError) as info:
+            v1 = Vector((1, 2, 3, 4))
 
     def test_vector_add(self):
         v1 = Vector((1, 2, 3))
