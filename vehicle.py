@@ -1,7 +1,7 @@
 from math import atan2, degrees
-# from mathutils import Vector, Quaternion
-from v_vector import Vector
-from v_quaternion import Quaternion
+# from mathutils import Vector, Quaternion  # use in Blender if you like
+from v_vector import Vector          # remove if you use mathutils
+from v_quaternion import Quaternion  # remove if you use mathutils
 
 class Vehicle:
     """
