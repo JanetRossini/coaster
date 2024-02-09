@@ -95,6 +95,7 @@ class TestCoasterVehicle:
     def test_vehicle_with_roll_only(self):
         """
         Drive out combining yaw and pitch to return roll only.
+        Resulting vehicle should have both y and z zeroed.
         """
         back, up, front = fetch(tilt_45, 0)
         vehicle = Vehicle(back, up, front)
