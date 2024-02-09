@@ -251,7 +251,7 @@ class TestCoasterVehicle:
         writer = VtFileWriter(verts, filepath, "test", size)
         writer.write_files()
         # writer.make_output()
-        assert False
+        # assert False
 
     def test_big_string(self):
         program = """
@@ -329,6 +329,9 @@ class VtFileWriter:
             output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>\n"
             lines.append(output)
         return lines
+
+    def file_top(self):
+        return
 
 
 
