@@ -1,3 +1,5 @@
+import os
+
 program = """
 // this is a comment
 list vecdata = [
@@ -37,3 +39,12 @@ class TestFileWriting:
         result = template.substitute(lines=insert)
         print(result)
         assert result == expected
+
+    def test_join(self):
+        file_track05 = 'C:/mumble/track05.blend'
+        inner_track05 = 'Object'
+        object_track05 = 'track05'
+        filepath=os.path.join(file_track05, inner_track05, object_track05)
+        assert filepath == 'C:/mumble/track05.blend/Object/track05'
+        directory=os.path.join(file_track05, inner_track05)
+        assert directory == 'C:/mumble/track05.blend/Object'
