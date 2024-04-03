@@ -30,7 +30,7 @@ object_track05 = 'track05'
 
 ... since they all follow the same naming pattern. 
 
-I've determined that the Vehicle class in dizziblendeer.py is the 
+I've determined that the Vehicle class in dizziblender.py is the 
 same as the one in Vehicle, except that the dizzi version has some 
 spacing around @ operators. We can use the separate file pretty 
 easily.
