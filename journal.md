@@ -29,3 +29,15 @@ object_track05 = 'track05'
 ~~~
 
 ... since they all follow the same naming pattern. 
+
+I've determined that the Vehicle class in dizziblendeer.py is the 
+same as the one in Vehicle, except that the dizzi version has some 
+spacing around @ operators. We can use the separate file pretty 
+easily.
+
+Similarly, for VTFileWriter, which can be moved to a separate file. 
+It is currently in two files, a test of mine, and dizziblender.py.
+
+I think that currently DS and JR have different project names. I'm 
+not sure how we should change those to get synched up. Is it as 
+simple as changing the project name in PyCharm? 
