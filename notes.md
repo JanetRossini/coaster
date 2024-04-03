@@ -33,6 +33,19 @@ approaches before we commit? Which way provides smaller steps?
 
 Does pathlib work in Blender? 
 
+### 20240403
+
+Should we try to get DS hooked up to the GitHub project, so that 
+we can keep in sync? DS would have to get credentials etc. on 
+GitHub but that shouldn't be too difficult. But we can perhaps 
+make faster progress working separately and trying to stay mostly 
+in sync.
+
+Does DS's file folder still have all the files from GitHub? 
+
+Should I get all the .blend stuff and put it in my folders, so I 
+can test in Blender?
+
 ## (Foot)Notes
 
 [^spike]: Term from Ward Cunningham. Quick and dirty experiment. 

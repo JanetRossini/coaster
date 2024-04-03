@@ -61,3 +61,29 @@ class TestFileWriting:
         assert str(p.absolute()) == str(Path.cwd()) + '/test_file_writing.py'
         q = p.with_name('notes.md')
         assert str(q.absolute()) == str(Path.cwd()) + '/notes.md'
+
+    def test_we_can_compute_wm_elements(self):
+        def bpy_ops_wm_append(filepath, directory, filename):
+            pass
+
+        def make_elements(name):
+            working = os.getcwd()  # comment next line, should still work for DS
+            working = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects'
+            filepath = os.path.join(working, name + '.blend')
+            directory = os.path.join(filepath, 'Object')
+            filename = object_track05
+            return filepath, directory, filename
+
+        file_track05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track05.blend'
+        inner_track05 = 'Object'
+        object_track05 = 'track05'
+        filepath, directory, filename = make_elements('track05')
+        assert filepath == file_track05
+        assert directory == file_track05 + '/' + inner_track05
+        assert filename == 'track05'
+        # bpy.ops.wm.append(
+        bpy_ops_wm_append(
+            filepath=filepath,
+            directory=directory,
+            filename=filename
+        )
