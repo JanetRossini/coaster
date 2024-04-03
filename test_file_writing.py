@@ -40,7 +40,7 @@ class TestFileWriting:
         print(result)
         assert result == expected
 
-    def test_join(self):
+    def test_join_again(self):
         file_track05 = 'C:/mumble/track05.blend'
         inner_track05 = 'Object'
         object_track05 = 'track05'
@@ -48,3 +48,16 @@ class TestFileWriting:
         assert filepath == 'C:/mumble/track05.blend/Object/track05'
         directory=os.path.join(file_track05, inner_track05)
         assert directory == 'C:/mumble/track05.blend/Object'
+
+    def test_pathlib(self):
+        from pathlib import Path
+        home = Path.home()
+        home_file = home / 'HOME_DIR.txt'  # this file has my absolute path in it
+        with home_file.open() as h:
+            home_dir = h.readline().strip()
+        assert str(home) == home_dir
+        assert str(Path.cwd()) == home_dir + '/PycharmProjects/coaster'
+        p = Path('test_file_writing.py')
+        assert str(p.absolute()) == str(Path.cwd()) + '/test_file_writing.py'
+        q = p.with_name('notes.md')
+        assert str(q.absolute()) == str(Path.cwd()) + '/notes.md'
