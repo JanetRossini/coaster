@@ -52,3 +52,5 @@ We will both need to remember to pull from GitHub, and of course
 should also note via email when we have pushed something that 
 needs pulling. I do not think that PyCharm will warn us if someone 
 else has pushed. We'll find out. Hopefully with good news.
+
+dizzi woz 'ere
