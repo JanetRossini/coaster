@@ -1,12 +1,12 @@
 # Journal
 
-## 20240402
+## 20240402 (JR)
 
 `test_pathlib` tests use of pathlib. I think we should stick with 
 `os.path`, however, because Blender seems to want strings anyway, 
 and `os.path` works OK.
 
-## 20240413
+## 20240413 (JR)
 
 I want to do some work to simplify the file code. I'll do some 
 tests. One objective is to eliminate the explicit paths, because 
@@ -41,3 +41,14 @@ It is currently in two files, a test of mine, and dizziblender.py.
 I think that currently DS and JR have different project names. I'm 
 not sure how we should change those to get synched up. Is it as 
 simple as changing the project name in PyCharm? 
+
+## 20240404 (JR)
+
+Posted to my Slack for guidance on things. I think the DS project 
+is probably properly set up to pull and push. We'll try pulling to 
+get this new note, and then maybe have DS edit this and push it back.
+
+We will both need to remember to pull from GitHub, and of course 
+should also note via email when we have pushed something that 
+needs pulling. I do not think that PyCharm will warn us if someone 
+else has pushed. We'll find out.
