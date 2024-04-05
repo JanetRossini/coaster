@@ -54,3 +54,35 @@ needs pulling. I do not think that PyCharm will warn us if someone
 else has pushed. We'll find out. Hopefully with good news.
 
 dizzi woz 'ere
+
+## 20240405 (JR)
+
+This morning I'm going to experiment with moving things around. In 
+particular, I'd like to get down to just one Vehicle class, in its 
+own file, and to get VTFileWriter moved out of the test files.
+
+I plan to try these things and then roll back. Will report what 
+happens here.
+
+I start  with Git / Pull. All files are up to date, as I expected.
+
+First experiment, cut Vehicle out of rollercoastergen and past 
+over the existing one in vehicle.py.
+
+### Bump
+
+Before I even get there, I discover that both VtFileWriter and 
+Vehicle are combined into rollercoastergen. This will not do. Why 
+not? Because when changes are needed, they'll need to be done in 
+multiple places.
+
+I will try deleting mine, on the grounds that Dizzi's are newer. 
+First, though, I'll diff them.
+
+Ah. Some of your copies have CRLF line ends, not just LF. I think 
+we should  change your prefs on that, tho it may be mostly harmless.
+
+I've just spent mondo time fiddling with the LF / CRLF thing.
+
+OK, moved VtFileWriter out of the tests into its own file. Will 
+commit that.
