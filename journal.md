@@ -86,3 +86,20 @@ I've just spent mondo time fiddling with the LF / CRLF thing.
 
 OK, moved VtFileWriter out of the tests into its own file. Will 
 commit that.
+
+We'll leave you with your own for now, try removing them when 
+we're together.
+
+Ran into trouble with Vehicle and its testing, because I use my 
+own Vector and Quaternion classes, and you use blender mathutils, 
+and, unfortunately for us all, mathutils in Blender has features 
+that we seem not to have in Python's regular mathutils.
+
+Best I can figure out right now, that means we can't have both a 
+testable Vehicle class and one that is usable in Blender, unless 
+we use my Q and V classes. Which we could do and should try, I guess.
+
+
+### 0925
+
+I'm gonna take a break. Eye bothering me this morning for some reason.
