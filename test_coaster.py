@@ -273,7 +273,7 @@ get_data() {
         filepath = os.path.expanduser("~/Desktop")
         size = 4
         writer = VtFileWriter(verts, filepath, "test", size)
-        writer.write_files()
+        writer.write_files("ignored", False, True)
         # writer.make_output()  # uncomment to look at things
         # assert False
 
