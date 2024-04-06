@@ -158,4 +158,6 @@ I've moved VtFileWriter out of rollercoastergen. May have to put it
 back, but I think the try/except horrid though it is, can be made 
 to work.
 
+Difficulty committing.
+
 0850, gonna take a break.
