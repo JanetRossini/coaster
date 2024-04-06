@@ -2,6 +2,9 @@ from math import radians
 
 import pytest
 
+# all real code should now use mathutils
+# this test checks the JR objects, which should no longer be needed.
+# from mathutils import Vector, Quaternion
 from v_quaternion import Quaternion
 from v_vector import Vector
 
@@ -16,7 +19,7 @@ class TestVMathQuaternion:
         v = Vector((1, 2, 3))
         axis = Vector((0, 1, 0))
         quat = Quaternion(axis, radians(90))
-        v2 = quat@v
+        v2 = quat @ v
         assert v2.x == pytest.approx(3, abs=0.001)
         assert v2.y == pytest.approx(2, abs=0.001)
         assert v2.z == pytest.approx(-1, abs=0.001)
@@ -34,7 +37,22 @@ class TestVMathQuaternion:
         assert q3.z == pytest.approx(0.307, abs=0.001)
 
     def test_error(self):
+        e1 = 'mathutils.Quaternion() takes at most 2 arguments (5 given)'
+        e2 = "Object cannot be initialized from (1, 2, 3, 4, 'hello')"
         with pytest.raises(TypeError) as info:
             q1 = Quaternion(1, 2, 3, 4, "hello")
-        assert "Object cannot be initialized from (1, 2, 3, 4, 'hello')" in str(info.value)
+        assert e1 in str(info.value) or e2 in str(info.value)
+
+    def test_quat_times_vector(self):
+        def quat_x_vector(quat, vec):
+            xyz = Vector((quat.x, quat.y, quat.z))
+            t = 2 * xyz.cross(vec)
+            return vec + quat.w * t + xyz.cross(t)
+        v = Vector((1, 2, 3))
+        axis = Vector((0, 1, 0))
+        quat = Quaternion(axis, radians(90))
+        v2 = quat_x_vector(quat, v)
+        assert v2.x == pytest.approx(3, abs=0.001)
+        assert v2.y == pytest.approx(2, abs=0.001)
+        assert v2.z == pytest.approx(-1, abs=0.001)
 
