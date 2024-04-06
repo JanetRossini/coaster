@@ -3,9 +3,9 @@ from math import atan2, radians, ceil
 
 import pytest
 
-# from mathutils import Vector, Quaternion
-from v_vector import Vector
-from v_quaternion import Quaternion
+
+# changed to use mathutils throughout.
+from mathutils import Vector, Quaternion
 from test_data import tilt_45, fetch
 from vehicle import Vehicle
 from vtfilewriter import VtFileWriter
