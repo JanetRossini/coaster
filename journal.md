@@ -161,3 +161,22 @@ to work.
 Difficulty committing.
 
 0850, gonna take a break.
+
+Later that day ...
+
+Discovered that my belief that mathutils does not have quaternion 
+times vector was mistaken. I've converted all the files except 
+those that directly test my replacement classes to use mathutils. 
+All tests are green.
+
+I have moved VtFileWriter out of rollercoastergen, but have not at 
+this writing moved Vehicle. Both should be removed, if we can make 
+rollercoastergen work. I think we can do that if I put try/except 
+logic in, so that the imports are done two different ways.
+
+I suppose there are other solutions, such as putting a file link 
+into modules instead of the real file, or vice versa. I need a bit 
+more thinking to be clear on what to do. Probably trying to 
+explain will help me clarify my thoughts.
+
+Committing for now. 1250 local time.
