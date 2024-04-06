@@ -1,5 +1,10 @@
-# from mathutils import Vector
-from v_vector import Vector
+from mathutils import Vector
+
+
+# all real code should now use mathutils
+# this test checks the JR objects, which should no longer be needed.
+# from mathutils import Vector - use this
+# from v_vector import Vector - not this
 """
 This is just the test data from Blender, converted into Python format.
 Tests only use the `tilt_45`, because of ages of work not shown here.
