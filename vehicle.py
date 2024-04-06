@@ -1,7 +1,6 @@
 from math import atan2, degrees
-# from mathutils import Vector, Quaternion  # use in Blender if you like
-from v_vector import Vector          # remove if you use mathutils
-from v_quaternion import Quaternion  # remove if you use mathutils
+from mathutils import Vector, Quaternion  # no longer uses JR classes
+
 
 class Vehicle:
     """
@@ -92,8 +91,8 @@ class Vehicle:
 
     def _new_vehicle_without_yaw(self):
         remove_yaw = self._yaw_quaternion()
-        new_forward = remove_yaw@self.forward
-        new_upward = remove_yaw@self.upward
+        new_forward = remove_yaw @ self.forward
+        new_upward = remove_yaw @ self.upward
         return Vehicle(Vector((0, 0, 0)), new_upward, new_forward)
 
     def _yaw_quaternion(self):
