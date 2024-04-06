@@ -2,6 +2,9 @@ from math import sqrt
 
 import pytest
 
+# all real code should now use mathutils
+# this test checks the JR objects, which should no longer be needed.
+# from mathutils import Vector
 from v_vector import Vector
 
 
