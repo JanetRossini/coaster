@@ -46,7 +46,7 @@ class VtFileWriter:
 
     @staticmethod
     def make_lines(coordinate_triples, abs, bank):
-        from rollercoastergen import Vehicle
+        from modules.vehicle import Vehicle
         lines = []
         back_zero = coordinate_triples[0][0]
 

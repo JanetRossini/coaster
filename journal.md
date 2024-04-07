@@ -136,7 +136,7 @@ Some steps that could/should be taken include:
 Found this idea, which would allow us to use different folders in 
 blender from those in our local code. Seems nasty but might work.
 
-~~~python
+~~~
 if __name__ == '__main__':
     import sys
     import os
@@ -180,3 +180,16 @@ more thinking to be clear on what to do. Probably trying to
 explain will help me clarify my thoughts.
 
 Committing for now. 1250 local time.
+
+## 20240407_0805_JR
+
+I am on a clean repo. I have one test skipped because it can't 
+find Vehicle in VtFileWriter. The issue comes from the fact that 
+Blender imports from the "modules" folder without your imports 
+ever mentioning it.
+
+I'll try breaking Vehicle away from RCG, because we want that anyway.
+
+Miraculously, when I do that, the unlinked test passes. Life is good.
+
+
