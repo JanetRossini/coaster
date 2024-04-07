@@ -197,3 +197,122 @@ that first. Manus do come up. Life remains good.
 
 I think we are ready to begin refactoring in earnest. Whew! I hope 
 I'm right. Committing this. 
+
+### Looking at the flags
+
+We should perhaps save this for a combined session, but I need to 
+do something this morning, so I'll have a look at the use of the 
+flags in the writer. I have a feeling that they should be sent in 
+on creation. 
+
+I notice that we pass a name into `write_files` but we do not use 
+it, because the writer has been created already knowing the path 
+and name. We should change the signature of the write_files method 
+not to have that unused parameter. 
+
+The methods of VtFileWriter are long and could use improvement.
+
+I just realized that PyCharm will split the edit window, so I can 
+have this file open on the right and another file, like 
+vtfilewriter, open on the left. So I can study the code and take 
+notes at the same time. I hesitate to say again that life is good.
+
+Unless we go to class methods, such as
+
+~~~
+    writer = VtFileWriter.absolute_banked(...)
+~~~
+
+I have come to believe that the flags should not be passed in at 
+creation time, although actual usage is always to create the 
+writer and immediately call `write_files`. But there are so many 
+parameters involved:
+
+* Creation
+    * verts - the vertices to be processed
+    * filepath - the path to the output folder
+    * basename - the output file name before numeric suffix
+    * size - the chunk size to be written out
+* Writing
+    * basename - again, ignored, should remove
+    * abs - absolute / relative flag. rename?
+    * bank - bank / flat flag. rename?
+
+Just noticed RCG line 555 triples is unused. Occurs four times. 
+We'll remove. But I digress. 
+
+What about having one creation method and four write methods:
+
+~~~
+write_absolute_flat, 
+write_absolute_banked, 
+write_relative_flat, 
+write_relative_banked. 
+~~~
+
+That would let us hide the flags and make the meaning more clear.
+
+If it were my code, I would try a few different ways, perhaps 
+actually in the code, perhaps just typing alternatives into tests 
+to see what I liked the look of.
+
+In reality, this hardly matters, as we are really essentially done 
+with this program, as far as we know. Until we aren't. But we are 
+here to learn, every day, are we not?
+
+Reading RCG throughout, I am impressed at how much DS has learned 
+and figured out about Blender-Python relations. One could quibble 
+about names and such, but given how little one knows about what 
+Blender really cares about, it's quite impressive. 
+
+I would like to see more pytest tests of the code here, but I 
+don't see how to really do it. Well ... note this:
+
+~~~
+    def execute(self, context):
+        # Put code here
+        obj = bpy.context.object
+
+        if obj is None or obj.type != "MESH":
+            return
+
+        # Output geometry
+        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        filepath = "C:/Users/Terry/PycharmProjects/blenderPython/"
+
+        abs = True
+        bank = False
+        verts = obj_eval.data.vertices
+        triples = [verts[i:i + 3] for i in range(0, len(verts) - 1, 2)]
+        size = 500
+        basename = "test_data"
+        writer = VtFileWriter(verts, filepath, basename, size)
+        writer.write_files(basename, abs, bank)
+
+        return {'FINISHED'}
+~~~
+
+With just a little rearrangement, we could have the whole tail end 
+of this block independent of Blender, just dependent on vertices. 
+In that form we could test it. But is there anything really to test 
+here, or is it just one big setup for calling the writer. Probably 
+not.
+
+Why do I write all this down? I write all this down for at least 
+three reasons: first, to focus my attention; second, so that my 
+readers (DS) can see what I think about and decide whether they 
+would like to adopt any of those ways of thinking; and third, 
+because I can look back over the past few days and see things 
+that I'd like to remember but otherwise wouldn't.
+
+I think we'll find that rearranging these is valuable. My guess is 
+that I would hae to rearrange these things a few times to get to 
+something I would like. Could we have a single class in here that 
+all four of the Exp functions use, reducing their code to 
+something much simpler? I bet we can! Maybe we'll start there.
+
+One more thing ... should the Exp classes and the curve adding 
+classes be in separate files? Given the hassle with imports, it 
+may not be worth it.
+
+Enough for now! Enjoy! 
