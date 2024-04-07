@@ -192,4 +192,8 @@ I'll try breaking Vehicle away from RCG, because we want that anyway.
 
 Miraculously, when I do that, the unlinked test passes. Life is good.
 
+Committed. Now to test in Blender. Arguably I should have done 
+that first. Manus do come up. Life remains good.
 
+I think we are ready to begin refactoring in earnest. Whew! I hope 
+I'm right. Committing this. 
