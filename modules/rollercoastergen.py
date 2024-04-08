@@ -18,13 +18,9 @@ def make_elements(name):
     working = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects'
     filepath = os.path.join(working, name + '.blend')
     directory = os.path.join(filepath, 'Object')
-    filename = object_track05
+    filename = name
     return filepath, directory, filename
 
-
-file_track05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track05.blend'
-inner_track05 = 'Object'
-object_track05 = 'track05'
 
 file_track10 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track10.blend'
 inner_track10 = 'Object'
