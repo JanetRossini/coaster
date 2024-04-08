@@ -479,3 +479,147 @@ remote test.
 
 There may be better ways to do this. For now, I'm rolling back, 
 after committing just the journal.
+
+## 20240408_0931_JR
+
+Now to mess around with the RCG a bit, just to practice. There are 
+a few different kinds of classes, each with a bunch of duplication.
+For the export, I think we need to decide whether we prefer the 
+curren buttons, or a smaller number of buttons with pull downs or 
+cycler things. I'll start with the add methods, which all have an 
+eerie similarity in their `execute` method. Here are two:
+
+~~~
+class RCG_OT_addflatruler20(Operator):
+    def execute(self, context):
+        bpy.ops.wm.append(filepath=os.path.join(file_trackflatruler20, inner_trackflatruler20, object_trackflatruler20),
+            directory=os.path.join(file_trackflatruler20, inner_trackflatruler20), filename=object_trackflatruler20)
+        trackflatruler20 = bpy.data.objects["trackflatruler20"]
+        trackflatruler20.select_set(state=True, view_layer=bpy.context.view_layer)
+        bpy.context.view_layer.objects.active = trackflatruler20
+
+
+class RCG_OT_addflatruler10(Operator):
+    def execute(self, context):
+        bpy.ops.wm.append(filepath=os.path.join(file_trackflatruler10, inner_trackflatruler10, object_trackflatruler10),
+            directory=os.path.join(file_trackflatruler10, inner_trackflatruler10), filename=object_trackflatruler10)
+        trackflatruler10 = bpy.data.objects["trackflatruler10"]
+        trackflatruler10.select_set(state=True, view_layer=bpy.context.view_layer)
+        bpy.context.view_layer.objects.active = trackflatruler10
+~~~
+
+I think we might profit from moving all the similar adds adjacent 
+to each other. Right now, there are some other classes sprinkled 
+in between them, such as between the track ones and the ruler ones.
+This will help us observe similarities and differences, and give 
+us a better chance of finding all the places we can make an 
+improvement. For now, I'm just practicing and plan to roll back.
+
+I have split my screen to show the definition of 
+`file_trackruler10` in one split, with the class 
+RCG_OT_addflatruler10 underneath. And I have journal open on the 
+right, so I can take these notes. 
+
+We can make these methods more alike by using generic names where 
+possible In the one above the name trackflatruler10 could be ruler.
+But when we add track, I think we're using exactly the same code, 
+so maybe we should use an even more generic word, like `item` or 
+`addend` or the like. 
+
+Put cursor on `trackruler10` and do Shift+F6, or pop up the 
+right-click menu and select Rename. Or even use top Refactor / 
+Refactor this. But learning a few hot keys speeds things up. 
+
+PyCharm asks if we want to change string occurrences. We do not, 
+just code. We get:
+
+~~~
+    def execute(self, context):
+        bpy.ops.wm.append(filepath=os.path.join(file_trackruler10, inner_trackruler10, object_trackruler10),
+            directory=os.path.join(file_trackruler10, inner_trackruler10), filename=object_trackruler10)
+        addend = bpy.data.objects["trackruler10"]
+        addend.select_set(state=True, view_layer=bpy.context.view_layer)
+        bpy.context.view_layer.objects.active = addend
+~~~
+
+Interesting. If we did that throughout we could extract a variable:
+
+~~~
+    def execute(self, context):
+        bpy.ops.wm.append(filepath=os.path.join(file_trackruler10, inner_trackruler10, object_trackruler10),
+            directory=os.path.join(file_trackruler10, inner_trackruler10), filename=object_trackruler10)
+        addend_name = "trackruler10"
+        addend = bpy.data.objects[addend_name]
+        addend.select_set(state=True, view_layer=bpy.context.view_layer)
+        bpy.context.view_layer.objects.active = addend
+~~~
+
+Then we could extract this method:
+
+~~~
+    def execute(self, context):
+        bpy.ops.wm.append(filepath=os.path.join(file_trackruler10, inner_trackruler10, object_trackruler10),
+            directory=os.path.join(file_trackruler10, inner_trackruler10), filename=object_trackruler10)
+        addend_name = "trackruler10"
+        self.select_and_set_context(addend_name)
+        return {'FINISHED'}
+
+    def select_and_set_context(self, addend_name):
+        addend = bpy.data.objects[addend_name]
+        addend.select_set(state=True, view_layer=bpy.context.view_layer)
+        bpy.context.view_layer.objects.active = addend
+~~~
+
+PyCharm observes that this method could be static, and offers to 
+make it a function instead. We might like that, because as a 
+function, it will be available to all our classes. PyCharm puts it 
+somewhere. We'll want to move it somewhere prominent.
+
+But now look at another ruler, like "05":
+
+~~~
+class RCG_OT_addruler05(Operator):
+    def execute(self, context):
+        bpy.ops.wm.append(filepath=os.path.join(file_trackruler05, inner_trackruler05, object_trackruler05),
+            directory=os.path.join(file_trackruler05, inner_trackruler05), filename=object_trackruler05)
+        trackruler05 = bpy.data.objects["trackruler05"]
+        trackruler05.select_set(state=True, view_layer=bpy.context.view_layer)
+        bpy.context.view_layer.objects.active = trackruler05
+
+        return {'FINISHED'}
+~~~
+
+We can change that to:
+
+~~~
+    def execute(self, context):
+        bpy.ops.wm.append(filepath=os.path.join(file_trackruler05, inner_trackruler05, object_trackruler05),
+            directory=os.path.join(file_trackruler05, inner_trackruler05), filename=object_trackruler05)
+        select_and_set_context("trackruler05")
+        return {'FINISHED'}
+~~~
+
+I wonder if there is a more automated way to do this. I tweak the 
+inspection for duplicates, and PyCharm will show them to me. If I 
+extract `addend_name` from each of the `bpy.data.objects` lines, 
+they all get marked as duplicated. (Any name would do, it ignores 
+the names in looking for duplicates. But in general, when doing 
+this, we work to *increase* duplication. Curiously, the more 
+duplicated the code gets, the easier it is to extract it.)
+
+Once we get PyCharm recognizing these segments, we can use the 
+show duplicates screen to click to them, but we still have to do 
+the edit somewhat manually. However, if we have set them all up by 
+extracting addend_name, we can just paste the new call after 
+selecting the lines that need to be changed.
+
+Enough experimentation. I've been at this for about another hour 
+and have plenty of ideas for things we could do.
+
+All the ideas, so far, are a bit tedious. Once we create a lot of 
+duplication, that often happens, because we have eight or ten 
+places to clean up. Some folks will refactor on three duplications.
+I will often do it with just two, but that is sometimes premature. 
+
+Rolling back after committing journal.
+
