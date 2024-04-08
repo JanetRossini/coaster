@@ -349,4 +349,15 @@ mention that when next we work together.
 
 Use the Move refactoring. Tests green. vehicle.py is empty. Remove 
 the file with Safe Delete. Green. Commit: move vehicle to 
-vtfilewriter, remove vehicle.py
+vtfilewriter, remove vehicle.py.
+
+Now let's remove my Vector and Quaternion classes since we now 
+know that mathutils works, which I mistakenly thought it did not 
+in PyCharm. We don't mind removing them, because they are still in 
+Git and GitHub.
+
+I point the tests in test_vmath_quat to mathutils briefly, just to 
+make sure it likes them. Then I can safe delete that test file, or 
+could leave it pointed to real Quaternion. I think remove it: it'll 
+be there if we need it. Remove v_quaternion also for one commit.
+Commit: remove v_quaternion and tests.
