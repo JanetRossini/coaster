@@ -364,3 +364,22 @@ Commit: remove v_quaternion and tests.
 
 Same drill for Vector and its tests. Safe Delete the tests then 
 the class. Commit: remove v_vector and tests.
+
+All green. Now, for my own amusement, I am going to look at 
+Vehicle and VtFileWriter to see if they can be improved.
+
+In this code:
+
+~~~
+class Vehicle:
+    def __init__(self, back, up, front):
+        self.back = back
+        self.up = up
+        self.front = front
+        self.forward = (front - back).normalized()
+        self.upward = (up - back).normalized()
+~~~
+
+We never use back, up, or front. We only use the forward and 
+upward. Remove the first three statements. Green. Commit: remove 
+unused member variables.

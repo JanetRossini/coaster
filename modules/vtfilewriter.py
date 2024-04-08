@@ -107,9 +107,6 @@ default {
 
 class Vehicle:
     def __init__(self, back, up, front):
-        self.back = back
-        self.up = up
-        self.front = front
         self.forward = (front - back).normalized()
         self.upward = (up - back).normalized()
 
