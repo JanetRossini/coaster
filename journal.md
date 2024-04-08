@@ -361,3 +361,6 @@ make sure it likes them. Then I can safe delete that test file, or
 could leave it pointed to real Quaternion. I think remove it: it'll 
 be there if we need it. Remove v_quaternion also for one commit.
 Commit: remove v_quaternion and tests.
+
+Same drill for Vector and its tests. Safe Delete the tests then 
+the class. Commit: remove v_vector and tests.
