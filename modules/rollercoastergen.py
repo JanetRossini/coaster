@@ -22,10 +22,6 @@ def make_elements(name):
     return filepath, directory, filename
 
 
-file_track10 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track10.blend'
-inner_track10 = 'Object'
-object_track10 = 'track10'
-
 file_track20 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track20.blend'
 inner_track20 = 'Object'
 object_track20 = 'track20'
@@ -104,9 +100,12 @@ class RCG_OT_addtrack10(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_track10, inner_track10, object_track10),
-                          directory=os.path.join(file_track10, inner_track10), filename=object_track10)
-        track10 = bpy.data.objects["track10"]
+        name = "track10"
+        filepath, directory, filename = make_elements(name)
+        bpy.ops.wm.append(filepath=filepath,
+                          directory=directory,
+                          filename=filename)
+        track10 = bpy.data.objects[name]
         track10.select_set(state=True, view_layer=bpy.context.view_layer)
         bpy.context.view_layer.objects.active = track10
         return {'FINISHED'}
