@@ -338,3 +338,7 @@ Remove it again. Tests all fail. I need to get better at this
 import for Blender thing. Fix one import, tests are green.
 
 Commit: remove duplicate Vehicle file.
+
+OK let's extract the comment from Vehicle. Put it in test_vehicle? 
+A file of its own. vehicle.md. Commit: move vehicle comment to 
+vehicle.md.
