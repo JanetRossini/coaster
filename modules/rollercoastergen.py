@@ -12,6 +12,20 @@ from bpy.types import Panel
 from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty
 
+
+def make_elements(name):
+    working = os.getcwd()  # comment next line, should still work for DS
+    working = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects'
+    filepath = os.path.join(working, name + '.blend')
+    directory = os.path.join(filepath, 'Object')
+    filename = object_track05
+    return filepath, directory, filename
+
+
+file_track05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track05.blend'
+inner_track05 = 'Object'
+object_track05 = 'track05'
+
 file_track05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track05.blend'
 inner_track05 = 'Object'
 object_track05 = 'track05'
