@@ -342,3 +342,11 @@ Commit: remove duplicate Vehicle file.
 OK let's extract the comment from Vehicle. Put it in test_vehicle? 
 A file of its own. vehicle.md. Commit: move vehicle comment to 
 vehicle.md.
+
+Now let's move Vehicle into VtFileWriter and remove vehicle.py. 
+Almost forgot to repin the test tab after reboot. Remind me to 
+mention that when next we work together.
+
+Use the Move refactoring. Tests green. vehicle.py is empty. Remove 
+the file with Safe Delete. Green. Commit: move vehicle to 
+vtfilewriter, remove vehicle.py

@@ -7,9 +7,8 @@ import pytest
 # changed to use mathutils throughout.
 from mathutils import Vector, Quaternion
 
-from modules.vehicle import Vehicle
 from test_data import tilt_45, fetch
-from modules.vtfilewriter import VtFileWriter
+from modules.vtfilewriter import VtFileWriter, Vehicle
 
 
 class TestCoasterVehicle:
