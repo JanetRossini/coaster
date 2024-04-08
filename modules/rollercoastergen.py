@@ -26,10 +26,6 @@ file_track05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/trac
 inner_track05 = 'Object'
 object_track05 = 'track05'
 
-file_track05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track05.blend'
-inner_track05 = 'Object'
-object_track05 = 'track05'
-
 file_track10 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track10.blend'
 inner_track10 = 'Object'
 object_track10 = 'track10'
