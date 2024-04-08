@@ -383,3 +383,99 @@ class Vehicle:
 We never use back, up, or front. We only use the forward and 
 upward. Remove the first three statements. Green. Commit: remove 
 unused member variables.
+
+That's all I see in Vehicle. Let's look at VtFileWriter together: 
+I think it would like to be improved just a bit. I'll make some 
+notes here, but no changes.
+
+I don't like the ifs here:
+
+~~~
+    def make_lines(coordinate_triples, abs, bank):
+        lines = []
+        back_zero = coordinate_triples[0][0]
+
+        for back, up, front in coordinate_triples:
+            if abs:
+                back_zeroed = back
+            else:
+                back_zeroed = back - back_zero
+            if bank:
+                roll = Vehicle(back, up, front).roll_degrees()
+            else:
+                roll = 0
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
+            lines.append(output)
+        return lines
+~~~
+
+There are, in principle, four possible ways for this loop to go:
+False, False; False, True; True, False; True, True. We could 
+extract a couple of methods, perhaps like this:
+
+~~~
+    @staticmethod
+    def make_lines(coordinate_triples, abs, bank):
+        lines = []
+        back_zero = coordinate_triples[0][0]
+
+        for back, up, front in coordinate_triples:
+            back_zeroed = VtFileWriter.get_rear_point(back, back_zero, abs)
+            roll = VtFileWriter.get_roll(back, up, front, bank)
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
+            lines.append(output)
+        return lines
+
+    @staticmethod
+    def get_roll(back, up, front, bank):
+        if bank:
+            roll = Vehicle(back, up, front).roll_degrees()
+        else:
+            roll = 0
+        return roll
+
+    @staticmethod
+    def get_rear_point(back, back_zero, abs):
+        if abs:
+            back_zeroed = back
+        else:
+            back_zeroed = back - back_zero
+        return back_zeroed
+~~~
+
+We can make those two static methods much shorter:
+
+~~~
+    @staticmethod
+    def get_roll(back, up, front, bank):
+        return Vehicle(back, up, front).roll_degrees() if bank else 0
+
+    @staticmethod
+    def get_rear_point(back, back_zero, abs):
+        return back if abs else back - back_zero
+~~~
+
+We also see that the write method is referring to the class, 
+because it is static. We would prefer this:
+
+~~~python
+    def make_lines(self, coordinate_triples, abs, bank):
+        lines = []
+        back_zero = coordinate_triples[0][0]
+
+        for back, up, front in coordinate_triples:
+            back_zeroed = self.get_rear_point(back, back_zero, abs)
+            roll = self.get_roll(back, up, front, bank)
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
+            lines.append(output)
+        return lines
+~~~
+
+Each of those changes could be committed if we wished: the tests 
+are all passing. I would prefer to have better tests that check 
+all the combinations to be sure they give uw what we want. The 
+code seems right, and it seems to work in SL ... but that's a pretty 
+remote test.
+
+There may be better ways to do this. For now, I'm rolling back, 
+after committing just the journal.
