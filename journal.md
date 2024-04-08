@@ -316,3 +316,25 @@ classes be in separate files? Given the hassle with imports, it
 may not be worth it.
 
 Enough for now! Enjoy! 
+
+## 20240408_0509_JR (Monday)
+
+Too early to be awake, but there we are. Need to fix the writer 
+bug. I know one way that will work, one way that might work, and 
+one way that could possibly work.
+
+1. Put Vehicle in with VtFileWriter
+2. Change the import in VtFileWriter using try/except
+3. Put import statements in the init.py in modules
+
+Since #1 will absolutely work, we'll go with that: it's more 
+important that we get to refactoring RCG. I'll move the long 
+comment out of Vehicle, so the combined file isn't too awful to 
+browse.
+
+Right off the bat, I find that I didn't remove the old vehicle.py. 
+I thought I moved the class and do not know how that happened. 
+Remove it again. Tests all fail. I need to get better at this 
+import for Blender thing. Fix one import, tests are green.
+
+Commit: remove duplicate Vehicle file.

@@ -2,7 +2,6 @@ import os
 from math import ceil
 
 
-
 class VtFileWriter:
     def __init__(self, vertices, path, base_name, size):
         self.vertices = vertices
