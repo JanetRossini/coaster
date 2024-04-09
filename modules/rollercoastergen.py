@@ -67,9 +67,9 @@ inner_ngtrack1 = 'Object'
 object_ngtrack1 = 'ngtrack1'
 
 
-class RCG_OT_addtrack05(Operator):
+class RCG_OT_importObject(Operator):
     """ Add an object called Track05 from a specific file """
-    bl_idname = "rcg.addtrackobject05"
+    bl_idname = "rcg.importobject"
     bl_label = "0.5m"
     bl_options = {"REGISTER", "UNDO"}
 
@@ -697,19 +697,22 @@ class RCG_PT_sidebar(Panel):
         col.operator("curve.primitive_nurbs_path_add", text="Create Path Curve")
         col.label(text="Add a track", icon='ANIM')
         row = col.row()
-        op = row.operator("rcg.addtrackobject05", text="0.5m")
+        op = row.operator("rcg.importobject", text="0.5m")
         op.rcg_file = "track05"
-        op = row.operator("rcg.addtrackobject05", text="1.0m")
+        op = row.operator("rcg.importobject", text="1.0m")
         op.rcg_file = "track10"
-        op = row.operator("rcg.addtrackobject05", text="2.0m")
+        op = row.operator("rcg.importobject", text="2.0m")
         op.rcg_file = "track20"
         # row.operator("rcg.addtrackobject10")
         # row.operator("rcg.addtrackobject20")
         col.label(text="Add an inverted track", icon='ANIM')
         row = col.row()
-        row.operator("rcg.addinvtrackobject05")
-        row.operator("rcg.addinvtrackobject10")
-        row.operator("rcg.addinvtrackobject20")
+        op = row.operator("rcg.importobject", text="0.5m")
+        op.rcg_file = "invtrack05"
+        op = row.operator("rcg.importobject", text="1.0m")
+        op.rcg_file = "invtrack10"
+        op = row.operator("rcg.importobject", text="2.0m")
+        op.rcg_file = "invtrack20"
         col.label(text="Add misc track", icon='ANIM')
         col.operator("rcg.addngtrack1")
         col.label(text="Add a track ruler", icon='ARROW_LEFTRIGHT')
@@ -729,7 +732,7 @@ class RCG_PT_sidebar(Panel):
         col.operator("rcg.expflatabs")
 
 
-classes = [RCG_OT_inputempties, RCG_OT_inputnurbspath, RCG_OT_addtrack05, RCG_OT_addtrack10, RCG_OT_addtrack20,
+classes = [RCG_OT_inputempties, RCG_OT_inputnurbspath, RCG_OT_importObject, RCG_OT_addtrack10, RCG_OT_addtrack20,
            RCG_OT_addinvtrack05, RCG_OT_addinvtrack10, RCG_OT_addinvtrack20, RCG_OT_addngtrack1, RCG_OT_addflatruler05,
            RCG_OT_addflatruler10, RCG_OT_addflatruler20, RCG_OT_addruler05, RCG_OT_addruler10, RCG_OT_addruler20,
            RCG_OT_addarray, RCG_OT_addbezcurve, RCG_OT_addnurbscurve, RCG_OT_apply, RCG_OT_Exp_Banked_path,
