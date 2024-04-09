@@ -73,12 +73,19 @@ class RCG_OT_addtrack05(Operator):
     bl_label = "0.5m"
     bl_options = {"REGISTER", "UNDO"}
 
+    rcg_file: bpy.props.StringProperty(name="Default Value")
+
     @classmethod
     def poll(cls, context):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        name = "track05"
+        if self.rcg_file != "":
+            name = self.rcg_file
+        else:
+            name = "track05"
+            self.report({"WARNING"}, "defaulting to " + name)
+        self.report({"INFO"}, "adding " + name)
         filepath, directory, filename = make_elements(name)
         bpy.ops.wm.append(filepath=filepath,
                           directory=directory,
@@ -690,9 +697,14 @@ class RCG_PT_sidebar(Panel):
         col.operator("curve.primitive_nurbs_path_add", text="Create Path Curve")
         col.label(text="Add a track", icon='ANIM')
         row = col.row()
-        row.operator("rcg.addtrackobject05")
-        row.operator("rcg.addtrackobject10")
-        row.operator("rcg.addtrackobject20")
+        op = row.operator("rcg.addtrackobject05", text="0.5m")
+        op.rcg_file = "track05"
+        op = row.operator("rcg.addtrackobject05", text="1.0m")
+        op.rcg_file = "track10"
+        op = row.operator("rcg.addtrackobject05", text="2.0m")
+        op.rcg_file = "track20"
+        # row.operator("rcg.addtrackobject10")
+        # row.operator("rcg.addtrackobject20")
         col.label(text="Add an inverted track", icon='ANIM')
         row = col.row()
         row.operator("rcg.addinvtrackobject05")
