@@ -22,51 +22,6 @@ def make_elements(name):
     return filepath, directory, filename
 
 
-file_track20 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track20.blend'
-inner_track20 = 'Object'
-object_track20 = 'track20'
-
-file_invtrack05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/invtrack05.blend'
-inner_invtrack05 = 'Object'
-object_invtrack05 = 'invtrack05'
-
-file_invtrack10 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/invtrack10.blend'
-inner_invtrack10 = 'Object'
-object_invtrack10 = 'invtrack10'
-
-file_invtrack20 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/invtrack20.blend'
-inner_invtrack20 = 'Object'
-object_invtrack20 = 'invtrack20'
-
-file_trackruler05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/trackruler05.blend'
-inner_trackruler05 = 'Object'
-object_trackruler05 = 'trackruler05'
-
-file_trackruler10 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/trackruler10.blend'
-inner_trackruler10 = 'Object'
-object_trackruler10 = 'trackruler10'
-
-file_trackruler20 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/trackruler20.blend'
-inner_trackruler20 = 'Object'
-object_trackruler20 = 'trackruler20'
-
-file_trackflatruler05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/trackflatruler05.blend'
-inner_trackflatruler05 = 'Object'
-object_trackflatruler05 = 'trackflatruler05'
-
-file_trackflatruler10 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/trackflatruler10.blend'
-inner_trackflatruler10 = 'Object'
-object_trackflatruler10 = 'trackflatruler10'
-
-file_trackflatruler20 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/trackflatruler20.blend'
-inner_trackflatruler20 = 'Object'
-object_trackflatruler20 = 'trackflatruler20'
-
-file_ngtrack1 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/ngtrack1.blend'
-inner_ngtrack1 = 'Object'
-object_ngtrack1 = 'ngtrack1'
-
-
 class RCG_OT_importObject(Operator):
     """ Add an object called Track05 from a specific file """
     bl_idname = "rcg.importobject"
@@ -94,128 +49,6 @@ class RCG_OT_importObject(Operator):
         track05.select_set(state=True, view_layer=bpy.context.view_layer)
         bpy.context.view_layer.objects.active = track05
         return {'FINISHED'}
-
-
-class RCG_OT_addtrack10(Operator):
-    """ Add an object called Track10 from a specific file """
-    bl_idname = "rcg.addtrackobject10"
-    bl_label = "1.0m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        name = "track10"
-        filepath, directory, filename = make_elements(name)
-        bpy.ops.wm.append(filepath=filepath,
-                          directory=directory,
-                          filename=filename)
-        track10 = bpy.data.objects[name]
-        track10.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = track10
-        return {'FINISHED'}
-
-
-class RCG_OT_addtrack20(Operator):
-    """ Add an object called Track20 from a specific file """
-    bl_idname = "rcg.addtrackobject20"
-    bl_label = "2.0m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_track20, inner_track20, object_track20),
-                          directory=os.path.join(file_track20, inner_track20), filename=object_track20)
-        track20 = bpy.data.objects["track20"]
-        track20.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = track20
-        return {'FINISHED'}
-
-
-class RCG_OT_addinvtrack05(Operator):
-    """ Add an object called InvTrack05 from a specific file """
-    bl_idname = "rcg.addinvtrackobject05"
-    bl_label = "0.5m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_invtrack05, inner_invtrack05, object_invtrack05),
-                          directory=os.path.join(file_invtrack05, inner_invtrack05), filename=object_invtrack05)
-        invtrack05 = bpy.data.objects["invtrack05"]
-        invtrack05.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = invtrack05
-
-        return {'FINISHED'}
-
-
-class RCG_OT_addinvtrack10(Operator):
-    """ Add an object called InvTrack10 from a specific file """
-    bl_idname = "rcg.addinvtrackobject10"
-    bl_label = "1.0m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_invtrack10, inner_invtrack10, object_invtrack10),
-                          directory=os.path.join(file_invtrack10, inner_invtrack10), filename=object_invtrack10)
-        invtrack10 = bpy.data.objects["invtrack10"]
-        invtrack10.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = invtrack10
-
-        return {'FINISHED'}
-
-
-class RCG_OT_addinvtrack20(Operator):
-    """ Add an object called InvTrack20 from a specific file """
-    bl_idname = "rcg.addinvtrackobject20"
-    bl_label = "2.0m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_invtrack20, inner_invtrack20, object_invtrack20),
-                          directory=os.path.join(file_invtrack20, inner_invtrack20), filename=object_invtrack20)
-        invtrack20 = bpy.data.objects["invtrack20"]
-        invtrack20.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = invtrack20
-
-        return {'FINISHED'}
-
-
-class RCG_OT_addngtrack1(Operator):
-    """ Add an object called ngtrack1 from a specific file """
-    bl_idname = "rcg.addngtrack1"
-    bl_label = "Add 1m NG track"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_ngtrack1, inner_ngtrack1, object_ngtrack1),
-                          directory=os.path.join(file_ngtrack1, inner_ngtrack1), filename=object_ngtrack1)
-        ngtrack1 = bpy.data.objects["ngtrack1"]
-        ngtrack1.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = ngtrack1
-
-        return {'FINISHED'}
-
 
 class SelectFileEmpties(bpy.types.Operator, ImportHelper):
     """Select a text file"""
@@ -348,128 +181,6 @@ def create_nurbs_path(coordinates):
 
     return obj
 
-
-class RCG_OT_addruler05(Operator):
-    """ Add an object called lineruler from a specific file """
-    bl_idname = "rcg.addruler05"
-    bl_label = "0.5m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_trackruler05, inner_trackruler05, object_trackruler05),
-                          directory=os.path.join(file_trackruler05, inner_trackruler05), filename=object_trackruler05)
-        trackruler05 = bpy.data.objects["trackruler05"]
-        trackruler05.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = trackruler05
-
-        return {'FINISHED'}
-
-
-class RCG_OT_addruler10(Operator):
-    """ Add an object called lineruler from a specific file """
-    bl_idname = "rcg.addruler10"
-    bl_label = "1.0m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_trackruler10, inner_trackruler10, object_trackruler10),
-                          directory=os.path.join(file_trackruler10, inner_trackruler10), filename=object_trackruler10)
-        trackruler10 = bpy.data.objects["trackruler10"]
-        trackruler10.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = trackruler10
-
-        return {'FINISHED'}
-
-
-class RCG_OT_addruler20(Operator):
-    """ Add an object called lineruler from a specific file """
-    bl_idname = "rcg.addruler20"
-    bl_label = "2.0m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_trackruler20, inner_trackruler20, object_trackruler20),
-                          directory=os.path.join(file_trackruler20, inner_trackruler20), filename=object_trackruler20)
-        trackruler20 = bpy.data.objects["trackruler20"]
-        trackruler20.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = trackruler20
-
-        return {'FINISHED'}
-
-
-class RCG_OT_addflatruler05(Operator):
-    """ Add an object called lineruler from a specific file """
-    bl_idname = "rcg.addflatruler05"
-    bl_label = "0.5m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_trackflatruler05, inner_trackflatruler05, object_trackflatruler05),
-                          directory=os.path.join(file_trackflatruler05, inner_trackflatruler05),
-                          filename=object_trackflatruler05)
-        trackflatruler05 = bpy.data.objects["trackflatruler05"]
-        trackflatruler05.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = trackflatruler05
-
-        return {'FINISHED'}
-
-
-class RCG_OT_addflatruler10(Operator):
-    """ Add an object called lineruler from a specific file """
-    bl_idname = "rcg.addflatruler10"
-    bl_label = "1.0m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_trackflatruler10, inner_trackflatruler10, object_trackflatruler10),
-                          directory=os.path.join(file_trackflatruler10, inner_trackflatruler10),
-                          filename=object_trackflatruler10)
-        trackflatruler10 = bpy.data.objects["trackflatruler10"]
-        trackflatruler10.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = trackflatruler10
-
-        return {'FINISHED'}
-
-
-class RCG_OT_addflatruler20(Operator):
-    """ Add an object called lineruler from a specific file """
-    bl_idname = "rcg.addflatruler20"
-    bl_label = "2.0m"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.wm.append(filepath=os.path.join(file_trackflatruler20, inner_trackflatruler20, object_trackflatruler20),
-                          directory=os.path.join(file_trackflatruler20, inner_trackflatruler20),
-                          filename=object_trackflatruler20)
-        trackflatruler20 = bpy.data.objects["trackflatruler20"]
-        trackflatruler20.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = trackflatruler20
-
-        return {'FINISHED'}
 
 
 class RCG_OT_addarray(Operator):
@@ -714,12 +425,17 @@ class RCG_PT_sidebar(Panel):
         op = row.operator("rcg.importobject", text="2.0m")
         op.rcg_file = "invtrack20"
         col.label(text="Add misc track", icon='ANIM')
-        col.operator("rcg.addngtrack1")
+        row = col.row()
+        op = row.operator("rcg.importobject", text="Add 1m NG Track")
+        op.rcg_file = "ngtrack1"
         col.label(text="Add a track ruler", icon='ARROW_LEFTRIGHT')
         row = col.row()
-        row.operator("rcg.addruler05")
-        row.operator("rcg.addruler10")
-        row.operator("rcg.addruler20")
+        op = row.operator("rcg.importobject", text="0.5m")
+        op.rcg_file = "trackruler05"
+        op = row.operator("rcg.importobject", text="1.0m")
+        op.rcg_file = "trackruler10"
+        op = row.operator("rcg.importobject", text="2.0m")
+        op.rcg_file = "trackruler20"
         col.label(text="Add a modifier", icon='MODIFIER')
         col.operator("rcg.addarray")
         col.operator("rcg.addbezcurve")
@@ -732,13 +448,9 @@ class RCG_PT_sidebar(Panel):
         col.operator("rcg.expflatabs")
 
 
-classes = [RCG_OT_inputempties, RCG_OT_inputnurbspath, RCG_OT_importObject, RCG_OT_addtrack10, RCG_OT_addtrack20,
-           RCG_OT_addinvtrack05, RCG_OT_addinvtrack10, RCG_OT_addinvtrack20, RCG_OT_addngtrack1, RCG_OT_addflatruler05,
-           RCG_OT_addflatruler10, RCG_OT_addflatruler20, RCG_OT_addruler05, RCG_OT_addruler10, RCG_OT_addruler20,
-           RCG_OT_addarray, RCG_OT_addbezcurve, RCG_OT_addnurbscurve, RCG_OT_apply, RCG_OT_Exp_Banked_path,
-           RCG_OT_Exp_Banked_path_abs, RCG_OT_Exp_Flat_path, RCG_OT_Exp_Flat_path_abs, RCG_PT_sidebar,
-           SelectFileEmpties,
-           SelectFileNurbs, ]
+classes = [RCG_OT_inputempties, RCG_OT_inputnurbspath, RCG_OT_importObject, RCG_OT_addarray, RCG_OT_addbezcurve,
+           RCG_OT_addnurbscurve, RCG_OT_apply, RCG_OT_Exp_Banked_path, RCG_OT_Exp_Banked_path_abs, RCG_OT_Exp_Flat_path,
+           RCG_OT_Exp_Flat_path_abs, RCG_PT_sidebar, SelectFileEmpties, SelectFileNurbs, ]
 
 
 def register():
