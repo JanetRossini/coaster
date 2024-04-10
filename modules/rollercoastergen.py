@@ -279,12 +279,11 @@ class RCG_OT_Export(Operator):
 
         # Output geometry
         obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        filepath = "C:/Users/Terry/PycharmProjects/blenderPython/"
 
         verts = obj_eval.data.vertices
-        triples = [verts[i:i + 3] for i in range(0, len(verts) - 1, 2)]
-        size = 500
+        filepath = "C:/Users/Terry/PycharmProjects/blenderPython/"
         basename = "test_data"
+        size = 500
         writer = VtFileWriter(verts, filepath, basename, size)
         writer.write_files(basename, self.rcg_abs, self.rcg_bank)
 
