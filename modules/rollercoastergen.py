@@ -304,6 +304,7 @@ class RCG_PT_sidebar(Panel):
     bl_region_type = "UI"
     bl_category = "RollerCoaster"
 
+    # noinspection SpellCheckingInspection
     def draw(self, context):
         col = self.layout.column(align=True)
         col.label(text="Add/Create track curve", icon='CURVE_DATA')
@@ -319,8 +320,6 @@ class RCG_PT_sidebar(Panel):
         op.rcg_file = "track10"
         op = row.operator("rcg.importobject", text="2.0m")
         op.rcg_file = "track20"
-        # row.operator("rcg.addtrackobject10")
-        # row.operator("rcg.addtrackobject20")
         col.label(text="Add an inverted track", icon='ANIM')
         row = col.row()
         op = row.operator("rcg.importobject", text="0.5m")
