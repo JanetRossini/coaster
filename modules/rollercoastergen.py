@@ -23,9 +23,9 @@ def make_elements(name):
 
 
 class RCG_OT_importObject(Operator):
-    """ Add an object called Track05 from a specific file """
+    """ Add an object from a premade blender file """
     bl_idname = "rcg.importobject"
-    bl_label = "0.5m"
+    bl_label = "Size"
     bl_options = {"REGISTER", "UNDO"}
 
     rcg_file: bpy.props.StringProperty(name="Default Value")
@@ -257,10 +257,10 @@ class RCG_OT_apply(Operator):
         return {'FINISHED'}
 
 
-class RCG_OT_Exp_Banked_path(Operator):
+class RCG_OT_Export(Operator):
     """ Set the render properties """
-    bl_idname = "rcg.expbank"
-    bl_label = "Export Banked Path"
+    bl_idname = "rcg.export"
+    bl_label = "Export"
     bl_options = {"REGISTER", "UNDO"}
 
     rcg_abs: bpy.props.BoolProperty(name="abs")
@@ -273,8 +273,6 @@ class RCG_OT_Exp_Banked_path(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        report = f'Abs: {self.rcg_abs} Bank: {self.rcg_bank}'
-        self.report({"INFO"}, report)
         # Put code here
         obj = bpy.context.object
 
@@ -294,104 +292,6 @@ class RCG_OT_Exp_Banked_path(Operator):
 
         return {'FINISHED'}
 
-
-class RCG_OT_Exp_Flat_path(Operator):
-    """ Set the render properties """
-    bl_idname = "rcg.expflat"
-    bl_label = "Export Flat Path"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        # Put code here
-        obj = bpy.context.object
-
-        if obj is None or obj.type != "MESH":
-            return
-
-        # Output geometry
-        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        filepath = "C:/Users/Terry/PycharmProjects/blenderPython/"
-
-        abs = False
-        bank = False
-        verts = obj_eval.data.vertices
-        triples = [verts[i:i + 3] for i in range(0, len(verts) - 1, 2)]
-        size = 500
-        basename = "test_data"
-        writer = VtFileWriter(verts, filepath, basename, size)
-        writer.write_files(basename, abs, bank)
-
-        return {'FINISHED'}
-
-
-class RCG_OT_Exp_Banked_path_abs(Operator):
-    """ Set the render properties """
-    bl_idname = "rcg.expbankabs"
-    bl_label = "Export Banked Path Abs"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        # Put code here
-        obj = bpy.context.object
-
-        if obj is None or obj.type != "MESH":
-            return
-
-        # Output geometry
-        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        filepath = "C:/Users/Terry/PycharmProjects/blenderPython/"
-
-        abs = True
-        bank = True
-        verts = obj_eval.data.vertices
-        triples = [verts[i:i + 3] for i in range(0, len(verts) - 1, 2)]
-        size = 500
-        basename = "test_data"
-        writer = VtFileWriter(verts, filepath, basename, size)
-        writer.write_files(basename, abs, bank)
-
-        return {'FINISHED'}
-
-
-class RCG_OT_Exp_Flat_path_abs(Operator):
-    """ Set the render properties """
-    bl_idname = "rcg.expflatabs"
-    bl_label = "Export Flat Path Abs"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        # Put code here
-        obj = bpy.context.object
-
-        if obj is None or obj.type != "MESH":
-            return
-
-        # Output geometry
-        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        filepath = "C:/Users/Terry/PycharmProjects/blenderPython/"
-
-        abs = True
-        bank = False
-        verts = obj_eval.data.vertices
-        triples = [verts[i:i + 3] for i in range(0, len(verts) - 1, 2)]
-        size = 500
-        basename = "test_data"
-        writer = VtFileWriter(verts, filepath, basename, size)
-        writer.write_files(basename, abs, bank)
-
-        return {'FINISHED'}
 
 
 # VtFileWriter begins here
@@ -447,17 +347,22 @@ class RCG_PT_sidebar(Panel):
         col.operator("rcg.addnurbscurve")
         col.operator("rcg.apply")
         col.label(text="Export Data", icon='EXPORT')
-        exp_banked_op = col.operator("rcg.expbank", text="Export Banked Path")
+        exp_banked_op = col.operator("rcg.export", text="Export Banked Path")
         exp_banked_op.rcg_abs = False
         exp_banked_op.rcg_bank = True
-        col.operator("rcg.expflat")
-        col.operator("rcg.expbankabs")
-        col.operator("rcg.expflatabs")
+        exp_flat_op = col.operator("rcg.export", text="Export Flat Path")
+        exp_flat_op.rcg_abs = False
+        exp_flat_op.rcg_bank = False
+        exp_banked_abs_op = col.operator("rcg.export", text="Export Banked Path Abs")
+        exp_banked_abs_op.rcg_abs = True
+        exp_banked_abs_op.rcg_bank = True
+        exp_flat_abs_op = col.operator("rcg.export", text="Export Flat Path Abs")
+        exp_flat_abs_op.rcg_abs = True
+        exp_flat_abs_op.rcg_bank = False
 
 
 classes = [RCG_OT_inputempties, RCG_OT_inputnurbspath, RCG_OT_importObject, RCG_OT_addarray, RCG_OT_addbezcurve,
-           RCG_OT_addnurbscurve, RCG_OT_apply, RCG_OT_Exp_Banked_path, RCG_OT_Exp_Banked_path_abs, RCG_OT_Exp_Flat_path,
-           RCG_OT_Exp_Flat_path_abs, RCG_PT_sidebar, SelectFileEmpties, SelectFileNurbs, ]
+           RCG_OT_addnurbscurve, RCG_OT_apply, RCG_OT_Export, RCG_PT_sidebar, SelectFileEmpties, SelectFileNurbs, ]
 
 
 def register():
