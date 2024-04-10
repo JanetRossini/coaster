@@ -50,6 +50,7 @@ class RCG_OT_importObject(Operator):
         bpy.context.view_layer.objects.active = track05
         return {'FINISHED'}
 
+
 class SelectFileEmpties(bpy.types.Operator, ImportHelper):
     """Select a text file"""
     bl_idname = "custom.select_empties"
@@ -182,7 +183,6 @@ def create_nurbs_path(coordinates):
     return obj
 
 
-
 class RCG_OT_addarray(Operator):
     """ Set the render properties """
     bl_idname = "rcg.addarray"
@@ -266,8 +266,6 @@ class RCG_OT_Export(Operator):
     rcg_abs: bpy.props.BoolProperty(name="abs")
     rcg_bank: bpy.props.BoolProperty(name="bank")
 
-
-
     @classmethod
     def poll(cls, context):
         return context.mode == "OBJECT"
@@ -291,10 +289,6 @@ class RCG_OT_Export(Operator):
         writer.write_files(basename, self.rcg_abs, self.rcg_bank)
 
         return {'FINISHED'}
-
-
-
-# VtFileWriter begins here
 
 
 class RCG_PT_sidebar(Panel):
