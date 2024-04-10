@@ -263,11 +263,18 @@ class RCG_OT_Exp_Banked_path(Operator):
     bl_label = "Export Banked Path"
     bl_options = {"REGISTER", "UNDO"}
 
+    rcg_abs: bpy.props.BoolProperty(name="abs")
+    rcg_bank: bpy.props.BoolProperty(name="bank")
+
+
+
     @classmethod
     def poll(cls, context):
         return context.mode == "OBJECT"
 
     def execute(self, context):
+        report = f'Abs: {self.rcg_abs} Bank: {self.rcg_bank}'
+        self.report({"INFO"}, report)
         # Put code here
         obj = bpy.context.object
 
@@ -278,14 +285,12 @@ class RCG_OT_Exp_Banked_path(Operator):
         obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
         filepath = "C:/Users/Terry/PycharmProjects/blenderPython/"
 
-        abs = False
-        bank = True
         verts = obj_eval.data.vertices
         triples = [verts[i:i + 3] for i in range(0, len(verts) - 1, 2)]
         size = 500
         basename = "test_data"
         writer = VtFileWriter(verts, filepath, basename, size)
-        writer.write_files(basename, abs, bank)
+        writer.write_files(basename, self.rcg_abs, self.rcg_bank)
 
         return {'FINISHED'}
 
@@ -442,7 +447,9 @@ class RCG_PT_sidebar(Panel):
         col.operator("rcg.addnurbscurve")
         col.operator("rcg.apply")
         col.label(text="Export Data", icon='EXPORT')
-        col.operator("rcg.expbank")
+        exp_banked_op = col.operator("rcg.expbank", text="Export Banked Path")
+        exp_banked_op.rcg_abs = False
+        exp_banked_op.rcg_bank = True
         col.operator("rcg.expflat")
         col.operator("rcg.expbankabs")
         col.operator("rcg.expflatabs")
