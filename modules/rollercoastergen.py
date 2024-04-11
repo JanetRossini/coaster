@@ -307,32 +307,32 @@ class RCG_PT_sidebar(Panel):
         col.operator("curve.primitive_nurbs_path_add", text="Create Path Curve")
         col.label(text="Add a track", icon='ANIM')
         row = col.row()
-        op = row.operator("rcg.importobject", text="0.5m")
-        op.rcg_file = "track05"
-        op = row.operator("rcg.importobject", text="1.0m")
-        op.rcg_file = "track10"
-        op = row.operator("rcg.importobject", text="2.0m")
-        op.rcg_file = "track20"
+        op05 = row.operator("rcg.importobject", text="0.5m")
+        op05.rcg_file = "track05"
+        op05 = row.operator("rcg.importobject", text="1.0m")
+        op05.rcg_file = "track10"
+        op05 = row.operator("rcg.importobject", text="2.0m")
+        op05.rcg_file = "track20"
         col.label(text="Add an inverted track", icon='ANIM')
         row = col.row()
-        op = row.operator("rcg.importobject", text="0.5m")
-        op.rcg_file = "invtrack05"
-        op = row.operator("rcg.importobject", text="1.0m")
-        op.rcg_file = "invtrack10"
-        op = row.operator("rcg.importobject", text="2.0m")
-        op.rcg_file = "invtrack20"
+        op05 = row.operator("rcg.importobject", text="0.5m")
+        op05.rcg_file = "invtrack05"
+        op05 = row.operator("rcg.importobject", text="1.0m")
+        op05.rcg_file = "invtrack10"
+        op05 = row.operator("rcg.importobject", text="2.0m")
+        op05.rcg_file = "invtrack20"
         col.label(text="Add misc track", icon='ANIM')
         row = col.row()
-        op = row.operator("rcg.importobject", text="Add 1m NG Track")
-        op.rcg_file = "ngtrack1"
+        op05 = row.operator("rcg.importobject", text="Add 1m NG Track")
+        op05.rcg_file = "ngtrack1"
         col.label(text="Add a track ruler", icon='ARROW_LEFTRIGHT')
         row = col.row()
-        op = row.operator("rcg.importobject", text="0.5m")
-        op.rcg_file = "trackruler05"
-        op = row.operator("rcg.importobject", text="1.0m")
-        op.rcg_file = "trackruler10"
-        op = row.operator("rcg.importobject", text="2.0m")
-        op.rcg_file = "trackruler20"
+        op05 = row.operator("rcg.importobject", text="0.5m")
+        op05.rcg_file = "trackruler05"
+        op10 = row.operator("rcg.importobject", text="1.0m")
+        op10.rcg_file = "trackruler10"
+        op20 = row.operator("rcg.importobject", text="2.0m")
+        op20.rcg_file = "trackruler20"
         col.label(text="Add a modifier", icon='MODIFIER')
         col.operator("rcg.addarray")
         col.operator("rcg.addbezcurve")
