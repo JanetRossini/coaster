@@ -87,3 +87,8 @@ class TestFileWriting:
             directory=directory,
             filename=filename
         )
+
+    def test_home(self):
+        home = os.path.expanduser('~')
+        print(home)
+        # assert False
