@@ -623,3 +623,36 @@ I will often do it with just two, but that is sometimes premature.
 
 Rolling back after committing journal.
 
+## 20240411_0833_JR
+
+I have two tasks on my task card: fix the mathutils issue so that 
+tests will run on both machines, and change the path code for file 
+writing so that it does not contain an explicit path but is 
+instead put into a coasterdata folder in the user's base folder.
+
+My plan is to change things so that we always use my Vector and 
+Quaternion classes, which pass all my tests and worked throughout. 
+It just seemed that using the official mathutils made more sense. 
+But not if it's not going to work without a C++ compiler.
+
+To do this, I will have to check out old versions of the tests and 
+code. I'll make some notes of the process here.
+
+This journal is getting long. I wonder if some other approach 
+would be better, maybe a folder of notes? I'll add that to my card.
+
+At the lower right on my screen are a few buttons that open a 
+console, packages, etc. One of them is a little network-looking 
+thing,and that leads to the Git history. Hover tip is "Git".
+
+The approach is the best one I know for this kind of thing: find 
+and check out the latest version that contained the files needed, 
+and copy them somewhere else. I generally paste them into my 
+regular editor, but I wonder if I can drag them to and from my 
+desktop. I'll try that.
+
+Looking at the Git list I see a small branch in there. Eeek, I try 
+never to branch. I think that reflects a failure to pull.
+
+Which reminds me to check my git status and I see that I have some 
+mods hanging. 
