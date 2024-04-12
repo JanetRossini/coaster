@@ -119,15 +119,27 @@ class SelectFileNurbs(bpy.types.Operator, ImportHelper):
 
     def execute(self, context):
         file_path = self.filepath
-
-        # Read coordinates from the file
         coordinates = read_coordinates(file_path)
-        #        print(coordinates)
-
-        # Create a NURBS path using the coordinates
-        nurbs_path_object = create_nurbs_path(coordinates)
-
+        create_nurbs_path(coordinates)
         return {'FINISHED'}
+
+
+def create_nurbs_path(coordinates):
+    nurbs_path = bpy.data.curves.new(name="NurbsPath", type='CURVE')
+    nurbs_path.dimensions = '3D'
+    nurbs_path.resolution_u = 2
+
+    spline = nurbs_path.splines.new('NURBS')
+    spline.points.add(len(coordinates) - 1)  # Add points for each coordinate
+
+    for i, coord in enumerate(coordinates):
+        x, y, z = coord
+        spline.points[i].co = (x, y, z, 1)  # Use homogeneous coordinates
+
+    obj = bpy.data.objects.new("NurbsPath", nurbs_path)
+    bpy.context.collection.objects.link(obj)
+
+    return obj
 
 
 class RCG_OT_inputnurbspath(Operator):
@@ -153,30 +165,6 @@ class RCG_OT_inputnurbspath(Operator):
         # Create a NURBS path using the coordinates
         #        nurbs_path_object = create_nurbs_path(coordinates)
         return {'FINISHED'}
-
-    # Define the function to create a NURBS path
-
-
-def create_nurbs_path(coordinates):
-    # Create a new NURBS path
-    nurbs_path = bpy.data.curves.new(name="NurbsPath", type='CURVE')
-    nurbs_path.dimensions = '3D'
-    nurbs_path.resolution_u = 2
-
-    # Create a new spline
-    spline = nurbs_path.splines.new('NURBS')
-    spline.points.add(len(coordinates) - 1)  # Add points for each coordinate
-
-    # Assign coordinates to the spline points
-    for i, coord in enumerate(coordinates):
-        x, y, z = coord
-        spline.points[i].co = (x, y, z, 1)  # Use homogeneous coordinates
-
-    # Create an object to hold the path
-    obj = bpy.data.objects.new("NurbsPath", nurbs_path)
-    bpy.context.collection.objects.link(obj)
-
-    return obj
 
 
 class RCG_OT_addarray(Operator):
