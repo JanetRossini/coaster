@@ -350,8 +350,17 @@ class RCG_PT_sidebar(Panel):
         exp_flat_abs_op.rcg_bank = False
 
 
-classes = [RCG_OT_inputempties, RCG_OT_inputnurbspath, RCG_OT_importObject, RCG_OT_addarray, RCG_OT_addbezcurve,
-           RCG_OT_addnurbscurve, RCG_OT_apply, RCG_OT_Export, RCG_PT_sidebar, SelectFileEmpties, SelectFileNurbs, ]
+classes = [RCG_OT_addarray,
+           RCG_OT_addbezcurve,
+           RCG_OT_addnurbscurve,
+           RCG_OT_apply,
+           RCG_OT_Export,
+           RCG_OT_importObject,
+           RCG_OT_inputempties,
+           RCG_OT_inputnurbspath,
+           RCG_PT_sidebar,
+           SelectFileEmpties,
+           SelectFileNurbs, ]
 
 
 def register():
