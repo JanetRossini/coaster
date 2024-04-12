@@ -655,4 +655,4 @@ Looking at the Git list I see a small branch in there. Eeek, I try
 never to branch. I think that reflects a failure to pull.
 
 Which reminds me to check my git status and I see that I have some 
-mods hanging. 
+mods hanging. I sort that out.
