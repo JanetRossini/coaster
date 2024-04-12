@@ -277,7 +277,8 @@ class RCG_OT_Export(Operator):
         obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
 
         verts = obj_eval.data.vertices
-        filepath = "C:/Users/Terry/PycharmProjects/blenderPython/"
+        home = os.path.expanduser('~')
+        filepath = os.path.join(home, 'coasterdata')
         basename = "test_data"
         size = 500
         writer = VtFileWriter(verts, filepath, basename, size)
