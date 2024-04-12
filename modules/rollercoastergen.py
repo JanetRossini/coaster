@@ -63,7 +63,10 @@ class SelectFileEmpties(bpy.types.Operator, ImportHelper):
         with open(file_path, 'r') as file:
             for line in file:
                 # Split each line into coordinates
-                line_stripped = line.replace('<', '').replace('>', '').replace(' ', '')
+                line_stripped = line\
+                    .replace('<', '')\
+                    .replace('>', '')\
+                    .replace(' ', '')
                 coordinates = line_stripped.strip().split(',')
                 # Convert coordinates to floats and create a Vector
                 vertex = Vector((float(coordinates[0]), float(coordinates[1]), float(coordinates[2])))
@@ -99,10 +102,13 @@ def read_coordinates(file_path):
     coordinates = []
     with open(file_path, 'r') as file:
         for line in file:
-            line_stripped = line.replace('<', '').replace('>', '').replace(' ', '').replace(',', ' ')
+            line_stripped = line\
+                .replace('<', '')\
+                .replace('>', '')\
+                .replace(' ', '')\
+                .replace(',', ' ')
             # Assuming coordinates are separated by space
             coords = line_stripped.strip().split()
-            #            print(coords)
             if len(coords) >= 3:  # Ensure there are at least x, y, and z coordinates
                 coordinates.append(tuple(map(float, coords)))
     return coordinates
