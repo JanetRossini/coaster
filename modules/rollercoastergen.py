@@ -330,12 +330,13 @@ class RCG_PT_sidebar(Panel):
         col.operator("rcg.addnurbscurve")
         col.operator("rcg.apply")
         col.label(text="Export Data", icon='EXPORT')
-        self.make_two_argument_op(col, "Export Banked Path", False, True)
-        self.make_two_argument_op(col, "Export Flat Path", False, False)
-        self.make_two_argument_op(col, "Export Banked Path Abs", True, True)
-        self.make_two_argument_op(col, "Export Glat Path Abs", True, False)
+        self.make_two_arg_export_op(col, "Export Banked Path", False, True)
+        self.make_two_arg_export_op(col, "Export Flat Path", False, False)
+        self.make_two_arg_export_op(col, "Export Banked Path Abs", True, True)
+        self.make_two_arg_export_op(col, "Export Glat Path Abs", True, False)
 
-    def make_two_argument_op(self, col, text, absolute, bank):
+    @staticmethod
+    def make_two_arg_export_op(col, text, absolute, bank):
         op = col.operator("rcg.export", text=text)
         op.rcg_abs = absolute
         op.rcg_bank = bank
