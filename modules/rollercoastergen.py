@@ -333,7 +333,7 @@ class RCG_PT_sidebar(Panel):
         self.make_two_arg_export_op(col, "Export Banked Path", False, True)
         self.make_two_arg_export_op(col, "Export Flat Path", False, False)
         self.make_two_arg_export_op(col, "Export Banked Path Abs", True, True)
-        self.make_two_arg_export_op(col, "Export Glat Path Abs", True, False)
+        self.make_two_arg_export_op(col, "Export Flat Path Abs", True, False)
 
     @staticmethod
     def make_two_arg_export_op(col, text, absolute, bank):
