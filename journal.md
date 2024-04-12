@@ -656,3 +656,7 @@ never to branch. I think that reflects a failure to pull.
 
 Which reminds me to check my git status and I see that I have some 
 mods hanging. I sort that out.
+
+I checked out the revision, dragged the files out to desktop. 
+Checked out main (top of changes), dragged the files back into the 
+project window folder. They are now there, ready to be checked in.
