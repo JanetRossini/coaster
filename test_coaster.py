@@ -1,6 +1,5 @@
 import os.path
 from math import atan2, radians, ceil
-
 import pytest
 
 
