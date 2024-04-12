@@ -458,7 +458,7 @@ We can make those two static methods much shorter:
 We also see that the write method is referring to the class, 
 because it is static. We would prefer this:
 
-~~~python
+~~~
     def make_lines(self, coordinate_triples, abs, bank):
         lines = []
         back_zero = coordinate_triples[0][0]
@@ -660,3 +660,10 @@ mods hanging. I sort that out.
 I checked out the revision, dragged the files out to desktop. 
 Checked out main (top of changes), dragged the files back into the 
 project window folder. They are now there, ready to be checked in.
+
+I had to set up a conditional import in vtfilewriter to get the 
+imports working but when I commit this, we'll be converted to use 
+my mathutils, not Blender / Python's file. Needs a solid test.
+
+And I am just about fed up with PyCharm's grammar and spelling 
+whining. Commit: convert to use v_mathutils.

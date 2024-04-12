@@ -1,12 +1,8 @@
-from mathutils import Vector  # use in Blender if you like
-
+import os
+from v_mathutils import Vector  # use in Blender if you like
 from vtfilewriter import VtFileWriter
 
-""" from v_vector import Vector  # remove if you use mathutils
-from v_quaternion import Quaternion  # remove if you use mathutils """
-
 import bpy
-import os
 from bpy.types import Operator
 from bpy.types import Panel
 from bpy_extras.io_utils import ImportHelper

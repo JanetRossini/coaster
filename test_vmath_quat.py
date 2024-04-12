@@ -1,12 +1,6 @@
 from math import radians
-
 import pytest
-
-# all real code should now use mathutils
-# this test checks the JR objects, which should no longer be needed.
-# from mathutils import Vector, Quaternion
-from v_quaternion import Quaternion
-from v_vector import Vector
+from modules.v_mathutils import Quaternion, Vector
 
 
 class TestVMathQuaternion:
