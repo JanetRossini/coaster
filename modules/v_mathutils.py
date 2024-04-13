@@ -86,8 +86,9 @@ class Quaternion:
         t = 2 * cross(q.xyz, v)
         v' = v + q.w * t + cross(q.xyz, t)
         """
-        # if not isinstance(v, Vector):
-        #     raise TypeError("Quaternion @ requires vector as second argument")
+        klass = v.__class__.__name__
+        if not 'Vector' in klass:
+            raise TypeError("Quaternion @ requires vector as second argument")
         xyz = self.xyz
         t = 2 * xyz.cross(v)
         return v + self.w * t + xyz.cross(t)

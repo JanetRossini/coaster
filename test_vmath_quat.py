@@ -37,6 +37,14 @@ class TestVMathQuaternion:
             q1 = Quaternion(1, 2, 3, 4, "hello")
         assert e1 in str(info.value) or e2 in str(info.value)
 
+    def test_quat_times_non_vector(self):
+        axis = Vector((0, 1, 0))
+        quat = Quaternion(axis, radians(90))
+        quat @ axis
+        with pytest.raises(TypeError):
+            quat @ 21
+
+
     def test_quat_times_vector(self):
         def quat_x_vector(quat, vec):
             xyz = Vector((quat.x, quat.y, quat.z))
