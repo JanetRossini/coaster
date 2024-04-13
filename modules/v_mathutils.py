@@ -37,6 +37,7 @@ class Quaternion:
         q1*scalar
         q1 @ vector ( __matmul__)
     """
+
     def __init__(self, *args):
         if len(args) == 4:
             self.w = args[0]
@@ -49,9 +50,9 @@ class Quaternion:
             norm = axis.normalized()
             half = angle / 2
             sine = sin(half)
-            self.x = norm.x*sine
-            self.y = norm.y*sine
-            self.z = norm.z*sine
+            self.x = norm.x * sine
+            self.y = norm.y * sine
+            self.z = norm.z * sine
             self.w = cos(half)
         elif len(args) == 1 and isinstance(args[0], Quaternion):
             q = args[0]
@@ -67,7 +68,7 @@ class Quaternion:
         return Vector((self.x, self.y, self.z))
 
     def __add__(self, q):
-        return Quaternion(self.w+q.w, self.x+q.x, self.y+q.y, self.z+q.z)
+        return Quaternion(self.w + q.w, self.x + q.x, self.y + q.y, self.z + q.z)
 
     def __neg__(self):
         return Quaternion(-self.w, -self.x, -self.y, -self.z)
@@ -79,16 +80,14 @@ class Quaternion:
         return Quaternion(scalar * self.w, scalar * self.x, scalar * self.y, scalar * self.z)
 
     def __rmul__(self, scalar):
-        return self*scalar
+        return self * scalar
 
     def __matmul__(self, v):
         """
         t = 2 * cross(q.xyz, v)
         v' = v + q.w * t + cross(q.xyz, t)
         """
-        klass = v.__class__.__name__
-        if not 'Vector' in klass:
-            raise TypeError("Quaternion @ requires vector as second argument")
+
         xyz = self.xyz
         t = 2 * xyz.cross(v)
         return v + self.w * t + xyz.cross(t)
@@ -112,11 +111,11 @@ class Quaternion:
         if self._is_unit():
             return self
         norm = self._norm
-        inverse = 1.0/norm
-        return inverse*self
+        inverse = 1.0 / norm
+        return inverse * self
 
-    def dot(self,q):
-        return self.w*q.w + self.x*q.x + self.y*q.y + self.z*q.z
+    def dot(self, q):
+        return self.w * q.w + self.x * q.x + self.y * q.y + self.z * q.z
 
     def slerp(self, other, frac):
         """
@@ -139,7 +138,7 @@ class Quaternion:
         frac = min(max(frac, 0), 1)
         dot = q0.dot(q1)
         if dot < 0:
-            q0 = -1*q0
+            q0 = -1 * q0
             dot = -dot
         if dot > 0.9995:
             # UNTESTED!!
@@ -147,12 +146,12 @@ class Quaternion:
             return qr
         theta_0 = acos(dot)
         sin_theta_0 = sin(theta_0)
-        theta = theta_0*frac
+        theta = theta_0 * frac
         sin_theta = sin(theta)
         s0 = cos(theta) - dot * sin_theta / sin_theta_0
         s1 = sin_theta / sin_theta_0
-        qa = s0*q0
-        qb = s1*q1
+        qa = s0 * q0
+        qb = s1 * q1
         qr = Quaternion(qa + qb).normalized()
         return qr
 
@@ -188,7 +187,7 @@ class Vector:
         return Vector(seq)
 
     def __rmul__(self, scalar):  # scalar * self
-        return self*scalar
+        return self * scalar
 
     @property
     def x(self):
@@ -207,16 +206,16 @@ class Vector:
         x = self.x
         y = self.y
         z = self.z
-        return sqrt(x*x + y*y + z*z)
+        return sqrt(x * x + y * y + z * z)
 
     def normalized(self):
         length = self.length
-        return Vector((self.x/length, self.y/length, self.z/length))
+        return Vector((self.x / length, self.y / length, self.z / length))
 
     def cross(self, b):
         ax, ay, az = self.seq
         bx, by, bz = b.seq
-        cx = ay*bz - az*by
-        cy = az*bx - ax*bz
-        cz = ax*by - ay*bx
+        cx = ay * bz - az * by
+        cy = az * bx - ax * bz
+        cz = ax * by - ay * bx
         return Vector((cx, cy, cz))
