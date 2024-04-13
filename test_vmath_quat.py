@@ -1,6 +1,6 @@
 from math import radians
 import pytest
-from modules.v_mathutils import Quaternion, Vector
+from mathutils import Quaternion, Vector
 
 
 class TestVMathQuaternion:

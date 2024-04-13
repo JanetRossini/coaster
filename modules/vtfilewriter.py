@@ -1,12 +1,13 @@
 import os
 from math import ceil, degrees, atan2
+from mathutils import Vector, Quaternion
 
 # Somewhat nasty trick to deal with where Blender starts looking for things,
 # while keeping our tests running.
-try:
-    from v_mathutils import Vector, Quaternion
-except ModuleNotFoundError:
-    from .v_mathutils import Vector, Quaternion
+# try:
+#     from v_mathutils import Vector, Quaternion
+# except ModuleNotFoundError:
+#     from .v_mathutils import Vector, Quaternion
 
 
 class VtFileWriter:

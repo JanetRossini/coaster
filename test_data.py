@@ -1,5 +1,4 @@
-from modules.v_mathutils import Vector
-
+from mathutils import Vector
 
 """
 This is just the test data from Blender, converted into Python format.

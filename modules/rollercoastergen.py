@@ -1,5 +1,5 @@
 import os
-from v_mathutils import Vector  # use in Blender if you like
+from mathutils import Vector  # use in Blender if you like
 from vtfilewriter import VtFileWriter
 
 import bpy
