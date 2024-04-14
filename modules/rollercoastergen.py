@@ -11,11 +11,19 @@ from bpy.props import StringProperty
 
 def make_elements(name):
     home = os.path.expanduser('~')
-    working = os.path.join(home, 'coasterdata', 'coasterobjects')
+    working = os.path.join(home, 'PycharmProjects', 'coaster',  'coasterobjects')
     filepath = os.path.join(working, name + '.blend')
     directory = os.path.join(filepath, 'Object')
     filename = name
     return filepath, directory, filename
+
+# def make_elements(name):
+#     working = os.getcwd()  # comment next line, should still work for DS
+#     working = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects'
+#     filepath = os.path.join(working, name + '.blend')
+#     directory = os.path.join(filepath, 'Object')
+#     filename = name
+#     return filepath, directory, filename
 
 
 class RCG_OT_importObject(Operator):
