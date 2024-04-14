@@ -695,3 +695,11 @@ They do not understand `seq`, though JR vectors do.
 The "correct" thing is `to_tuple`, which we could implement in 
 our v_mathutils. Added a couple of tests of vectors, numpy, array, 
 etc.
+
+Let's look at reading in the files on my machine. I think that to 
+do that we should put them in some standard spot, like the output 
+files. For now, I'll copy them to the same folder. They are in 
+~/coasterdata/coasterobjects.
+
+Code changed to read from there. My Blender created track 
+successfully.

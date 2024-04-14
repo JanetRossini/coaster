@@ -10,8 +10,8 @@ from bpy.props import StringProperty
 
 
 def make_elements(name):
-    working = os.getcwd()  # comment next line, should still work for DS
-    working = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects'
+    home = os.path.expanduser('~')
+    working = os.path.join(home, 'coasterdata', 'coasterobjects')
     filepath = os.path.join(working, name + '.blend')
     directory = os.path.join(filepath, 'Object')
     filename = name
