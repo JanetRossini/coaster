@@ -685,7 +685,6 @@ actually came up against these issues:
    trip on my machine.
 4. We need to get to the point where DS can test on her machine.
 5. We need tests for fie writing and all four kinds of point creation.
-6. Some other note that I can't read now but maybe it will come to me.
 
 ## 20240414_0848_JR (Sunday)
 
