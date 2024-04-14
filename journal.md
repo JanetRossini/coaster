@@ -693,4 +693,5 @@ vtfilewriter got an error trying to send `seq` to one of them. Right.
 They do not understand `seq`, though JR vectors do. 
 
 The "correct" thing is `to_tuple`, which we could implement in 
-our v_mathutils. Added a couple of tests of
+our v_mathutils. Added a couple of tests of vectors, numpy, array, 
+etc.
