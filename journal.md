@@ -667,3 +667,26 @@ my mathutils, not Blender / Python's file. Needs a solid test.
 
 And I am just about fed up with PyCharm's grammar and spelling 
 whining. Commit: convert to use v_mathutils.
+
+## 20240413_JR (Saturday)
+
+We discovered that the change to use my library did not work. We 
+actually came up against these issues:
+
+1. Blender will produce mathutils Vectors, so unless we do a lot 
+   of too clever stuff, we probably cannot use my library. (It 
+   might be easy enough now to convert to janet-vectors in just 
+   one spot, but I'm not sure yet what we should do.)
+2. Blender seems to hold on to scripts even when you use its 
+   reload function, so that our library scripts are not dropped. 
+   (This, too, may ot be quite accurate, as DS's process was a 
+   bit erratic.)
+3. We need to get to the point where I can do a complete round 
+   trip on my machine.
+4. We need to get to the point where DS can test on her machine.
+5. We need tests for fie writing and all four kinds of point creation.
+6. Some other note that I can't read now but maybe it will come to me.
+
+## 20240414_0848_JR (Sunday)
+
+
