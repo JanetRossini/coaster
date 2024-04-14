@@ -703,3 +703,6 @@ files. For now, I'll copy them to the same folder. They are in
 
 Code changed to read from there. My Blender created track 
 successfully.
+
+Tried to install bpy, no joy, requires python <= 3.8 or something 
+like that. Tried a fake_bpy but probably did it wrong.
