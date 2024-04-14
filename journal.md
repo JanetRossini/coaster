@@ -689,4 +689,9 @@ actually came up against these issues:
 
 ## 20240414_0848_JR (Sunday)
 
+Blender API says that MeshVertex.co is a mathutils.Vector. But 
+vtfilewriter got an error trying to send `seq` to one of them. Right.
+They do not understand `seq`, though JR vectors do. 
 
+The "correct" thing is `to_tuple`, which we could implement in 
+our v_mathutils. Added a couple of tests of

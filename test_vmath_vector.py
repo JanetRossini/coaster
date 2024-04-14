@@ -58,3 +58,28 @@ class TestVMathVector:
         v2 = Vector((2, 3, 4))
         v3 = v1.cross(v2)
         assert v3 == Vector((-1, 2, -1))
+
+    # def test_array_add(self):
+    #     import numpy as np
+    #     a1 = np.array((1, 2, 3))
+    #     a2 = np.array((3, 2, 1))
+    #     a4 = np.array((4, 4, 4))
+    #     a_sum = a1 + a2
+    #     assert np.array_equal(a4, a_sum)
+
+    def test_mu_to_tuple(self):
+        from mathutils import Vector
+        v = Vector((1, 2, 3))
+        x, y, z = v.to_tuple()
+        assert x == 1
+        assert y == 2
+        assert z == 3
+
+    # def test_vmu_to_tuple(self):
+    #     from v_mathutils import Vector
+    #     v = Vector((1, 2, 3))
+    #     x, y, z = v.to_tuple()
+    #     assert x == 1
+    #     assert y == 2
+    #     assert z == 3
+
