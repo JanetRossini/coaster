@@ -675,7 +675,7 @@ actually came up against these issues:
 
 1. Blender will produce mathutils Vectors, so unless we do a lot 
    of too clever stuff, we probably cannot use my library. (It 
-   might be easy enough now to convert to janet-vectors in just 
+   might be easy enough now to convert to JR-vectors in just 
    one spot, but I'm not sure yet what we should do.)
 2. Blender seems to hold on to scripts even when you use its 
    reload function, so that our library scripts are not dropped. 
