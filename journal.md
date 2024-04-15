@@ -706,3 +706,6 @@ successfully.
 
 Tried to install bpy, no joy, requires python <= 3.8 or something 
 like that. Tried a fake_bpy but probably did it wrong.
+
+Changed again, to read track data from the project. DS should test 
+as well.
