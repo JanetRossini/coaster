@@ -60,16 +60,11 @@ class VtFileWriter:
             back_zero = coordinate_triples[0][0]
 
         for back, up, front in coordinate_triples:
-            back_zeroed, roll = VtFileWriter.get_line_data(back, up, front, back_zero, bank)
+            back_zeroed = back - back_zero
+            roll = Vehicle(back, up, front).roll_degrees() if bank else 0
             output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
             lines.append(output)
         return lines
-
-    @staticmethod
-    def get_line_data(back, up, front, back_zero, bank):
-        back_zeroed = back - back_zero
-        roll = Vehicle(back, up, front).roll_degrees() if bank else 0
-        return back_zeroed, roll
 
     fixed_part = """
 // nothing varies from here on down

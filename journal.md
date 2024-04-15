@@ -1043,3 +1043,24 @@ First I simplify:
 
 Let's commit, we're green and this will be a nice final resting 
 place for the four tests that made this possible.
+
+PyCharm can't do the inline, but I can:
+
+~~~python
+    @staticmethod
+    def make_lines(coordinate_triples, absolute, bank):
+        lines = []
+        if absolute:
+            back_zero = Vector((0, 0, 0))
+        else:
+            back_zero = coordinate_triples[0][0]
+
+        for back, up, front in coordinate_triples:
+            back_zeroed = back - back_zero
+            roll = Vehicle(back, up, front).roll_degrees() if bank else 0
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
+            lines.append(output)
+        return lines
+~~~
+
+And then remove the get and tests.
