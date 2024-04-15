@@ -68,10 +68,7 @@ class VtFileWriter:
     @staticmethod
     def get_line_data(back, up, front, back_zero, bank):
         back_zeroed = back - back_zero
-        if bank:
-            roll = Vehicle(back, up, front).roll_degrees()
-        else:
-            roll = 0
+        roll = Vehicle(back, up, front).roll_degrees() if bank else 0
         return back_zeroed, roll
 
     fixed_part = """

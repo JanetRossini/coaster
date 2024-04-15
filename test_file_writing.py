@@ -161,3 +161,35 @@ class TestFileWriting:
         assert bz.x == pytest.approx(1.0)
         assert bz.y == pytest.approx(0.0)
         assert bz.z == pytest.approx(0.0)
+
+    def test_make_lines_rel_flat(self):
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        coords = [(back, up, front)]
+        lines = VtFileWriter.make_lines(coords, False, False)
+        assert lines[0] == '<0.000, 0.000, 0.000, 0>'
+
+    def test_make_lines_rel_bank(self):
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        coords = [(back, up, front)]
+        lines = VtFileWriter.make_lines(coords, False, True)
+        assert lines[0] == '<0.000, 0.000, 0.000, 45>'
+
+    def test_make_lines_abs_bank(self):
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        coords = [(back, up, front)]
+        lines = VtFileWriter.make_lines(coords, True, True)
+        assert lines[0] == '<2.000, 2.000, 2.000, 45>'
+
+    def test_make_lines_abs_flat(self):
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        coords = [(back, up, front)]
+        lines = VtFileWriter.make_lines(coords, True, False)
+        assert lines[0] == '<2.000, 2.000, 2.000, 0>'

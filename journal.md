@@ -1015,3 +1015,31 @@ and so the real call isn't right yet.
 Super. Nearly good. We have converted the if statement down in 
 get_line_data in to a simple assignment. And we have tests for al 
 four cases of the get_line_data method. Commit again. 
+
+Writing those tests tell me how to write this, and the three like it:
+
+~~~python
+    def test_make_lines_abs_flat(self):
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        coords = [(back, up, front)]
+        lines = VtFileWriter.make_lines(coords, True, False)
+        assert lines[0] == '<2.000, 2.000, 2.000, 0>'
+~~~
+
+Now I can inline the get code for great good, which will break the 
+first four tests but leave these running.
+
+First I simplify:
+
+~~~python
+    @staticmethod
+    def get_line_data(back, up, front, back_zero, bank):
+        back_zeroed = back - back_zero
+        roll = Vehicle(back, up, front).roll_degrees() if bank else 0
+        return back_zeroed, roll
+~~~
+
+Let's commit, we're green and this will be a nice final resting 
+place for the four tests that made this possible.
