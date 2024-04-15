@@ -923,3 +923,95 @@ we need to do that in two places now, the tests and the real code.
 I'm going to back up to before I did that last extract. And I'm 
 going to commit to make a save point.
 
+Darn. I see where I want to go and I don't see a safe path to get 
+there.
+
+I have a save point. I'll code what I want and then see about 
+getting there safely.
+
+I want to change `get_line_data` to accept an adjuster rather than 
+the flag:
+
+What if we do this:
+
+~~~python
+    @staticmethod
+    def get_line_data(back, up, front, back_zero, bank):
+        back_zeroed = back - back_zero
+        if bank:
+            roll = Vehicle(back, up, front).roll_degrees()
+        else:
+            roll = 0
+        return back_zeroed, roll
+~~~
+
+Ah, nice. FIVE tests fail, not just four, becuasse our main call 
+to the function is now broken as well.
+
+First fix the four new tests:
+
+I move the flags to the top of the test, because I plan to use 
+them. For example:
+
+~~~python
+    def test_get_line_data_abs_bank(self):
+        absolute = True
+        bank = True
+        back_zero = Vector((1, 2, 2))
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        bz, roll = VtFileWriter.get_line_data(back, up, front, back_zero, absolute, bank)
+        assert roll == pytest.approx(45.0)
+        assert bz.x == pytest.approx(2.0)
+        assert bz.y == pytest.approx(2.0)
+        assert bz.z == pytest.approx(2.0)
+~~~
+
+Now I need to pass in an appropriate back_zero and stop passing in 
+abs.
+
+If abs is True, we want back_zero to be zero vector, like this:
+
+~~~python
+    def test_get_line_data_abs_bank(self):
+        absolute = True
+        if absolute:
+            back_zero = Vector((0, 0, 0))
+        else:
+            back_zero = Vector((1, 2, 2))
+        bank = True
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        bz, roll = VtFileWriter.get_line_data(back, up, front, back_zero, bank)
+        assert roll == pytest.approx(45.0)
+        assert bz.x == pytest.approx(2.0)
+        assert bz.y == pytest.approx(2.0)
+        assert bz.z == pytest.approx(2.0)
+~~~
+
+That one passes. Paste the same code im the others and remove 
+their absolute parameter. All four pass. NOw just one test is 
+failing. It's because we actually do write a file in test_coaster, 
+and so the real call isn't right yet.
+
+~~~python
+    @staticmethod
+    def make_lines(coordinate_triples, absolute, bank):
+        lines = []
+        if absolute:
+            back_zero = Vector((0, 0, 0))
+        else:
+            back_zero = coordinate_triples[0][0]
+
+        for back, up, front in coordinate_triples:
+            back_zeroed, roll = VtFileWriter.get_line_data(back, up, front, back_zero, bank)
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
+            lines.append(output)
+        return lines
+~~~
+
+Super. Nearly good. We have converted the if statement down in 
+get_line_data in to a simple assignment. And we have tests for al 
+four cases of the get_line_data method. Commit again. 

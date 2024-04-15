@@ -52,22 +52,22 @@ class VtFileWriter:
         file.write(self.fixed_part)
 
     @staticmethod
-    def make_lines(coordinate_triples, abs, bank):
+    def make_lines(coordinate_triples, absolute, bank):
         lines = []
-        back_zero = coordinate_triples[0][0]
+        if absolute:
+            back_zero = Vector((0, 0, 0))
+        else:
+            back_zero = coordinate_triples[0][0]
 
         for back, up, front in coordinate_triples:
-            back_zeroed, roll = VtFileWriter.get_line_data(back, up, front, back_zero, abs, bank)
+            back_zeroed, roll = VtFileWriter.get_line_data(back, up, front, back_zero, bank)
             output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
             lines.append(output)
         return lines
 
     @staticmethod
-    def get_line_data(back, up, front, back_zero, abs, bank):
-        if abs:
-            back_zeroed = back
-        else:
-            back_zeroed = back - back_zero
+    def get_line_data(back, up, front, back_zero, bank):
+        back_zeroed = back - back_zero
         if bank:
             roll = Vehicle(back, up, front).roll_degrees()
         else:
