@@ -709,3 +709,27 @@ like that. Tried a fake_bpy but probably did it wrong.
 
 Changed again, to read track data from the project. DS should test 
 as well.
+
+## 20240415_0745_JR (Monday)
+
+Short of trying to get an old python installed in the project, I 
+do not see a way to get DS's version to run the tests. At this 
+writing, I do not think it is worth doing, but that we should try 
+to do new work in a project that is set up to work on both systems,
+so that DS can learn the testing aspect of Python. Because of the 
+incompatibility with mathutils, that may be difficult.
+
+One possibility still on the table would be to convert the current 
+code to use the JR version of Vector and Quaternion, and not to 
+use mathutils at all. There is, however, at least one point in the 
+system where we will be handed a mathutils Vector instance, but 
+since Python is duck-typed, we can work around that.
+
+I am waffling about this. Waffle waffle.
+
+We need some tests for the vtfilewriter, since it has four options 
+that produce somewhat different results. I'll work on that this 
+morning. But first, I want to make a small change to the JR github.
+io site.
+
+Whee, excerpts!
