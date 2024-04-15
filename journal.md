@@ -733,3 +733,193 @@ morning. But first, I want to make a small change to the JR github.
 io site.
 
 Whee, excerpts!
+
+### Tests for vtfilewriter
+
+I think it's fair to say that the most important need is to test 
+the four combinations of flags, to be sure that the right values 
+are produced. We could test formatting or test that it writes all 
+the data or such but that's of even lower priority.
+
+The method in question is:
+
+~~~python
+    @staticmethod
+    def make_lines(coordinate_triples, abs, bank):
+        lines = []
+        back_zero = coordinate_triples[0][0]
+
+        for back, up, front in coordinate_triples:
+            if abs:
+                back_zeroed = back
+            else:
+                back_zeroed = back - back_zero
+            if bank:
+                roll = Vehicle(back, up, front).roll_degrees()
+            else:
+                roll = 0
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
+            lines.append(output)
+        return lines
+~~~
+
+I can see ways that I'd like to improve that code, which makes 
+tests more necessary, since fiddling with the conditional logic is 
+exactly why we have tests. 
+
+We can test this method directly, as it is static. (Does not 
+reference self.) So we can create a list of coordinate_triples, 
+whatever those are, create a list of expected output records, and 
+call it. 
+
+Since we believe it works now. we could even inspect current 
+output and then use it as a "golden master". We currently have no 
+tests at all for that method.
+
+Irritatingly, we'll need mathutils or v_mathutils, and we use the 
+Vehicle class as well, which uses the math stuff. All this just to 
+test the use of two booleans? 
+
+I'm allowed to use machine refactorings without tests: they are 
+highly reliable and almost certain not to break behavior. Extract:
+
+~~~python
+    @staticmethod
+    def make_lines(coordinate_triples, abs, bank):
+        lines = []
+        back_zero = coordinate_triples[0][0]
+
+        for back, up, front in coordinate_triples:
+            back_zeroed, roll = VtFileWriter.get_line_data(back, up, front, back_zero, abs, bank)
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
+            lines.append(output)
+        return lines
+
+    @staticmethod
+    def get_line_data(back, up, front, back_zero, abs, bank):
+        if abs:
+            back_zeroed = back
+        else:
+            back_zeroed = back - back_zero
+        if bank:
+            roll = Vehicle(back, up, front).roll_degrees()
+        else:
+            roll = 0
+        return back_zeroed, roll
+~~~
+
+Now we could just test `get_line_data` to be sure it does what we 
+expect. We still have the issue of using Vehicle. 
+
+I'll start by trying some simple tests on this new method. It 
+should be possible now to just test one combination, or maybe just 
+a few, to be sure we get what we want. Then we'll see if we can 
+eliminate the reference to Vehicle. 
+
+I should drop that Vehicle requirement: I'm trying to do this so 
+that DS can run the tests, and that's really off the table unless we 
+replace the vector and quad. 
+
+Once I get started four tests are quite easy. They are in 
+test_file_writing, named:
+
+~~~python
+    def test_get_line_data_rel_bank(self):
+    def test_get_line_data_abs_bank(self):
+    def test_get_line_data_abs_flat(self):
+    def test_get_line_data_rel_flat(self):
+~~~
+
+That was fairly easy, once I got started. 
+
+Now I have a couple of improvements in mind for this code:
+
+~~~python
+    @staticmethod
+    def make_lines(coordinate_triples, abs, bank):
+        lines = []
+        back_zero = coordinate_triples[0][0]
+
+        for back, up, front in coordinate_triples:
+            back_zeroed, roll = VtFileWriter.get_line_data(back, up, front, back_zero, abs, bank)
+            output = f"<{back_zeroed.x:.3f}, {back_zeroed.y:.3f}, {back_zeroed.z:.3f}, {roll:.0f}>"
+            lines.append(output)
+        return lines
+
+    @staticmethod
+    def get_line_data(back, up, front, back_zero, abs, bank):
+        if abs:
+            back_zeroed = back
+        else:
+            back_zeroed = back - back_zero
+        if bank:
+            roll = Vehicle(back, up, front).roll_degrees()
+        else:
+            roll = 0
+        return back_zeroed, roll
+~~~
+
+My tests don't support these ideas terribly well, but I'll try to 
+set that concern aside. Ideas include:
+
+1. If we init back_zero either as shown above or to zero vector, 
+   we can remove the first if from get_line_data. Oh, I think I 
+   see a neat way to do that.
+2. If we were to compute the roll and pass it in, we could avoid 
+   the reference to Vehicle in our tests. Not important?
+
+Let's do my neat idea. Refactor, pulling out a completely useless 
+method:
+
+~~~python
+    @staticmethod
+def get_line_data(back, up, front, back_zero, abs, bank):
+    return VtFileWriter.get_line_data_2(back, up, front, back_zero,
+                                        bank)
+
+
+@staticmethod
+def get_line_data_2(back, up, front, back_zero, abs, bank):
+    if abs:
+        back_zeroed = back
+    else:
+        back_zeroed = back - back_zero
+    if bank:
+        roll = Vehicle(back, up, front).roll_degrees()
+    else:
+        roll = 0
+    return back_zeroed, roll
+~~~
+
+The tests still pass. Now we change to this:
+
+~~~python
+    @staticmethod
+def get_line_data(back, up, front, back_zero, abs, bank):
+    if abs:
+        back_adjust = Vector((0, 0, 0))
+    else:
+        back_adjust = back_zero
+    return VtFileWriter.get_line_data_2(back, up, front, back_adjust,
+                                        bank)
+
+
+@staticmethod
+def get_line_data_2(back, up, front, back_adjust, abs, bank):
+    back_zeroed = back - back_adjust
+    if bank:
+        roll = Vehicle(back, up, front).roll_degrees()
+    else:
+        roll = 0
+    return back_zeroed, roll
+~~~
+
+Now the abs flag is not needed in the second method.
+
+I may have lost the thread, but I think what we should do now is 
+pass in the adjustment when we call the get_line_data method. But 
+we need to do that in two places now, the tests and the real code.
+
+I'm going to back up to before I did that last extract. And I'm 
+going to commit to make a save point.
+

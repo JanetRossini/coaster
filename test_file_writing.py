@@ -1,5 +1,10 @@
 import os
 
+import pytest
+from mathutils import Vector
+
+from modules.vtfilewriter import VtFileWriter
+
 program = """
 // this is a comment
 list vecdata = [
@@ -92,3 +97,55 @@ class TestFileWriting:
         home = os.path.expanduser('~')
         print(home)
         # assert False
+
+    def test_get_line_data_rel_bank(self):
+        back_zero = Vector((1, 2, 2))
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        absolute = False
+        bank = True
+        bz, roll = VtFileWriter.get_line_data(back, up, front, back_zero, absolute, bank)
+        assert roll == pytest.approx(45.0)
+        assert bz.x == pytest.approx(1.0)
+        assert bz.y == pytest.approx(0.0)
+        assert bz.z == pytest.approx(0.0)
+
+    def test_get_line_data_abs_bank(self):
+        back_zero = Vector((1, 2, 2))
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        absolute = True
+        bank = True
+        bz, roll = VtFileWriter.get_line_data(back, up, front, back_zero, absolute, bank)
+        assert roll == pytest.approx(45.0)
+        assert bz.x == pytest.approx(2.0)
+        assert bz.y == pytest.approx(2.0)
+        assert bz.z == pytest.approx(2.0)
+
+    def test_get_line_data_abs_flat(self):
+        back_zero = Vector((1, 2, 2))
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        absolute = True
+        bank = False
+        bz, roll = VtFileWriter.get_line_data(back, up, front, back_zero, absolute, bank)
+        assert roll == pytest.approx(0.0)
+        assert bz.x == pytest.approx(2.0)
+        assert bz.y == pytest.approx(2.0)
+        assert bz.z == pytest.approx(2.0)
+
+    def test_get_line_data_rel_flat(self):
+        back_zero = Vector((1, 2, 2))
+        back = Vector((2, 2, 2))
+        front = Vector((3, 2, 2))
+        up = Vector((2, 3, 3))
+        absolute = False
+        bank = False
+        bz, roll = VtFileWriter.get_line_data(back, up, front, back_zero, absolute, bank)
+        assert roll == pytest.approx(0.0)
+        assert bz.x == pytest.approx(1.0)
+        assert bz.y == pytest.approx(0.0)
+        assert bz.z == pytest.approx(0.0)
