@@ -2,7 +2,7 @@ import os.path
 from math import atan2, radians, ceil
 import pytest
 
-from modules.v_mathutils import Vector, Quaternion
+from modules.v_mathutils import VtVector, VtQuaternion
 
 from test_data import tilt_45, fetch
 from modules.vtfilewriter import VtFileWriter, Vehicle
@@ -45,13 +45,13 @@ class TestCoasterVehicle:
         """
         # yaw is rotation around z, uses y and x
         # we want y == 0
-        forward = Vector((1, 1, 1)).normalized()
+        forward = VtVector((1, 1, 1)).normalized()
         # top view is x horizontal, y vertical
-        z_axis = Vector((0, 0, 1))
+        z_axis = VtVector((0, 0, 1))
         rise = forward.y
         run = forward.x
         angle = atan2(rise, run)
-        remove_yaw = Quaternion(z_axis, -angle)
+        remove_yaw = VtQuaternion(z_axis, -angle)
         f_no_yaw = remove_yaw@forward
         assert f_no_yaw.y == pytest.approx(0, abs=0.001)
 
@@ -62,13 +62,13 @@ class TestCoasterVehicle:
         """
         # pitch is rotation around y, uses z and x
         # we want z == 0
-        forward = Vector((1, 2, 3)).normalized()
+        forward = VtVector((1, 2, 3)).normalized()
         # side view is y horizontal, z vertical
-        y_axis = Vector((0, 1, 0))
+        y_axis = VtVector((0, 1, 0))
         rise = forward.z
         run = forward.x
         angle = atan2(rise, run)
-        remove_pitch = Quaternion(y_axis, angle)  # why not -?
+        remove_pitch = VtQuaternion(y_axis, angle)  # why not -?
         f_no_pitch = remove_pitch@forward
         assert f_no_pitch.z == pytest.approx(0, abs=0.001)
 
@@ -148,21 +148,21 @@ class TestCoasterVehicle:
         # assert False
 
     def test_format(self):
-        back = Vector((1.234, 2.345, 3.456))
+        back = VtVector((1.234, 2.345, 3.456))
         roll = 129.0
         result = f"<{back.x:.3f}, {back.y:.3f}, {back.z:.3f}, {roll:.0f}>\n"
         assert result == "<1.234, 2.345, 3.456, 129>\n"
 
     def test_real_cross(self):
-        v1 = Vector((1, 2,3))
-        v2 = Vector((2, 3, 4))
+        v1 = VtVector((1, 2, 3))
+        v2 = VtVector((2, 3, 4))
         v3 = v1.cross(v2)
-        assert v3 == Vector((-1, 2, -1))
+        assert v3 == VtVector((-1, 2, -1))
 
     def test_real_quat(self):
-        v = Vector((1, 2, 3))
-        axis = Vector((0, 1, 0))
-        quat = Quaternion(axis, radians(90))
+        v = VtVector((1, 2, 3))
+        axis = VtVector((0, 1, 0))
+        quat = VtQuaternion(axis, radians(90))
         v2 = quat@v
         assert v2.x == pytest.approx(3, abs=0.001)
         assert v2.y == pytest.approx(2, abs=0.001)

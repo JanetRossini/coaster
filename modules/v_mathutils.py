@@ -26,7 +26,7 @@ Might use it for slerp.
 """
 
 
-class Quaternion:
+class VtQuaternion:
     """
     Minimal Quaternion.
     Supports:
@@ -54,7 +54,7 @@ class Quaternion:
             self.y = norm.y * sine
             self.z = norm.z * sine
             self.w = cos(half)
-        elif len(args) == 1 and isinstance(args[0], Quaternion):
+        elif len(args) == 1 and isinstance(args[0], VtQuaternion):
             q = args[0]
             self.w = q.w
             self.x = q.x
@@ -65,19 +65,19 @@ class Quaternion:
 
     @property
     def xyz(self):
-        return Vector((self.x, self.y, self.z))
+        return VtVector((self.x, self.y, self.z))
 
     def __add__(self, q):
-        return Quaternion(self.w + q.w, self.x + q.x, self.y + q.y, self.z + q.z)
+        return VtQuaternion(self.w + q.w, self.x + q.x, self.y + q.y, self.z + q.z)
 
     def __neg__(self):
-        return Quaternion(-self.w, -self.x, -self.y, -self.z)
+        return VtQuaternion(-self.w, -self.x, -self.y, -self.z)
 
     def __sub__(self, q):
         return self + (-q)
 
     def __mul__(self, scalar):
-        return Quaternion(scalar * self.w, scalar * self.x, scalar * self.y, scalar * self.z)
+        return VtQuaternion(scalar * self.w, scalar * self.x, scalar * self.y, scalar * self.z)
 
     def __rmul__(self, scalar):
         return self * scalar
@@ -142,7 +142,7 @@ class Quaternion:
             dot = -dot
         if dot > 0.9995:
             # UNTESTED!!
-            qr = Quaternion(q0 + frac * (q1 - q0)).normalized()
+            qr = VtQuaternion(q0 + frac * (q1 - q0)).normalized()
             return qr
         theta_0 = acos(dot)
         sin_theta_0 = sin(theta_0)
@@ -152,11 +152,11 @@ class Quaternion:
         s1 = sin_theta / sin_theta_0
         qa = s0 * q0
         qb = s1 * q1
-        qr = Quaternion(qa + qb).normalized()
+        qr = VtQuaternion(qa + qb).normalized()
         return qr
 
 
-class Vector:
+class VtVector:
     def __init__(self, seq):
         self.seq = tuple(seq)
         if len(self.seq) != 3:
@@ -173,18 +173,18 @@ class Vector:
         v_seq = vector.seq
         top_range = range(0, max(len(s_seq), len(v_seq)))
         seq = (s_seq[i] + v_seq[i] for i in top_range)
-        return Vector(seq)
+        return VtVector(seq)
 
     def __neg__(self):
         seq = (-c for c in self.seq)
-        return Vector(seq)
+        return VtVector(seq)
 
     def __sub__(self, vector):
         return self + -vector
 
     def __mul__(self, scalar):  # self * scalar
         seq = (scalar * coord for coord in self.seq)
-        return Vector(seq)
+        return VtVector(seq)
 
     def __rmul__(self, scalar):  # scalar * self
         return self * scalar
@@ -210,7 +210,7 @@ class Vector:
 
     def normalized(self):
         length = self.length
-        return Vector((self.x / length, self.y / length, self.z / length))
+        return VtVector((self.x / length, self.y / length, self.z / length))
 
     def cross(self, b):
         ax, ay, az = self.seq
@@ -218,4 +218,4 @@ class Vector:
         cx = ay * bz - az * by
         cy = az * bx - ax * bz
         cz = ax * by - ay * bx
-        return Vector((cx, cy, cz))
+        return VtVector((cx, cy, cz))

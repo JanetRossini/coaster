@@ -1101,3 +1101,10 @@ in doing the imports: I missed two entirely and did one wrong. Not
 bad out of less than ten. I have one test failing, throwing an 
 error that is not the one expected. Broadening the test gets me to 
 green. Commit. 
+
+I think one bug remains and I am not sure how to test for it or 
+fix it. First, let's rename our classes. This will ensure that 
+when Blender throws an error, we have a better chance of knowing 
+whether it is our Vector or Blender's.
+
+Rename to VtVector and VtQuaternion. Green. Commit.

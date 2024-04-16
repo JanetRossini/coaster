@@ -1,5 +1,5 @@
 import os
-from v_mathutils import Vector  # use in Blender if you like
+from v_mathutils import VtVector  # use in Blender if you like
 from vtfilewriter import VtFileWriter
 
 import bpy
@@ -77,7 +77,7 @@ class SelectFileEmpties(bpy.types.Operator, ImportHelper):
                     .replace(' ', '')
                 coordinates = line_stripped.strip().split(',')
                 # Convert coordinates to floats and create a Vector
-                vertex = Vector((float(coordinates[0]), float(coordinates[1]), float(coordinates[2])))
+                vertex = VtVector((float(coordinates[0]), float(coordinates[1]), float(coordinates[2])))
                 vertices.append(vertex)
 
             #            # Create empties at each vertex
