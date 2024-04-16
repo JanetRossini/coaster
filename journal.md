@@ -1077,3 +1077,9 @@ to provide a class method that will be the only method that knos
 how to convert.
 
 Here goes.
+
+I have left the tests in place, connected to mathutils. Should I 
+remove all references to mathutils now or what? I think I'll bring 
+the math file in and deal with it first.  There is a convenient 
+commit named "using only mathutils, old files still present". 
+Check it out.
