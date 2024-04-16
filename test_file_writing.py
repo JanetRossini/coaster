@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from mathutils import Vector
+from modules.v_mathutils import Vector
 
 from modules.vtfilewriter import VtFileWriter
 

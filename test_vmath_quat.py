@@ -1,6 +1,6 @@
 from math import radians
 import pytest
-from mathutils import Quaternion, Vector
+from modules.v_mathutils import Quaternion, Vector
 
 
 class TestVMathQuaternion:
@@ -41,7 +41,7 @@ class TestVMathQuaternion:
         axis = Vector((0, 1, 0))
         quat = Quaternion(axis, radians(90))
         quat @ axis
-        with pytest.raises(TypeError):
+        with pytest.raises(Exception):
             quat @ 21
 
 

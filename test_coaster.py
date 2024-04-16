@@ -2,7 +2,7 @@ import os.path
 from math import atan2, radians, ceil
 import pytest
 
-from mathutils import Vector, Quaternion
+from modules.v_mathutils import Vector, Quaternion
 
 from test_data import tilt_45, fetch
 from modules.vtfilewriter import VtFileWriter, Vehicle

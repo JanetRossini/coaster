@@ -1,5 +1,5 @@
 import pytest
-from mathutils import Vector
+from modules.v_mathutils import Vector
 
 
 class TestVMathVector:
@@ -67,13 +67,13 @@ class TestVMathVector:
     #     a_sum = a1 + a2
     #     assert np.array_equal(a4, a_sum)
 
-    def test_mu_to_tuple(self):
-        from mathutils import Vector
-        v = Vector((1, 2, 3))
-        x, y, z = v.to_tuple()
-        assert x == 1
-        assert y == 2
-        assert z == 3
+    # def test_mu_to_tuple(self):
+    #     from mathutils import Vector
+    #     v = Vector((1, 2, 3))
+    #     x, y, z = v.to_tuple()
+    #     assert x == 1
+    #     assert y == 2
+    #     assert z == 3
 
     # def test_vmu_to_tuple(self):
     #     from v_mathutils import Vector

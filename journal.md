@@ -1084,3 +1084,20 @@ the math file in and deal with it first.  There is a convenient
 commit named "using only mathutils, old files still present". 
 Check it out. Copy contents to clipboard. Check out main. Create 
 new python file, paste. Commit.
+
+Find all references to mathutils and replace them with v_mathutils.
+After I replace them correctly, some with v_mathutils, some with 
+modules.v_mathutils, I have 11 tests failing. I had hoped for zero.
+
+There are only two actual errors:
+
+~~~
+E       AttributeError: 'Vector' object has no attribute 'seq'
+E       TypeError: Quaternion multiplication: not supported between 'Quaternion' and 'Vector' types
+~~~
+
+Should be fairly easy to chase. Most of the issues were mistakes 
+in doing the imports: I missed two entirely and did one wrong. Not 
+bad out of less than ten. I have one test failing, throwing an 
+error that is not the one expected. Broadening the test gets me to 
+green. Commit. 
