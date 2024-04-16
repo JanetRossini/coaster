@@ -30,7 +30,7 @@ class VtQuaternion:
     """
     Minimal Quaternion.
     Supports:
-        -q1 (__neg__
+        -q1 (__neg__)
         q1 + q2 (__add__)
         q1 - q2 (__sub__)
         scalar*q1 (__mul++ and __rmul__)
