@@ -1066,3 +1066,14 @@ PyCharm can't do the inline, but I can:
 And then remove the get and tests.
 
 That'll do, pig. 
+
+## 20240416_0752_JR
+
+Morning plan is to convert from mathutils to using our own Vector 
+and Quaternion classes. I plan to rename them e.g. VtVector to 
+avoid future confusion with the Blender classes. I think there is 
+only one place where our code wil see a Blender Vector. My plan is 
+to provide a class method that will be the only method that knos 
+how to convert.
+
+Here goes.
