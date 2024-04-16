@@ -157,6 +157,13 @@ class VtQuaternion:
 
 
 class VtVector:
+
+    @classmethod
+    def from_vertex(cls, vertex):
+        co = vertex.co  # Vector in Blender, VtVector in tests
+        seq = (co.x, co.y, co.z)
+        return cls(seq)
+
     def __init__(self, seq):
         self.seq = tuple(seq)
         if len(self.seq) != 3:

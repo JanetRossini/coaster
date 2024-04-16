@@ -21,8 +21,8 @@ class VtFileWriter:
         self.size = size
 
     def write_files(self, name, abs, bank):
-        coords = tuple(v.co for v in self.vertices)
-        triples = tuple(coords[i:i + 3] for i in range(0, len(coords) - 1, 2))
+        vt_vectors = tuple(VtVector.from_vertex(v) for v in self.vertices)
+        triples = tuple(vt_vectors[i:i + 3] for i in range(0, len(vt_vectors) - 1, 2))
         all_lines = self.make_lines(triples, abs, bank)
         count = ceil(len(triples)/self.size)
         for file_number in range(count):

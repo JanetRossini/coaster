@@ -1108,3 +1108,37 @@ when Blender throws an error, we have a better chance of knowing
 whether it is our Vector or Blender's.
 
 Rename to VtVector and VtQuaternion. Green. Commit.
+
+The remaining issue (that I know of) is here:
+
+~~~python
+    def write_files(self, name, abs, bank):
+        coords = tuple(v.co for v in self.vertices)
+        triples = tuple(coords[i:i + 3] for i in range(0, len(coords) - 1, 2))
+        all_lines = self.make_lines(triples, abs, bank)
+        count = ceil(len(triples)/self.size)
+        for file_number in range(count):
+            start = file_number*self.size
+            end = (file_number+1)*self.size
+            lines = all_lines[start:end]
+            name = [self.base_name, str(file_number)]
+            file_name = "_".join(name) + ".lsl"
+            full_path = os.path.join(self.path, file_name)
+            with open(full_path, "w") as file:
+                self.write_one_file(file_name, file_number, count, lines, file)
+                print(f"File was written to {full_path}\n")
+~~~
+
+In the code above, v.co is a mathutils Vector when we are called 
+from Blender, and in the one test we have for file writing, it is 
+a VtVector. We need to ensure that we convert it to a VtVector.
+
+I'll do this by intention: I'll write the code I want to have work,
+then make it work.
+
+Works in my tests. Must test in Blender, but I'm not sure how to 
+test file writing. I do a test to be sure that Blender Python will 
+respond to x, y and z, no surprise, it does. I think we're as good 
+as we can get. DS will have to check whether she can write a file.
+
+Commit.

@@ -59,6 +59,17 @@ class TestVMathVector:
         v3 = v1.cross(v2)
         assert v3 == VtVector((-1, 2, -1))
 
+    def test_mathutils_vector_if_possible(self):
+        try:
+            from mathutils import Vector
+        except(ModuleNotFoundError):
+            return
+        v = Vector((1, 2, 3))
+        assert v.x == 1
+        assert v.y == 2
+        assert v.z == 3
+
+
     # def test_array_add(self):
     #     import numpy as np
     #     a1 = np.array((1, 2, 3))
