@@ -94,6 +94,7 @@ class TestFileWriting:
         dir_win = filepath + '\\' + inner_track05
         assert directory == dir_mac or directory == dir_win
         assert filename == 'track05'
+        # just to show how we use it:
         # bpy.ops.wm.append(
         bpy_ops_wm_append(
             filepath=filepath,
