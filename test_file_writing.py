@@ -53,7 +53,7 @@ class TestFileWriting:
         path_mac = 'C:/mumble/track05.blend/Object/track05'
         path_win = 'C:/mumble/track05.blend\\Object\\track05'
         assert filepath == path_mac or filepath == path_win
-        directory=os.path.join(file_track05, inner_track05)
+        directory = os.path.join(file_track05, inner_track05)
         dir_mac = 'C:/mumble/track05.blend/Object'
         dir_win = 'C:/mumble/track05.blend\\Object'
         assert directory == dir_mac or directory == dir_win
