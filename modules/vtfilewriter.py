@@ -135,7 +135,7 @@ class Vehicle:
         rise = self.forward.y
         run = self.forward.x
         angle = atan2(rise, run)
-        remove_yaw = VtQuaternion(z_axis, -angle)
+        remove_yaw = VtQuaternion.axis_angle(z_axis, -angle)
         return remove_yaw
 
     def _new_vehicle_without_pitch(self):
@@ -154,7 +154,7 @@ class Vehicle:
         rise = self.forward.z
         run = self.forward.x
         angle = atan2(rise, run)
-        remove_pitch = VtQuaternion(y_axis, angle)
+        remove_pitch = VtQuaternion.axis_angle(y_axis, angle)
         return remove_pitch
 
     def _new_vehicle_with_roll_only(self):

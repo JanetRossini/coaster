@@ -51,7 +51,7 @@ class TestCoasterVehicle:
         rise = forward.y
         run = forward.x
         angle = atan2(rise, run)
-        remove_yaw = VtQuaternion(z_axis, -angle)
+        remove_yaw = VtQuaternion.axis_angle(z_axis, -angle)
         f_no_yaw = remove_yaw@forward
         assert f_no_yaw.y == pytest.approx(0, abs=0.001)
 
@@ -68,7 +68,7 @@ class TestCoasterVehicle:
         rise = forward.z
         run = forward.x
         angle = atan2(rise, run)
-        remove_pitch = VtQuaternion(y_axis, angle)  # why not -?
+        remove_pitch = VtQuaternion.axis_angle(y_axis, angle)  # why not -?
         f_no_pitch = remove_pitch@forward
         assert f_no_pitch.z == pytest.approx(0, abs=0.001)
 
@@ -162,7 +162,7 @@ class TestCoasterVehicle:
     def test_real_quat(self):
         v = VtVector((1, 2, 3))
         axis = VtVector((0, 1, 0))
-        quat = VtQuaternion(axis, radians(90))
+        quat = VtQuaternion.axis_angle(axis, radians(90))
         v2 = quat@v
         assert v2.x == pytest.approx(3, abs=0.001)
         assert v2.y == pytest.approx(2, abs=0.001)

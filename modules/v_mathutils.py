@@ -45,15 +45,7 @@ class VtQuaternion:
             self.y = args[2]
             self.z = args[3]
         elif len(args) == 2:
-            axis = args[0]
-            angle = args[1]
-            norm = axis.normalized()
-            half = angle / 2
-            sine = sin(half)
-            self.x = norm.x * sine
-            self.y = norm.y * sine
-            self.z = norm.z * sine
-            self.w = cos(half)
+            raise TypeError
         elif len(args) == 1 and isinstance(args[0], VtQuaternion):
             q = args[0]
             self.w = q.w
@@ -62,6 +54,17 @@ class VtQuaternion:
             self.z = q.z
         else:
             raise TypeError("Object cannot be initialized from {}".format(args))
+
+    @classmethod
+    def axis_angle(cls, axis, angle):
+        norm = axis.normalized()
+        half = angle / 2
+        sine = sin(half)
+        x = norm.x * sine
+        y = norm.y * sine
+        z = norm.z * sine
+        w = cos(half)
+        return cls(w, x, y, z)
 
     @property
     def xyz(self):

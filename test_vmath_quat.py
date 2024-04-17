@@ -7,12 +7,12 @@ class TestVMathQuaternion:
 
     def test_create(self):
         axis = VtVector((1, 0, 0))
-        q = VtQuaternion(axis, radians(90))
+        q = VtQuaternion.axis_angle(axis, radians(90))
 
     def test_vec_mul(self):
         v = VtVector((1, 2, 3))
         axis = VtVector((0, 1, 0))
-        quat = VtQuaternion(axis, radians(90))
+        quat = VtQuaternion.axis_angle(axis, radians(90))
         v2 = quat @ v
         assert v2.x == pytest.approx(3, abs=0.001)
         assert v2.y == pytest.approx(2, abs=0.001)
@@ -20,8 +20,8 @@ class TestVMathQuaternion:
 
     def test_slerp(self):
         axis = VtVector((1, 2, 3))
-        q1 = VtQuaternion(axis, 0)
-        q2 = VtQuaternion(axis, radians(90))
+        q1 = VtQuaternion.axis_angle(axis, 0)
+        q2 = VtQuaternion.axis_angle(axis, radians(90))
         q3 = q1.slerp(q2, 0.5)
         # Quaternion(0.924, 0.102, 0.205, 0.307) != 0
         # value borrowed from test of mathutils slerp.
@@ -39,10 +39,10 @@ class TestVMathQuaternion:
 
     def test_quat_times_non_vector(self):
         axis = VtVector((0, 1, 0))
-        quat = VtQuaternion(axis, radians(90))
+        quat = VtQuaternion.axis_angle(axis, radians(90))
         quat @ axis
         with pytest.raises(Exception):
-            quat @ 21
+            q = quat @ 21
 
 
     def test_quat_times_vector(self):
@@ -52,7 +52,7 @@ class TestVMathQuaternion:
             return vec + quat.w * t + xyz.cross(t)
         v = VtVector((1, 2, 3))
         axis = VtVector((0, 1, 0))
-        quat = VtQuaternion(axis, radians(90))
+        quat = VtQuaternion.axis_angle(axis, radians(90))
         v2 = quat_x_vector(quat, v)
         assert v2.x == pytest.approx(3, abs=0.001)
         assert v2.y == pytest.approx(2, abs=0.001)
