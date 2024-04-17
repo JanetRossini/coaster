@@ -47,11 +47,7 @@ class VtQuaternion:
         elif len(args) == 2:
             raise TypeError
         elif len(args) == 1 and isinstance(args[0], VtQuaternion):
-            q = args[0]
-            self.w = q.w
-            self.x = q.x
-            self.y = q.y
-            self.z = q.z
+            raise TypeError
         else:
             raise TypeError("Object cannot be initialized from {}".format(args))
 
@@ -65,6 +61,10 @@ class VtQuaternion:
         z = norm.z * sine
         w = cos(half)
         return cls(w, x, y, z)
+
+    @classmethod
+    def from_quaternion(cls, q):
+        return cls(q.w, q.x, q.y, q.z)
 
     @property
     def xyz(self):
@@ -145,7 +145,7 @@ class VtQuaternion:
             dot = -dot
         if dot > 0.9995:
             # UNTESTED!!
-            qr = VtQuaternion(q0 + frac * (q1 - q0)).normalized()
+            qr = VtQuaternion.from_quaternion(q0 + frac * (q1 - q0)).normalized()
             return qr
         theta_0 = acos(dot)
         sin_theta_0 = sin(theta_0)
@@ -155,8 +155,7 @@ class VtQuaternion:
         s1 = sin_theta / sin_theta_0
         qa = s0 * q0
         qb = s1 * q1
-        qr = VtQuaternion(qa + qb).normalized()
-        return qr
+        return VtQuaternion.from_quaternion(qa + qb).normalized()
 
 
 class VtVector:
