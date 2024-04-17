@@ -144,7 +144,7 @@ class VtQuaternion:
             q0 = -1 * q0
             dot = -dot
         if dot > 0.9995:
-            # UNTESTED!!
+            # UNTESTED!! Linear approximation at large dot product
             qr = VtQuaternion.from_quaternion(q0 + frac * (q1 - q0)).normalized()
             return qr
         theta_0 = acos(dot)
