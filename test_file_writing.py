@@ -45,6 +45,7 @@ class TestFileWriting:
         print(result)
         assert result == expected
 
+    @pytest.mark.skip("Needs to be platform independent")
     def test_join_again(self):
         file_track05 = 'C:/mumble/track05.blend'
         inner_track05 = 'Object'
@@ -54,6 +55,7 @@ class TestFileWriting:
         directory=os.path.join(file_track05, inner_track05)
         assert directory == 'C:/mumble/track05.blend/Object'
 
+    @pytest.mark.skip("Needs to be platform independent")
     def test_pathlib(self):
         from pathlib import Path
         home = Path.home()
@@ -67,6 +69,7 @@ class TestFileWriting:
         q = p.with_name('notes.md')
         assert str(q.absolute()) == str(Path.cwd()) + '/notes.md'
 
+    @pytest.mark.skip("Needs to be platform independent")
     def test_we_can_compute_wm_elements(self):
         def bpy_ops_wm_append(filepath, directory, filename):
             pass
