@@ -54,7 +54,9 @@ class TestFileWriting:
         path_win = 'C:/mumble/track05.blend\\Object\\track05'
         assert filepath == path_mac or filepath == path_win
         directory=os.path.join(file_track05, inner_track05)
-        assert directory == 'C:/mumble/track05.blend/Object'
+        dir_mac = 'C:/mumble/track05.blend/Object'
+        dir_win = 'C:/mumble/track05.blend\\Object'
+        assert directory == dir_mac or directory == dir_win
 
     @pytest.mark.skip("Needs to be platform independent")
     def test_pathlib(self):
