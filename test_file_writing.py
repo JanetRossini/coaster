@@ -72,7 +72,6 @@ class TestFileWriting:
         q = p.with_name('notes.md')
         assert str(q.absolute()) == str(Path.cwd()) + '/notes.md'
 
-    @pytest.mark.skip("Needs to be platform independent")
     def test_we_can_compute_wm_elements(self):
         def bpy_ops_wm_append(filepath, directory, filename):
             pass
@@ -85,12 +84,15 @@ class TestFileWriting:
             filename = object_track05
             return filepath, directory, filename
 
-        file_track05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track05.blend'
+        file_track05_mac = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track05.blend'
+        file_track05_win = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects\\track05.blend'
         inner_track05 = 'Object'
         object_track05 = 'track05'
         filepath, directory, filename = make_elements('track05')
-        assert filepath == file_track05
-        assert directory == file_track05 + '/' + inner_track05
+        assert filepath == file_track05_mac or filepath == file_track05_win
+        dir_mac = filepath + '/' + inner_track05
+        dir_win = filepath + '\\' + inner_track05
+        assert directory == dir_mac or directory == dir_win
         assert filename == 'track05'
         # bpy.ops.wm.append(
         bpy_ops_wm_append(
