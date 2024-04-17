@@ -178,6 +178,7 @@ class VtVector:
         return self.seq == vector.seq
 
     def __add__(self, vector):
+        # this is weird, and could fail oddly. would min be better? or just use 3?
         s_seq = self.seq
         v_seq = vector.seq
         top_range = range(0, max(len(s_seq), len(v_seq)))
