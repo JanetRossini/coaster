@@ -71,14 +71,14 @@ class TestFileWriting:
             return filepath, directory, filename
 
         file_track05_mac = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track05.blend'
-        file_track05_win = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects\\track05.blend'
         inner_track05 = 'Object'
         object_track05 = 'track05'
         filepath, directory, filename = make_elements('track05')
-        assert filepath == file_track05_mac or filepath == file_track05_win
+        filepath = filepath.replace('\\', '/')
+        assert filepath == file_track05_mac
         dir_mac = filepath + '/' + inner_track05
-        dir_win = filepath + '\\' + inner_track05
-        assert directory == dir_mac or directory == dir_win
+        directory = directory.replace('\\', '/')
+        assert directory == dir_mac
         assert filename == 'track05'
         # just to show how we use it:
         # bpy.ops.wm.append(
