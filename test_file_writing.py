@@ -51,12 +51,12 @@ class TestFileWriting:
         object_track05 = 'track05'
         filepath = os.path.join(file_track05, inner_track05, object_track05)
         path_mac = 'C:/mumble/track05.blend/Object/track05'
-        path_win = 'C:/mumble/track05.blend\\Object\\track05'
-        assert filepath == path_mac or filepath == path_win
+        filepath = filepath.replace('\\', '/')
+        assert filepath == path_mac
         directory = os.path.join(file_track05, inner_track05)
+        directory = directory.replace('\\', '/')
         dir_mac = 'C:/mumble/track05.blend/Object'
-        dir_win = 'C:/mumble/track05.blend\\Object'
-        assert directory == dir_mac or directory == dir_win
+        assert directory == dir_mac
 
     def test_we_can_compute_wm_elements(self):
         def bpy_ops_wm_append(filepath, directory, filename):
