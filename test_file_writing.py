@@ -58,20 +58,6 @@ class TestFileWriting:
         dir_win = 'C:/mumble/track05.blend\\Object'
         assert directory == dir_mac or directory == dir_win
 
-    @pytest.mark.skip("Needs to be platform independent")
-    def test_pathlib(self):
-        from pathlib import Path
-        home = Path.home()
-        home_file = home / 'HOME_DIR.txt'  # this file has my absolute path in it
-        with home_file.open() as h:
-            home_dir = h.readline().strip()
-        assert str(home) == home_dir
-        assert str(Path.cwd()) == home_dir + '/PycharmProjects/coaster'
-        p = Path('test_file_writing.py')
-        assert str(p.absolute()) == str(Path.cwd()) + '/test_file_writing.py'
-        q = p.with_name('notes.md')
-        assert str(q.absolute()) == str(Path.cwd()) + '/notes.md'
-
     def test_we_can_compute_wm_elements(self):
         def bpy_ops_wm_append(filepath, directory, filename):
             pass
