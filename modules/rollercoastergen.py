@@ -237,6 +237,26 @@ class RCG_OT_addnurbscurve(Operator):
 
         return {'FINISHED'}
 
+class RCG_OT_addcolumn(Operator):
+    bl_idname = "rcg.addcolumn"
+    bl_label = "Add Column"
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        z = 2.0
+        bpy.ops.mesh.primitive_cylinder_add(
+            scale=(1.0, 1.0, z),
+            location=(0.0, 0.0, z),
+            vertices=3,
+            end_fill_type='NOTHING',
+            enter_editmode=True)
+        self.report({"INFO"}, "Column coming soon")
+        return {'FINISHED'}
+
 
 class RCG_OT_apply(Operator):
     """ Set the render properties """
@@ -336,6 +356,8 @@ class RCG_PT_sidebar(Panel):
         self.make_two_arg_export_op(col, "Export Flat Path", False, False)
         self.make_two_arg_export_op(col, "Export Banked Path Abs", True, True)
         self.make_two_arg_export_op(col, "Export Flat Path Abs", True, False)
+        col.label(text="Supports", icon='ANIM')
+        col.operator("rcg.addcolumn")
 
     @staticmethod
     def make_two_arg_export_op(col, text, absolute, bank):
@@ -346,6 +368,7 @@ class RCG_PT_sidebar(Panel):
 
 classes = [RCG_OT_addarray,
            RCG_OT_addbezcurve,
+           RCG_OT_addcolumn,
            RCG_OT_addnurbscurve,
            RCG_OT_apply,
            RCG_OT_Export,
