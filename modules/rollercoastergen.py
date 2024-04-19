@@ -247,14 +247,16 @@ class RCG_OT_addcolumn(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        z = 2.0
+        height = 4.0
         bpy.ops.mesh.primitive_cylinder_add(
-            scale=(1.0, 1.0, z),
-            location=(0.0, 0.0, z),
+            location=(0.0, 0.0, height/2),
             vertices=3,
             end_fill_type='NOTHING',
-            enter_editmode=True)
-        self.report({"INFO"}, "Column coming soon")
+            enter_editmode=False)
+        ob = bpy.context.object
+        x, y, _old_z = ob.dimensions
+        ob.dimensions = [x, y, height]
+        # self.report({"INFO"}, "Column set dimensions")
         return {'FINISHED'}
 
 
