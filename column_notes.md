@@ -162,3 +162,63 @@ I think we like that better. I could test this in Blender. Since
 the refactoring was done by machine, it's quite safe. But I am 
 cautious around blenders, so I will test again. Works as 
 advertised. Commit save point.
+
+Now let's look at how we did the export, because that operator 
+iterates through all the vertices, and we will need to do 
+something similar. The relevant part is this:
+
+~~~python
+    def execute(self, context):
+        # Put code here
+        obj = bpy.context.object
+
+        if obj is None or obj.type != "MESH":
+            return
+
+        # Output geometry
+        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+
+        verts = obj_eval.data.vertices
+~~~
+
+Reviewing the file writer, we find that the vertices, which are 
+the corners of the fins or saw teeth that we use to compute 
+position and roll, come in triples, back, up, front, the corners 
+of the fins. For our purposes, we only need the back ones.
+
+I think that I'll just type this in. It might not be too difficult.
+In fact I paste most of it. Looking at the code above, I think we 
+probably should be returning something, one of those Blender codes.
+Leave it but make a note.
+
+I only want every third vertex, the backs.
+
+I really want the `co` part of the vertex, the coordinate, but 
+we'll do that in a moment. We want to go every, oh, 40 points.
+
+I think this might work:
+
+~~~python
+    def execute(self, context):
+        obj = bpy.context.object
+        if obj is None or obj.type != "MESH":
+            return
+        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        verts = obj_eval.data.vertices
+        backs = verts[::3]
+        column_verts = backs[::40]
+        for vert in column_verts:
+            co = vert.co
+            self.place_column(co.x, co.y, co.z)
+        # self.report({"INFO"}, "Column set dimensions")
+        return {'FINISHED'}
+~~~
+
+I have to try this in a file that has been prepared for me. I get 
+a message saying
+
+Python: RuntimeError: class RCG_OT_addcolumn, function execute: incompatible return value , , Function.result expected a set, not a NoneType
+
+I am sure that comes from the empty return, which tells me that 
+whatever is selected in the file provided, it's not a mesh. It's 
+not: it's a nurbs path. I need a different start file.

@@ -247,8 +247,16 @@ class RCG_OT_addcolumn(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
-        self.place_column(x_pos, y_pos, z_pos)
+        obj = bpy.context.object
+        if obj is None or obj.type != "MESH":
+            return {'CANCELLED'}
+        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        verts = obj_eval.data.vertices
+        backs = verts[::3]
+        column_verts = backs[::40]
+        for vert in column_verts:
+            co = vert.co
+            self.place_column(co.x, co.y, co.z)
         # self.report({"INFO"}, "Column set dimensions")
         return {'FINISHED'}
 
@@ -299,7 +307,7 @@ class RCG_OT_Export(Operator):
         obj = bpy.context.object
 
         if obj is None or obj.type != "MESH":
-            return
+            return {'CANCELLED'}
 
         # Output geometry
         obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
