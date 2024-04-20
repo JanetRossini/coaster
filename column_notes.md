@@ -91,3 +91,74 @@ parameters when we extract:
 I think this should still work as it did, placing a column of 
 height 4 on the floor. Test in Blender, wishing that I had tests I 
 could use in PyCharm. It does work. Commit save point.
+
+I think I can extract a method now.
+
+~~~python
+    def execute(self, context):
+        x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
+        z_size = 4.0
+        self.place_column(x_pos, y_pos, z_pos, z_size)
+        # self.report({"INFO"}, "Column set dimensions")
+        return {'FINISHED'}
+
+    def place_column(self, x_pos, y_pos, z_pos, z_size):
+        bpy.ops.mesh.primitive_cylinder_add(
+            location=(x_pos, y_pos, z_pos - z_size / 2),
+            vertices=3,
+            end_fill_type='NOTHING',
+            enter_editmode=False)
+        ob = bpy.context.object
+        x_size, y_size, _old_z = ob.dimensions
+        ob.dimensions = [x_size, y_size, z_size]
+~~~
+
+Just what I wanted. 
+
+Oh. I just noticed that, according to our plan, we want the z size 
+of the column to be the z coordinate. So I don't really need it as 
+a parameter. We could revert and do over, or edit what we have. 
+I'll edit. No, I'll do over. Back with this:
+
+~~~python
+    def execute(self, context):
+        x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
+        z_size = 4.0
+        bpy.ops.mesh.primitive_cylinder_add(
+            location=(x_pos, y_pos, z_pos - z_size/2),
+            vertices=3,
+            end_fill_type='NOTHING',
+            enter_editmode=False)
+        ob = bpy.context.object
+        x_size, y_size, _old_z = ob.dimensions
+        ob.dimensions = [x_size, y_size, z_size]
+        # self.report({"INFO"}, "Column set dimensions")
+        return {'FINISHED'}
+~~~
+
+Let's remove the z-size by setting it, for now, to z. Then, 
+extract, including that part in the extracted bit:
+
+~~~python
+    def execute(self, context):
+        x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
+        self.place_column(x_pos, y_pos, z_pos)
+        # self.report({"INFO"}, "Column set dimensions")
+        return {'FINISHED'}
+
+    def place_column(self, x_pos, y_pos, z_pos):
+        z_size = z_pos
+        bpy.ops.mesh.primitive_cylinder_add(
+            location=(x_pos, y_pos, z_pos - z_size / 2),
+            vertices=3,
+            end_fill_type='NOTHING',
+            enter_editmode=False)
+        ob = bpy.context.object
+        x_size, y_size, _old_z = ob.dimensions
+        ob.dimensions = [x_size, y_size, z_size]
+~~~
+
+I think we like that better. I could test this in Blender. Since 
+the refactoring was done by machine, it's quite safe. But I am 
+cautious around blenders, so I will test again. Works as 
+advertised. Commit save point.

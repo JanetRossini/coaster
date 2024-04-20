@@ -248,17 +248,20 @@ class RCG_OT_addcolumn(Operator):
 
     def execute(self, context):
         x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
-        z_size = 4.0
+        self.place_column(x_pos, y_pos, z_pos)
+        # self.report({"INFO"}, "Column set dimensions")
+        return {'FINISHED'}
+
+    def place_column(self, x_pos, y_pos, z_pos):
+        z_size = z_pos
         bpy.ops.mesh.primitive_cylinder_add(
-            location=(x_pos, y_pos, z_pos - z_size/2),
+            location=(x_pos, y_pos, z_pos - z_size / 2),
             vertices=3,
             end_fill_type='NOTHING',
             enter_editmode=False)
         ob = bpy.context.object
         x_size, y_size, _old_z = ob.dimensions
         ob.dimensions = [x_size, y_size, z_size]
-        # self.report({"INFO"}, "Column set dimensions")
-        return {'FINISHED'}
 
 
 class RCG_OT_apply(Operator):
