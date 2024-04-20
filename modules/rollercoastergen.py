@@ -255,7 +255,7 @@ class RCG_OT_addcolumn(Operator):
         self.say_info(f'vertices are {type(vertices)}')
         verts = vertices.values()
         self.say_info(f'verts are {type(verts)}, {len(verts)}')
-        backs = verts[::3]
+        backs = verts[::2]
         self.say_info(f'{len(backs)} backs')
         column_verts = backs[::10]
         self.say_info(f'{len(column_verts)} column_verts')
