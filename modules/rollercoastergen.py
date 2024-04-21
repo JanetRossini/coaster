@@ -254,8 +254,9 @@ class RCG_OT_addcolumn(Operator):
         columns = bpy.data.collections.new("RCG Supports")
         scene = bpy.context.scene
         scene.collection.children.link(columns)
-        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children["RCG Columns"]
+        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children["RCG Supports"]
         obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        self.say_info(f"type {type(obj_eval)}")
         vertices = obj_eval.data.vertices
         self.say_info(f'vertices are {type(vertices)}')
         verts = vertices.values()
