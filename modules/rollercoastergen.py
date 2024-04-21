@@ -250,6 +250,11 @@ class RCG_OT_addcolumn(Operator):
         obj = bpy.context.object
         if obj is None or obj.type != "MESH":
             return {'CANCELLED'}
+        root_collection = bpy.context.view_layer.layer_collection.children[0]
+        columns = bpy.data.collections.new("RCG Supports")
+        scene = bpy.context.scene
+        scene.collection.children.link(columns)
+        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children["RCG Columns"]
         obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
         vertices = obj_eval.data.vertices
         self.say_info(f'vertices are {type(vertices)}')
@@ -262,6 +267,7 @@ class RCG_OT_addcolumn(Operator):
         for vert in column_verts:
             co = vert.co
             self.place_column(co.x, co.y, co.z)
+        bpy.context.view_layer.active_layer_collection = root_collection
         # self.report({"INFO"}, "Column set dimensions")
         return {'FINISHED'}
 
@@ -278,6 +284,8 @@ class RCG_OT_addcolumn(Operator):
             end_fill_type='NOTHING',
             enter_editmode=False)
         ob = bpy.context.object
+        ob.name = 'Support'
+        bpy.ops.object.shade_smooth()
         # x_size, y_size, _old_z = ob.dimensions
         # ob.dimensions = [x_size/10, y_size/10, z_size]
 

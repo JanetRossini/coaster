@@ -96,21 +96,24 @@ I think I can extract a method now.
 
 ~~~python
     def execute(self, context):
-        x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
-        z_size = 4.0
-        self.place_column(x_pos, y_pos, z_pos, z_size)
-        # self.report({"INFO"}, "Column set dimensions")
-        return {'FINISHED'}
 
-    def place_column(self, x_pos, y_pos, z_pos, z_size):
-        bpy.ops.mesh.primitive_cylinder_add(
-            location=(x_pos, y_pos, z_pos - z_size / 2),
-            vertices=3,
-            end_fill_type='NOTHING',
-            enter_editmode=False)
-        ob = bpy.context.object
-        x_size, y_size, _old_z = ob.dimensions
-        ob.dimensions = [x_size, y_size, z_size]
+
+    x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
+z_size = 4.0
+self.place_column(x_pos, y_pos, z_pos)
+# self.report({"INFO"}, "Column set dimensions")
+return {'FINISHED'}
+
+
+def place_column(self, x_pos, y_pos, z_pos, z_size):
+    bpy.ops.mesh.primitive_cylinder_add(
+        location=(x_pos, y_pos, z_pos - z_size / 2),
+        vertices=3,
+        end_fill_type='NOTHING',
+        enter_editmode=False)
+    ob = bpy.context.object
+    x_size, y_size, _old_z = ob.dimensions
+    ob.dimensions = [x_size, y_size, z_size]
 ~~~
 
 Just what I wanted. 
@@ -141,21 +144,24 @@ extract, including that part in the extracted bit:
 
 ~~~python
     def execute(self, context):
-        x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
-        self.place_column(x_pos, y_pos, z_pos)
-        # self.report({"INFO"}, "Column set dimensions")
-        return {'FINISHED'}
 
-    def place_column(self, x_pos, y_pos, z_pos):
-        z_size = z_pos
-        bpy.ops.mesh.primitive_cylinder_add(
-            location=(x_pos, y_pos, z_pos - z_size / 2),
-            vertices=3,
-            end_fill_type='NOTHING',
-            enter_editmode=False)
-        ob = bpy.context.object
-        x_size, y_size, _old_z = ob.dimensions
-        ob.dimensions = [x_size, y_size, z_size]
+
+    x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
+self.place_column(x_pos, y_pos, z_pos)
+# self.report({"INFO"}, "Column set dimensions")
+return {'FINISHED'}
+
+
+def place_column(self, x_pos, y_pos, z_pos):
+    z_size = z_pos
+    bpy.ops.mesh.primitive_cylinder_add(
+        location=(x_pos, y_pos, z_pos - z_size / 2),
+        vertices=3,
+        end_fill_type='NOTHING',
+        enter_editmode=False)
+    ob = bpy.context.object
+    x_size, y_size, _old_z = ob.dimensions
+    ob.dimensions = [x_size, y_size, z_size]
 ~~~
 
 I think we like that better. I could test this in Blender. Since 
@@ -200,18 +206,20 @@ I think this might work:
 
 ~~~python
     def execute(self, context):
-        obj = bpy.context.object
-        if obj is None or obj.type != "MESH":
-            return
-        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        verts = obj_eval.data.vertices
-        backs = verts[::3]
-        column_verts = backs[::40]
-        for vert in column_verts:
-            co = vert.co
-            self.place_column(co.x, co.y, co.z)
-        # self.report({"INFO"}, "Column set dimensions")
-        return {'FINISHED'}
+
+
+    obj = bpy.context.object
+if obj is None or obj.type != "MESH":
+    return
+obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+verts = obj_eval.data.vertices
+backs = verts[::3]
+column_verts = backs[::40]
+for vert in column_verts:
+    co = vert.co
+    self.place_column(co.x, co.y, co.z)
+# self.report({"INFO"}, "Column set dimensions")
+return {'FINISHED'}
 ~~~
 
 I have to try this in a file that has been prepared for me. I get 
