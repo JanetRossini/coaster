@@ -272,12 +272,14 @@ class RCG_OT_addcolumn(Operator):
         z_size = z_pos
         bpy.ops.mesh.primitive_cylinder_add(
             location=(x_pos, y_pos, z_pos - z_size / 2),
-            vertices=3,
+            vertices=6,
+            radius=0.04,
+            depth=z_size,
             end_fill_type='NOTHING',
             enter_editmode=False)
         ob = bpy.context.object
-        x_size, y_size, _old_z = ob.dimensions
-        ob.dimensions = [x_size/10, y_size/10, z_size]
+        # x_size, y_size, _old_z = ob.dimensions
+        # ob.dimensions = [x_size/10, y_size/10, z_size]
 
 
 class RCG_OT_apply(Operator):

@@ -222,3 +222,29 @@ Python: RuntimeError: class RCG_OT_addcolumn, function execute: incompatible ret
 I am sure that comes from the empty return, which tells me that 
 whatever is selected in the file provided, it's not a mesh. It's 
 not: it's a nurbs path. I need a different start file.
+
+~~~python
+import bpy
+
+# Name of the object you want to set smooth shading
+object_name = "Cube"  # Change "Cube" to the name of your object
+
+# Find the object by name
+obj = bpy.data.objects.get(object_name)
+
+# Ensure the object is a mesh
+if obj and obj.type == 'MESH':
+    # Switch to object mode to make changes
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.mode_set(mode='OBJECT')
+    
+    # Select all faces
+    obj.data.polygons.foreach_set("select", [True] * len(obj.data.polygons))
+    
+    # Set shading to smooth
+    bpy.ops.object.shade_smooth()
+    
+    print(f"Faces of {object_name} set to smooth shading.")
+else:
+    print(f"Object {object_name} is not a mesh or doesn't exist.")
+~~~
