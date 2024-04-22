@@ -587,3 +587,7 @@ Commit: columns placed opposite fin top.
 Now let's set up and use a variable to represent the offset 
 distance we want in meters.
 
+Done. Too tired to write it up. Whew. Easy but intricate. Copied 
+DS's note an chatGPT idea.
+
+Commit: column placement accepts offset distance from 0 to 1 meter.
