@@ -544,3 +544,18 @@ setup lines into `place_column` and then pass pair, like this:
 
 I think this works but want to try it. Good. Commit: 
 `place_column` now receives a position_up pair.
+
+So that was a reasonably safe series, though I did make one 
+mistake. Fortunately, I tested immediately, so it was easily found 
+before things got worse. Now we are in a situation where every 
+tenth pair of pos/up values gets a column. We could change the ten 
+if we want to, and I think we may well want to.
+
+As things stand, suppose that the coaster was 102 fins long. 
+We'd set a column at 0, 10, ... 90, 100 ... and there would be two 
+columns very close together at the join point. What I suspect we 
+want is to work out a rule of thumb and then use the actual size 
+of the track to decide how to allocate columns that appear equally 
+spaced. It'll take some numeric thinking to figure that out, but 
+it should be easy enough. And definitely for another day.
+

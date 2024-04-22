@@ -278,8 +278,6 @@ class RCG_OT_addcolumn(Operator):
         ob = bpy.context.object
         ob.name = 'Support'
         bpy.ops.object.shade_smooth()
-        # x_size, y_size, _old_z = ob.dimensions
-        # ob.dimensions = [x_size/10, y_size/10, z_size]
 
     def set_rcg_collection_active(self):
         root_collection = bpy.context.view_layer.layer_collection.children[0]
