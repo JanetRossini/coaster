@@ -242,7 +242,7 @@ class RCGSettings(bpy.types.PropertyGroup):
     offset_distance: bpy.props.FloatProperty(
         name="Offset Distance",
         description="Distance (meters) from path to rail.",
-        default=0.5,
+        default=0.15,
         min=0.0,
         max=1.0,
         step=0.1
