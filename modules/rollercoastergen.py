@@ -248,6 +248,15 @@ class RCGSettings(bpy.types.PropertyGroup):
         step=0.1
     )
 
+    column_spacing: bpy.props.IntProperty(
+        name="Column Spacing",
+        description="Distance (meters) between columns",
+        default=10,
+        min=5,
+        max=15,
+        step=1
+    )
+
 class RCG_OT_addcolumn(Operator):
     bl_idname = "rcg.addcolumn"
     bl_label = "Add Column"
@@ -262,6 +271,7 @@ class RCG_OT_addcolumn(Operator):
 
     def execute(self, context):
         offset_desired = context.scene.my_settings.offset_distance
+        column_spacing = context.scene.my_settings.column_spacing
         self.say_info(f"Offset {offset_desired}")
         obj = bpy.context.object
         if obj is None or obj.type != "MESH":
@@ -271,8 +281,8 @@ class RCG_OT_addcolumn(Operator):
         vertices = fins.data.vertices
         verts = vertices.values()
         pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
-        every_tenth_pair = pos_up_pairs[::10]
-        for pair in every_tenth_pair:
+        every_nth_pair = pos_up_pairs[::column_spacing]
+        for pair in every_nth_pair:
             self.place_column(pair, offset_desired)
         bpy.context.view_layer.active_layer_collection = root_collection
         return {'FINISHED'}
@@ -407,6 +417,7 @@ class RCG_PT_sidebar(Panel):
         self.make_two_arg_export_op(col, "Export Flat Path Abs", True, False)
         col.label(text="Supports", icon='ANIM')
         col.operator("rcg.addcolumn")
+        col.prop(settings, "column_spacing")
         col.prop(settings, "offset_distance")
 
     @staticmethod
