@@ -237,6 +237,17 @@ class RCG_OT_addnurbscurve(Operator):
 
         return {'FINISHED'}
 
+
+class RCGSettings(bpy.types.PropertyGroup):
+    offset_distance: bpy.props.FloatProperty(
+        name="Offset Distance",
+        description="Distance (meters) from path to rail.",
+        default=0.5,
+        min=0.0,
+        max=1.0,
+        step=0.1
+    )
+
 class RCG_OT_addcolumn(Operator):
     bl_idname = "rcg.addcolumn"
     bl_label = "Add Column"
@@ -250,6 +261,8 @@ class RCG_OT_addcolumn(Operator):
         self.report({"INFO"}, msg)
 
     def execute(self, context):
+        offset_desired = context.scene.my_settings.offset_distance
+        self.say_info(f"Offset {offset_desired}")
         obj = bpy.context.object
         if obj is None or obj.type != "MESH":
             return {'CANCELLED'}
@@ -259,9 +272,8 @@ class RCG_OT_addcolumn(Operator):
         verts = vertices.values()
         pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
         every_tenth_pair = pos_up_pairs[::10]
-        offset_distance = 0.0
         for pair in every_tenth_pair:
-            self.place_column(pair, offset_distance)
+            self.place_column(pair, offset_desired)
         bpy.context.view_layer.active_layer_collection = root_collection
         return {'FINISHED'}
 
@@ -354,6 +366,7 @@ class RCG_PT_sidebar(Panel):
 
     # noinspection SpellCheckingInspection
     def draw(self, context):
+        settings = context.scene.my_settings
         col = self.layout.column(align=True)
         col.label(text="Add/Create track curve", icon='CURVE_DATA')
         col.operator("rcg.inputempties")
@@ -394,6 +407,7 @@ class RCG_PT_sidebar(Panel):
         self.make_two_arg_export_op(col, "Export Flat Path Abs", True, False)
         col.label(text="Supports", icon='ANIM')
         col.operator("rcg.addcolumn")
+        col.prop(settings, "offset_distance")
 
     @staticmethod
     def make_two_arg_export_op(col, text, absolute, bank):
@@ -412,6 +426,7 @@ classes = [RCG_OT_addarray,
            RCG_OT_inputempties,
            RCG_OT_inputnurbspath,
            RCG_PT_sidebar,
+           RCGSettings,
            SelectFileEmpties,
            SelectFileNurbs, ]
 
@@ -419,6 +434,7 @@ classes = [RCG_OT_addarray,
 def register():
     for c in classes:
         bpy.utils.register_class(c)
+    bpy.types.Scene.my_settings = bpy.props.PointerProperty(type=RCGSettings)
 
 
 def unregister():
