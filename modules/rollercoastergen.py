@@ -251,21 +251,16 @@ class RCG_OT_addcolumn(Operator):
         if obj is None or obj.type != "MESH":
             return {'CANCELLED'}
         root_collection = self.set_rcg_collection_active()
-        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        self.say_info(f"type {type(obj_eval)}")
-        vertices = obj_eval.data.vertices
-        self.say_info(f'vertices are {type(vertices)}')
+        fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        vertices = fins.data.vertices
         verts = vertices.values()
-        self.say_info(f'verts are {type(verts)}, {len(verts)}')
-        backs = verts[::2]
-        self.say_info(f'{len(backs)} backs')
-        column_verts = backs[::10]
-        self.say_info(f'{len(column_verts)} column_verts')
-        for position_vert in column_verts:
+        pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
+        every_tenth_pair = pos_up_pairs[::10]
+        for pair in every_tenth_pair:
+            position_vert = pair[0]
             co = position_vert.co
             self.place_column(position_vert)
         bpy.context.view_layer.active_layer_collection = root_collection
-        # self.report({"INFO"}, "Column set dimensions")
         return {'FINISHED'}
 
     def say_info(self, msg):

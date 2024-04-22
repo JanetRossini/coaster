@@ -403,3 +403,113 @@ way to do it, but I didn't really try. Works:
 Commit.
 
 Remove unused parms from place_column and commit again.
+
+~~~python
+    def place_column(self, pos_vert):
+~~~
+
+Now I need to change the execute, which looks like this:
+
+~~~python
+    def execute(self, context):
+        obj = bpy.context.object
+        if obj is None or obj.type != "MESH":
+            return {'CANCELLED'}
+        root_collection = self.set_rcg_collection_active()
+        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        self.say_info(f"type {type(obj_eval)}")
+        vertices = obj_eval.data.vertices
+        self.say_info(f'vertices are {type(vertices)}')
+        verts = vertices.values()
+        self.say_info(f'verts are {type(verts)}, {len(verts)}')
+        backs = verts[::2]
+        self.say_info(f'{len(backs)} backs')
+        column_verts = backs[::10]
+        self.say_info(f'{len(column_verts)} column_verts')
+        for position_vert in column_verts:
+            co = position_vert.co
+            self.place_column(position_vert)
+        bpy.context.view_layer.active_layer_collection = root_collection
+        # self.report({"INFO"}, "Column set dimensions")
+        return {'FINISHED'}
+~~~
+
+That would be less ugly without all the say_info in there. I'll 
+remove them. I do a rename as well:
+
+~~~python
+    def execute(self, context):
+        obj = bpy.context.object
+        if obj is None or obj.type != "MESH":
+            return {'CANCELLED'}
+        root_collection = self.set_rcg_collection_active()
+        fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        vertices = fins.data.vertices
+        verts = vertices.values()
+        backs = verts[::2]
+        column_verts = backs[::10]
+        for position_vert in column_verts:
+            co = position_vert.co
+            self.place_column(position_vert)
+        bpy.context.view_layer.active_layer_collection = root_collection
+        return {'FINISHED'}
+~~~
+
+I want to process pairs of back/up vectors in the `place_column` 
+method, so this code needs a bit of tweaking. Down to `verts` 
+we're OK but then let's group by two and see what we see.
+
+This line:
+
+~~~python
+        backs = verts[::2]
+~~~
+
+Gives us every other one, starting at zero. If we would just 
+produce pairs (back, up) we'd have what we need in `place_oolumn`. 
+We can pass both in and ignore the up and have a testable point.
+
+`backs` isn't a great name. `positions` would have been better. 
+We'll use a better name in the new code.
+
+~~~python
+    def execute(self, context):
+        obj = bpy.context.object
+        if obj is None or obj.type != "MESH":
+            return {'CANCELLED'}
+        root_collection = self.set_rcg_collection_active()
+        fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        vertices = fins.data.vertices
+        verts = vertices.values()
+        pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
+        every_tenth_pair = pos_up_pairs[::10]
+        for position_vert in every_tenth_pair:
+            co = position_vert.co
+            self.place_column(position_vert)
+        bpy.context.view_layer.active_layer_collection = root_collection
+        return {'FINISHED'}
+~~~
+
+This much is testable as it stands. Try it. Error, the name I used 
+confused me.This works:
+
+~~~python
+    def execute(self, context):
+        obj = bpy.context.object
+        if obj is None or obj.type != "MESH":
+            return {'CANCELLED'}
+        root_collection = self.set_rcg_collection_active()
+        fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        vertices = fins.data.vertices
+        verts = vertices.values()
+        pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
+        every_tenth_pair = pos_up_pairs[::10]
+        for pair in every_tenth_pair:
+            position_vert = pair[0]
+            co = position_vert.co
+            self.place_column(position_vert)
+        bpy.context.view_layer.active_layer_collection = root_collection
+        return {'FINISHED'}
+~~~
+
+Commit.
