@@ -100,7 +100,7 @@ I think I can extract a method now.
 
 x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
 z_size = 4.0
-self.place_column(position_vert)
+self.place_column(position_vert, offset)
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
 
@@ -147,7 +147,7 @@ extract, including that part in the extracted bit:
 
 
 x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
-self.place_column(position_vert)
+self.place_column(position_vert, offset)
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
 
@@ -217,7 +217,7 @@ backs = verts[::3]
 column_verts = backs[::40]
 for vert in column_verts:
     co = vert.co
-    self.place_column(position_vert)
+    self.place_column(position_vert, offset)
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
 ~~~
@@ -297,7 +297,7 @@ def execute(self, context):
     self.say_info(f'{len(column_verts)} column_verts')
     for vert in column_verts:
         co = vert.co
-        self.place_column(position_vert)
+        self.place_column(position_vert, offset)
     bpy.context.view_layer.active_layer_collection = root_collection
     # self.report({"INFO"}, "Column set dimensions")
     return {'FINISHED'}
@@ -326,26 +326,28 @@ place_column. Soon, I'll pass in the up vertex as well.
 
 ~~~python
     def execute(self, context):
-    obj = bpy.context.object
-    if obj is None or obj.type != "MESH":
-        return {'CANCELLED'}
-    root_collection = self.set_rcg_collection_active()
-    obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-    self.say_info(f"type {type(obj_eval)}")
-    vertices = obj_eval.data.vertices
-    self.say_info(f'vertices are {type(vertices)}')
-    verts = vertices.values()
-    self.say_info(f'verts are {type(verts)}, {len(verts)}')
-    backs = verts[::2]
-    self.say_info(f'{len(backs)} backs')
-    column_verts = backs[::10]
-    self.say_info(f'{len(column_verts)} column_verts')
-    for position_vert in column_verts:
-        co = position_vert.co
-        self.place_column(position_vert)
-    bpy.context.view_layer.active_layer_collection = root_collection
-    # self.report({"INFO"}, "Column set dimensions")
-    return {'FINISHED'}
+
+
+obj = bpy.context.object
+if obj is None or obj.type != "MESH":
+    return {'CANCELLED'}
+root_collection = self.set_rcg_collection_active()
+obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+self.say_info(f"type {type(obj_eval)}")
+vertices = obj_eval.data.vertices
+self.say_info(f'vertices are {type(vertices)}')
+verts = vertices.values()
+self.say_info(f'verts are {type(verts)}, {len(verts)}')
+backs = verts[::2]
+self.say_info(f'{len(backs)} backs')
+column_verts = backs[::10]
+self.say_info(f'{len(column_verts)} column_verts')
+for position_vert in column_verts:
+    co = position_vert.co
+    self.place_column(position_vert, offset)
+bpy.context.view_layer.active_layer_collection = root_collection
+# self.report({"INFO"}, "Column set dimensions")
+return {'FINISHED'}
 
 
 def set_rcg_collection_active(self):
@@ -412,26 +414,28 @@ Now I need to change the execute, which looks like this:
 
 ~~~python
     def execute(self, context):
-        obj = bpy.context.object
-        if obj is None or obj.type != "MESH":
-            return {'CANCELLED'}
-        root_collection = self.set_rcg_collection_active()
-        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        self.say_info(f"type {type(obj_eval)}")
-        vertices = obj_eval.data.vertices
-        self.say_info(f'vertices are {type(vertices)}')
-        verts = vertices.values()
-        self.say_info(f'verts are {type(verts)}, {len(verts)}')
-        backs = verts[::2]
-        self.say_info(f'{len(backs)} backs')
-        column_verts = backs[::10]
-        self.say_info(f'{len(column_verts)} column_verts')
-        for position_vert in column_verts:
-            co = position_vert.co
-            self.place_column(position_vert)
-        bpy.context.view_layer.active_layer_collection = root_collection
-        # self.report({"INFO"}, "Column set dimensions")
-        return {'FINISHED'}
+
+
+    obj = bpy.context.object
+if obj is None or obj.type != "MESH":
+    return {'CANCELLED'}
+root_collection = self.set_rcg_collection_active()
+obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+self.say_info(f"type {type(obj_eval)}")
+vertices = obj_eval.data.vertices
+self.say_info(f'vertices are {type(vertices)}')
+verts = vertices.values()
+self.say_info(f'verts are {type(verts)}, {len(verts)}')
+backs = verts[::2]
+self.say_info(f'{len(backs)} backs')
+column_verts = backs[::10]
+self.say_info(f'{len(column_verts)} column_verts')
+for position_vert in column_verts:
+    co = position_vert.co
+    self.place_column(position_vert, offset)
+bpy.context.view_layer.active_layer_collection = root_collection
+# self.report({"INFO"}, "Column set dimensions")
+return {'FINISHED'}
 ~~~
 
 That would be less ugly without all the say_info in there. I'll 
@@ -439,20 +443,22 @@ remove them. I do a rename as well:
 
 ~~~python
     def execute(self, context):
-        obj = bpy.context.object
-        if obj is None or obj.type != "MESH":
-            return {'CANCELLED'}
-        root_collection = self.set_rcg_collection_active()
-        fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        vertices = fins.data.vertices
-        verts = vertices.values()
-        backs = verts[::2]
-        column_verts = backs[::10]
-        for position_vert in column_verts:
-            co = position_vert.co
-            self.place_column(position_vert)
-        bpy.context.view_layer.active_layer_collection = root_collection
-        return {'FINISHED'}
+
+
+    obj = bpy.context.object
+if obj is None or obj.type != "MESH":
+    return {'CANCELLED'}
+root_collection = self.set_rcg_collection_active()
+fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+vertices = fins.data.vertices
+verts = vertices.values()
+backs = verts[::2]
+column_verts = backs[::10]
+for position_vert in column_verts:
+    co = position_vert.co
+    self.place_column(position_vert, offset)
+bpy.context.view_layer.active_layer_collection = root_collection
+return {'FINISHED'}
 ~~~
 
 I want to process pairs of back/up vectors in the `place_column` 
@@ -474,20 +480,22 @@ We'll use a better name in the new code.
 
 ~~~python
     def execute(self, context):
-        obj = bpy.context.object
-        if obj is None or obj.type != "MESH":
-            return {'CANCELLED'}
-        root_collection = self.set_rcg_collection_active()
-        fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        vertices = fins.data.vertices
-        verts = vertices.values()
-        pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
-        every_tenth_pair = pos_up_pairs[::10]
-        for position_vert in every_tenth_pair:
-            co = position_vert.co
-            self.place_column(position_vert)
-        bpy.context.view_layer.active_layer_collection = root_collection
-        return {'FINISHED'}
+
+
+    obj = bpy.context.object
+if obj is None or obj.type != "MESH":
+    return {'CANCELLED'}
+root_collection = self.set_rcg_collection_active()
+fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+vertices = fins.data.vertices
+verts = vertices.values()
+pos_up_pairs = [verts[i:i + 2] for i in range(0, len(verts), 2)]
+every_tenth_pair = pos_up_pairs[::10]
+for position_vert in every_tenth_pair:
+    co = position_vert.co
+    self.place_column(position_vert, offset)
+bpy.context.view_layer.active_layer_collection = root_collection
+return {'FINISHED'}
 ~~~
 
 This much is testable as it stands. Try it. Error, the name I used 
@@ -495,21 +503,23 @@ confused me.This works:
 
 ~~~python
     def execute(self, context):
-        obj = bpy.context.object
-        if obj is None or obj.type != "MESH":
-            return {'CANCELLED'}
-        root_collection = self.set_rcg_collection_active()
-        fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        vertices = fins.data.vertices
-        verts = vertices.values()
-        pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
-        every_tenth_pair = pos_up_pairs[::10]
-        for pair in every_tenth_pair:
-            position_vert = pair[0]
-            co = position_vert.co
-            self.place_column(position_vert)
-        bpy.context.view_layer.active_layer_collection = root_collection
-        return {'FINISHED'}
+
+
+    obj = bpy.context.object
+if obj is None or obj.type != "MESH":
+    return {'CANCELLED'}
+root_collection = self.set_rcg_collection_active()
+fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+vertices = fins.data.vertices
+verts = vertices.values()
+pos_up_pairs = [verts[i:i + 2] for i in range(0, len(verts), 2)]
+every_tenth_pair = pos_up_pairs[::10]
+for pair in every_tenth_pair:
+    position_vert = pair[0]
+    co = position_vert.co
+    self.place_column(position_vert, offset)
+bpy.context.view_layer.active_layer_collection = root_collection
+return {'FINISHED'}
 ~~~
 
 Commit. Now, let's see. We could follow the original plan and pass 
@@ -520,26 +530,29 @@ setup lines into `place_column` and then pass pair, like this:
 
 ~~~python
     def execute:
-        ...
-        for pair in every_tenth_pair:
-            self.place_column(pair)
-        bpy.context.view_layer.active_layer_collection = root_collection
-        return {'FINISHED'}
 
-    def place_column(self, pos_up_pair):
-        position_vert = pos_up_pair[0]
-        pos_co = position_vert.co
-        z_size = pos_co.z
-        bpy.ops.mesh.primitive_cylinder_add(
-            location=(pos_co.x,pos_co.y, pos_co.z - z_size / 2),
-            vertices=6,
-            radius=0.04,
-            depth=z_size,
-            end_fill_type='NOTHING',
-            enter_editmode=False)
-        ob = bpy.context.object
-        ob.name = 'Support'
-        bpy.ops.object.shade_smooth()
+
+    ...
+for pair in every_tenth_pair:
+    self.place_column(pair, offset)
+bpy.context.view_layer.active_layer_collection = root_collection
+return {'FINISHED'}
+
+
+def place_column(self, pos_up_pair):
+    position_vert = pos_up_pair[0]
+    pos_co = position_vert.co
+    z_size = pos_co.z
+    bpy.ops.mesh.primitive_cylinder_add(
+        location=(pos_co.x, pos_co.y, pos_co.z - z_size / 2),
+        vertices=6,
+        radius=0.04,
+        depth=z_size,
+        end_fill_type='NOTHING',
+        enter_editmode=False)
+    ob = bpy.context.object
+    ob.name = 'Support'
+    bpy.ops.object.shade_smooth()
 ~~~
 
 I think this works but want to try it. Good. Commit: 
@@ -570,3 +583,7 @@ was flipped 180 degrees. I've lost the ability to drag the screen
 around to my liking. Irritating.
 
 Commit: columns placed opposite fin top.
+
+Now let's set up and use a variable to represent the offset 
+distance we want in meters.
+

@@ -259,17 +259,19 @@ class RCG_OT_addcolumn(Operator):
         verts = vertices.values()
         pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
         every_tenth_pair = pos_up_pairs[::10]
+        offset_distance = 0.0
         for pair in every_tenth_pair:
-            self.place_column(pair)
+            self.place_column(pair, offset_distance)
         bpy.context.view_layer.active_layer_collection = root_collection
         return {'FINISHED'}
 
-    def place_column(self, pos_up_pair):
+    def place_column(self, pos_up_pair, offset_desired):
         position_vert = pos_up_pair[0]
         pos_vec = position_vert.co
         up_vec = pos_up_pair[1].co
-        offset = - (up_vec-pos_vec)
-        pos_vec = pos_vec + offset
+        raw_offset = - (up_vec - pos_vec)
+        mul = offset_desired / 0.5
+        pos_vec = pos_vec + mul*raw_offset
         z_size = pos_vec.z
         bpy.ops.mesh.primitive_cylinder_add(
             location=(pos_vec.x,pos_vec.y, pos_vec.z - z_size / 2),
