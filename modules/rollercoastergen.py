@@ -268,6 +268,9 @@ class RCG_OT_addcolumn(Operator):
         # self.report({"INFO"}, "Column set dimensions")
         return {'FINISHED'}
 
+    def say_info(self, msg):
+        self.report({"INFO"}, msg)
+
     def set_rcg_collection_active(self):
         root_collection = bpy.context.view_layer.layer_collection.children[0]
         columns = bpy.data.collections.new("RCG Supports")
@@ -277,13 +280,11 @@ class RCG_OT_addcolumn(Operator):
             "RCG Supports"]
         return root_collection
 
-    def say_info(self, msg):
-        self.report({"INFO"}, msg)
-
     def place_column(self, x_pos, y_pos, z_pos, pos_vert):
-        z_size = z_pos
+        pos_co = pos_vert.co
+        z_size = pos_co.z
         bpy.ops.mesh.primitive_cylinder_add(
-            location=(x_pos, y_pos, z_pos - z_size / 2),
+            location=(pos_co.x,pos_co.y, pos_co.z - z_size / 2),
             vertices=6,
             radius=0.04,
             depth=z_size,

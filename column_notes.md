@@ -355,9 +355,6 @@ place_column. Soon, I'll pass in the up vertex as well.
             "RCG Supports"]
         return root_collection
 
-    def say_info(self, msg):
-        self.report({"INFO"}, msg)
-
     def place_column(self, x_pos, y_pos, z_pos, pos_vert):
         z_size = z_pos
         bpy.ops.mesh.primitive_cylinder_add(
@@ -375,3 +372,27 @@ place_column. Soon, I'll pass in the up vertex as well.
 ~~~
 
 This was done by machine, so I commit.
+
+Now let's use the vertex, since we have passed it in. This I test 
+in Blender, because I did it by hand. I might have found a machine 
+way to do it, but I didn't really try. Works:
+
+~~~python
+    def place_column(self, x_pos, y_pos, z_pos, pos_vert):
+        pos_co = pos_vert.co
+        z_size = pos_co.z
+        bpy.ops.mesh.primitive_cylinder_add(
+            location=(pos_co.x,pos_co.y, pos_co.z - z_size / 2),
+            vertices=6,
+            radius=0.04,
+            depth=z_size,
+            end_fill_type='NOTHING',
+            enter_editmode=False)
+        ob = bpy.context.object
+        ob.name = 'Support'
+        bpy.ops.object.shade_smooth()
+        # x_size, y_size, _old_z = ob.dimensions
+        # ob.dimensions = [x_size/10, y_size/10, z_size]
+~~~
+
+Commit.
