@@ -266,10 +266,13 @@ class RCG_OT_addcolumn(Operator):
 
     def place_column(self, pos_up_pair):
         position_vert = pos_up_pair[0]
-        pos_co = position_vert.co
-        z_size = pos_co.z
+        pos_vec = position_vert.co
+        up_vec = pos_up_pair[1].co
+        offset = - (up_vec-pos_vec)
+        pos_vec = pos_vec + offset
+        z_size = pos_vec.z
         bpy.ops.mesh.primitive_cylinder_add(
-            location=(pos_co.x,pos_co.y, pos_co.z - z_size / 2),
+            location=(pos_vec.x,pos_vec.y, pos_vec.z - z_size / 2),
             vertices=6,
             radius=0.04,
             depth=z_size,

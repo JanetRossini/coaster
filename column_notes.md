@@ -559,3 +559,14 @@ of the track to decide how to allocate columns that appear equally
 spaced. It'll take some numeric thinking to figure that out, but 
 it should be easy enough. And definitely for another day.
 
+OK, now let's see about making the column offset itself. My first 
+cut will be to add the negative of the vector from back to up to 
+the position we use. That should offset the column a half-meter in 
+the right direction since the length of the up vector is always 0.
+5 as far as I know.
+
+It's working as intended, the columns are now offset as if the fin 
+was flipped 180 degrees. I've lost the ability to drag the screen 
+around to my liking. Irritating.
+
+Commit: columns placed opposite fin top.
