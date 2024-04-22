@@ -512,4 +512,35 @@ confused me.This works:
         return {'FINISHED'}
 ~~~
 
-Commit.
+Commit. Now, let's see. We could follow the original plan and pass 
+in the two vectors, but it seems like it's better to pass in the 
+pair to the `place_column`. I don't see a machine refactoring 
+series that will do this. I'll just code it, but I'll move the two 
+setup lines into `place_column` and then pass pair, like this:
+
+~~~python
+    def execute:
+        ...
+        for pair in every_tenth_pair:
+            self.place_column(pair)
+        bpy.context.view_layer.active_layer_collection = root_collection
+        return {'FINISHED'}
+
+    def place_column(self, pos_up_pair):
+        position_vert = pos_up_pair[0]
+        pos_co = position_vert.co
+        z_size = pos_co.z
+        bpy.ops.mesh.primitive_cylinder_add(
+            location=(pos_co.x,pos_co.y, pos_co.z - z_size / 2),
+            vertices=6,
+            radius=0.04,
+            depth=z_size,
+            end_fill_type='NOTHING',
+            enter_editmode=False)
+        ob = bpy.context.object
+        ob.name = 'Support'
+        bpy.ops.object.shade_smooth()
+~~~
+
+I think this works but want to try it. Good. Commit: 
+`place_column` now receives a position_up pair.

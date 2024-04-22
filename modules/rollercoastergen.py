@@ -246,6 +246,9 @@ class RCG_OT_addcolumn(Operator):
     def poll(cls, context):
         return context.mode == "OBJECT"
 
+    def say_info(self, msg):
+        self.report({"INFO"}, msg)
+
     def execute(self, context):
         obj = bpy.context.object
         if obj is None or obj.type != "MESH":
@@ -257,26 +260,13 @@ class RCG_OT_addcolumn(Operator):
         pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
         every_tenth_pair = pos_up_pairs[::10]
         for pair in every_tenth_pair:
-            position_vert = pair[0]
-            co = position_vert.co
-            self.place_column(position_vert)
+            self.place_column(pair)
         bpy.context.view_layer.active_layer_collection = root_collection
         return {'FINISHED'}
 
-    def say_info(self, msg):
-        self.report({"INFO"}, msg)
-
-    def set_rcg_collection_active(self):
-        root_collection = bpy.context.view_layer.layer_collection.children[0]
-        columns = bpy.data.collections.new("RCG Supports")
-        scene = bpy.context.scene
-        scene.collection.children.link(columns)
-        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children[
-            "RCG Supports"]
-        return root_collection
-
-    def place_column(self, pos_vert):
-        pos_co = pos_vert.co
+    def place_column(self, pos_up_pair):
+        position_vert = pos_up_pair[0]
+        pos_co = position_vert.co
         z_size = pos_co.z
         bpy.ops.mesh.primitive_cylinder_add(
             location=(pos_co.x,pos_co.y, pos_co.z - z_size / 2),
@@ -290,6 +280,15 @@ class RCG_OT_addcolumn(Operator):
         bpy.ops.object.shade_smooth()
         # x_size, y_size, _old_z = ob.dimensions
         # ob.dimensions = [x_size/10, y_size/10, z_size]
+
+    def set_rcg_collection_active(self):
+        root_collection = bpy.context.view_layer.layer_collection.children[0]
+        columns = bpy.data.collections.new("RCG Supports")
+        scene = bpy.context.scene
+        scene.collection.children.link(columns)
+        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children[
+            "RCG Supports"]
+        return root_collection
 
 
 class RCG_OT_apply(Operator):
