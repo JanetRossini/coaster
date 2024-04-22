@@ -100,7 +100,7 @@ I think I can extract a method now.
 
 x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
 z_size = 4.0
-self.place_column(x_pos, y_pos, z_pos, position_vert)
+self.place_column(position_vert)
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
 
@@ -147,7 +147,7 @@ extract, including that part in the extracted bit:
 
 
 x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
-self.place_column(x_pos, y_pos, z_pos, position_vert)
+self.place_column(position_vert)
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
 
@@ -217,7 +217,7 @@ backs = verts[::3]
 column_verts = backs[::40]
 for vert in column_verts:
     co = vert.co
-    self.place_column(co.x, co.y, co.z, position_vert)
+    self.place_column(position_vert)
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
 ~~~
@@ -297,10 +297,11 @@ def execute(self, context):
     self.say_info(f'{len(column_verts)} column_verts')
     for vert in column_verts:
         co = vert.co
-        self.place_column(co.x, co.y, co.z, position_vert)
+        self.place_column(position_vert)
     bpy.context.view_layer.active_layer_collection = root_collection
     # self.report({"INFO"}, "Column set dimensions")
     return {'FINISHED'}
+
 
 def place_column(self, x_pos, y_pos, z_pos):
     z_size = z_pos
@@ -325,50 +326,54 @@ place_column. Soon, I'll pass in the up vertex as well.
 
 ~~~python
     def execute(self, context):
-        obj = bpy.context.object
-        if obj is None or obj.type != "MESH":
-            return {'CANCELLED'}
-        root_collection = self.set_rcg_collection_active()
-        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
-        self.say_info(f"type {type(obj_eval)}")
-        vertices = obj_eval.data.vertices
-        self.say_info(f'vertices are {type(vertices)}')
-        verts = vertices.values()
-        self.say_info(f'verts are {type(verts)}, {len(verts)}')
-        backs = verts[::2]
-        self.say_info(f'{len(backs)} backs')
-        column_verts = backs[::10]
-        self.say_info(f'{len(column_verts)} column_verts')
-        for position_vert in column_verts:
-            co = position_vert.co
-            self.place_column(co.x, co.y, co.z, position_vert)
-        bpy.context.view_layer.active_layer_collection = root_collection
-        # self.report({"INFO"}, "Column set dimensions")
-        return {'FINISHED'}
+    obj = bpy.context.object
+    if obj is None or obj.type != "MESH":
+        return {'CANCELLED'}
+    root_collection = self.set_rcg_collection_active()
+    obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+    self.say_info(f"type {type(obj_eval)}")
+    vertices = obj_eval.data.vertices
+    self.say_info(f'vertices are {type(vertices)}')
+    verts = vertices.values()
+    self.say_info(f'verts are {type(verts)}, {len(verts)}')
+    backs = verts[::2]
+    self.say_info(f'{len(backs)} backs')
+    column_verts = backs[::10]
+    self.say_info(f'{len(column_verts)} column_verts')
+    for position_vert in column_verts:
+        co = position_vert.co
+        self.place_column(position_vert)
+    bpy.context.view_layer.active_layer_collection = root_collection
+    # self.report({"INFO"}, "Column set dimensions")
+    return {'FINISHED'}
 
-    def set_rcg_collection_active(self):
-        root_collection = bpy.context.view_layer.layer_collection.children[0]
-        columns = bpy.data.collections.new("RCG Supports")
-        scene = bpy.context.scene
-        scene.collection.children.link(columns)
-        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children[
-            "RCG Supports"]
-        return root_collection
 
-    def place_column(self, x_pos, y_pos, z_pos, pos_vert):
-        z_size = z_pos
-        bpy.ops.mesh.primitive_cylinder_add(
-            location=(x_pos, y_pos, z_pos - z_size / 2),
-            vertices=6,
-            radius=0.04,
-            depth=z_size,
-            end_fill_type='NOTHING',
-            enter_editmode=False)
-        ob = bpy.context.object
-        ob.name = 'Support'
-        bpy.ops.object.shade_smooth()
-        # x_size, y_size, _old_z = ob.dimensions
-        # ob.dimensions = [x_size/10, y_size/10, z_size]
+def set_rcg_collection_active(self):
+    root_collection =
+    bpy.context.view_layer.layer_collection.children[0]
+    columns = bpy.data.collections.new("RCG Supports")
+    scene = bpy.context.scene
+    scene.collection.children.link(columns)
+    bpy.context.view_layer.active_layer_collection =
+    bpy.context.view_layer.layer_collection.children[
+        "RCG Supports"]
+    return root_collection
+
+
+def place_column(self, x_pos, y_pos, z_pos, pos_vert):
+    z_size = z_pos
+    bpy.ops.mesh.primitive_cylinder_add(
+        location=(x_pos, y_pos, z_pos - z_size / 2),
+        vertices=6,
+        radius=0.04,
+        depth=z_size,
+        end_fill_type='NOTHING',
+        enter_editmode=False)
+    ob = bpy.context.object
+    ob.name = 'Support'
+    bpy.ops.object.shade_smooth()
+    # x_size, y_size, _old_z = ob.dimensions
+    # ob.dimensions = [x_size/10, y_size/10, z_size]
 ~~~
 
 This was done by machine, so I commit.
@@ -396,3 +401,5 @@ way to do it, but I didn't really try. Works:
 ~~~
 
 Commit.
+
+Remove unused parms from place_column and commit again.
