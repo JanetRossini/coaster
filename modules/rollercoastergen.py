@@ -250,11 +250,7 @@ class RCG_OT_addcolumn(Operator):
         obj = bpy.context.object
         if obj is None or obj.type != "MESH":
             return {'CANCELLED'}
-        root_collection = bpy.context.view_layer.layer_collection.children[0]
-        columns = bpy.data.collections.new("RCG Supports")
-        scene = bpy.context.scene
-        scene.collection.children.link(columns)
-        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children["RCG Supports"]
+        root_collection = self.set_rcg_collection_active()
         obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
         self.say_info(f"type {type(obj_eval)}")
         vertices = obj_eval.data.vertices
@@ -265,17 +261,26 @@ class RCG_OT_addcolumn(Operator):
         self.say_info(f'{len(backs)} backs')
         column_verts = backs[::10]
         self.say_info(f'{len(column_verts)} column_verts')
-        for vert in column_verts:
-            co = vert.co
-            self.place_column(co.x, co.y, co.z)
+        for position_vert in column_verts:
+            co = position_vert.co
+            self.place_column(co.x, co.y, co.z, position_vert)
         bpy.context.view_layer.active_layer_collection = root_collection
         # self.report({"INFO"}, "Column set dimensions")
         return {'FINISHED'}
 
+    def set_rcg_collection_active(self):
+        root_collection = bpy.context.view_layer.layer_collection.children[0]
+        columns = bpy.data.collections.new("RCG Supports")
+        scene = bpy.context.scene
+        scene.collection.children.link(columns)
+        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children[
+            "RCG Supports"]
+        return root_collection
+
     def say_info(self, msg):
         self.report({"INFO"}, msg)
 
-    def place_column(self, x_pos, y_pos, z_pos):
+    def place_column(self, x_pos, y_pos, z_pos, pos_vert):
         z_size = z_pos
         bpy.ops.mesh.primitive_cylinder_add(
             location=(x_pos, y_pos, z_pos - z_size / 2),
