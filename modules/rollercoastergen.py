@@ -18,6 +18,15 @@ def make_elements(name):
     return filepath, directory, filename
 
 
+def activate_object_by_name(partial_name):
+    for obj in bpy.context.scene.objects:
+        if partial_name in obj.name:
+            obj.select_set(True)
+            bpy.context.view_layer.objects.active = obj
+            return
+    print("didn't find it")
+
+
 class RCG_OT_importObject(Operator):
     """ Add an object from a premade blender file """
     bl_idname = "rcg.importobject"
@@ -264,10 +273,11 @@ class RCG_OT_addcolumn(Operator):
     def execute(self, context):
         offset_desired = context.scene.my_settings.offset_distance
         column_spacing = context.scene.my_settings.column_spacing
-        self.say_info(f"Offset {offset_desired}")
+        # self.say_info(f"Offset {offset_desired}")
+        activate_object_by_name('ruler')
         obj = bpy.context.object
         if obj is None or obj.type != "MESH" or 'ruler' not in obj.name:
-            self.report({'ERROR'}, 'Please select the finned path')
+            self.report({'ERROR'}, 'You seem to have no ruler.')
             return {'CANCELLED'}
         root_collection = self.set_rcg_collection_active()
         fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
@@ -408,13 +418,10 @@ class RCG_PT_sidebar(Panel):
         self.make_two_arg_export_op(col, "Export Flat Path", False, False)
         self.make_two_arg_export_op(col, "Export Banked Path Abs", True, True)
         self.make_two_arg_export_op(col, "Export Flat Path Abs", True, False)
-        if context.active_object is None or 'ruler' not in context.active_object.name:
-            col.label(text='Select Ruler for Supports', icon='ANIM')
-        else:
-            col.label(text="Supports", icon='ANIM')
-            col.operator("rcg.addcolumn")
-            col.prop(settings, "column_spacing")
-            col.prop(settings, "offset_distance")
+        col.label(text="Supports", icon='ANIM')
+        col.operator("rcg.addcolumn")
+        col.prop(settings, "column_spacing")
+        col.prop(settings, "offset_distance")
 
     @staticmethod
     def make_two_arg_export_op(col, text, absolute, bank):
