@@ -250,12 +250,21 @@ class RCGSettings(bpy.types.PropertyGroup):
     )
 
     column_spacing: bpy.props.IntProperty(
-        name="Column Spacing",
-        description="Number of fins between columns",
+        name="Support Spacing",
+        description="Number of fins between supports",
         default=10,
         min=5,
         max=15,
         step=1
+    )
+
+    column_diameter: bpy.props.FloatProperty(
+        name="Support Diameter",
+        description="What can I say? Diameter of the support.",
+        default=0.08,
+        min=0.08,
+        max=0.32,
+        step=0.1
     )
 
 class RCG_OT_addcolumn(Operator):
@@ -273,6 +282,7 @@ class RCG_OT_addcolumn(Operator):
     def execute(self, context):
         offset_desired = context.scene.my_settings.offset_distance
         column_spacing = context.scene.my_settings.column_spacing
+        column_diameter = context.scene.my_settings.column_diameter
         # self.say_info(f"Offset {offset_desired}")
         activate_object_by_name('ruler')
         obj = bpy.context.object
@@ -287,11 +297,11 @@ class RCG_OT_addcolumn(Operator):
         pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
         every_nth_pair = pos_up_pairs[::column_spacing]
         for pair in every_nth_pair:
-            self.place_column(pair, offset_desired)
+            self.place_column(pair, column_diameter, offset_desired)
         bpy.context.view_layer.active_layer_collection = root_collection
         return {'FINISHED'}
 
-    def place_column(self, pos_up_pair, offset_desired):
+    def place_column(self, pos_up_pair, diameter, offset_desired):
         position_vert = pos_up_pair[0]
         pos_vec = position_vert.co
         up_vec = pos_up_pair[1].co
@@ -302,7 +312,7 @@ class RCG_OT_addcolumn(Operator):
         bpy.ops.mesh.primitive_cylinder_add(
             location=(pos_vec.x,pos_vec.y, pos_vec.z - z_size / 2),
             vertices=6,
-            radius=0.04,
+            radius=diameter/2.0,
             depth=z_size,
             end_fill_type='NOTHING',
             enter_editmode=False)
@@ -351,11 +361,12 @@ class RCG_OT_Export(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        # Put code here
+        activate_object_by_name('ruler')
         obj = bpy.context.object
-
-        if obj is None or obj.type != "MESH":
+        if obj is None or obj.type != "MESH" or 'ruler' not in obj.name:
+            self.report({'ERROR'}, 'You seem to have no ruler.')
             return {'CANCELLED'}
+        bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
 
         # Output geometry
         obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
@@ -422,6 +433,7 @@ class RCG_PT_sidebar(Panel):
         col.label(text="Supports", icon='ANIM')
         col.operator("rcg.addcolumn")
         col.prop(settings, "column_spacing")
+        col.prop(settings, "column_diameter")
         col.prop(settings, "offset_distance")
 
     @staticmethod
