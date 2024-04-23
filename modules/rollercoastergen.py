@@ -251,7 +251,7 @@ class RCGSettings(bpy.types.PropertyGroup):
 
 class RCG_OT_addcolumn(Operator):
     bl_idname = "rcg.addcolumn"
-    bl_label = "Add Column"
+    bl_label = "Add Supports"
     bl_options = {"REGISTER", "UNDO"}
 
     @classmethod
@@ -408,10 +408,13 @@ class RCG_PT_sidebar(Panel):
         self.make_two_arg_export_op(col, "Export Flat Path", False, False)
         self.make_two_arg_export_op(col, "Export Banked Path Abs", True, True)
         self.make_two_arg_export_op(col, "Export Flat Path Abs", True, False)
-        col.label(text="Supports", icon='ANIM')
-        col.operator("rcg.addcolumn")
-        col.prop(settings, "column_spacing")
-        col.prop(settings, "offset_distance")
+        if context.active_object is None or 'ruler' not in context.active_object.name:
+            col.label(text='Select Ruler for Supports', icon='ANIM')
+        else:
+            col.label(text="Supports", icon='ANIM')
+            col.operator("rcg.addcolumn")
+            col.prop(settings, "column_spacing")
+            col.prop(settings, "offset_distance")
 
     @staticmethod
     def make_two_arg_export_op(col, text, absolute, bank):
