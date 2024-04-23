@@ -241,7 +241,7 @@ class RCG_OT_addnurbscurve(Operator):
 class RCGSettings(bpy.types.PropertyGroup):
     offset_distance: bpy.props.FloatProperty(
         name="Offset Distance",
-        description="Distance (meters) from path to rail.",
+        description="Distance (meters) from path to rail center.",
         default=0.15,
         min=0.0,
         max=1.0,
@@ -250,7 +250,7 @@ class RCGSettings(bpy.types.PropertyGroup):
 
     column_spacing: bpy.props.IntProperty(
         name="Column Spacing",
-        description="Distance (meters) between columns",
+        description="Number of fins between columns",
         default=10,
         min=5,
         max=15,
