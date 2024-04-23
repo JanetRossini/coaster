@@ -266,7 +266,8 @@ class RCG_OT_addcolumn(Operator):
         column_spacing = context.scene.my_settings.column_spacing
         self.say_info(f"Offset {offset_desired}")
         obj = bpy.context.object
-        if obj is None or obj.type != "MESH":
+        if obj is None or obj.type != "MESH" or 'ruler' not in obj.name:
+            self.report({'ERROR'}, 'Please select the finned path')
             return {'CANCELLED'}
         root_collection = self.set_rcg_collection_active()
         fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
