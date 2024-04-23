@@ -279,6 +279,7 @@ class RCG_OT_addcolumn(Operator):
         if obj is None or obj.type != "MESH" or 'ruler' not in obj.name:
             self.report({'ERROR'}, 'You seem to have no ruler.')
             return {'CANCELLED'}
+        bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
         root_collection = self.set_rcg_collection_active()
         fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
         vertices = fins.data.vertices
