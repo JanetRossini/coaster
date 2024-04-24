@@ -290,7 +290,7 @@ class RCG_OT_addcolumn(Operator):
             self.report({'ERROR'}, 'You seem to have no ruler.')
             return {'CANCELLED'}
         bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
-        root_collection = self.set_rcg_collection_active()
+        root_collection = self.set_rcg_collection_active()  # set to our collection
         fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
         vertices = fins.data.vertices
         verts = vertices.values()
@@ -298,7 +298,7 @@ class RCG_OT_addcolumn(Operator):
         every_nth_pair = pos_up_pairs[::column_spacing]
         for pair in every_nth_pair:
             self.place_column(pair, column_diameter, offset_desired)
-        bpy.context.view_layer.active_layer_collection = root_collection
+        bpy.context.view_layer.active_layer_collection = root_collection  # reset collection
         return {'FINISHED'}
 
     def place_column(self, pos_up_pair, diameter, offset_desired):
@@ -325,8 +325,8 @@ class RCG_OT_addcolumn(Operator):
         columns = bpy.data.collections.new("RCG Supports")
         scene = bpy.context.scene
         scene.collection.children.link(columns)
-        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children[
-            "RCG Supports"]
+        bpy.context.view_layer.active_layer_collection\
+            = bpy.context.view_layer.layer_collection.children["RCG Supports"]
         return root_collection
 
 
