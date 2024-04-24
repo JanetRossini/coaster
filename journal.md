@@ -23,7 +23,7 @@ the explicit paths.
 With this code, we can completely remove all the triples like:
 
 ~~~python
-file_track05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track05.blend'
+file_track05 = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track.blend'
 inner_track05 = 'Object'
 object_track05 = 'track05'
 ~~~

@@ -46,16 +46,16 @@ class TestFileWriting:
         assert result == expected
 
     def test_join_again(self):
-        file_track05 = 'C:/mumble/track05.blend'
+        file_track05 = 'C:/mumble/track.blend'
         inner_track05 = 'Object'
-        object_track05 = 'track05'
+        object_track05 = 'track'
         filepath = os.path.join(file_track05, inner_track05, object_track05)
-        path_mac = 'C:/mumble/track05.blend/Object/track05'
+        path_mac = 'C:/mumble/track.blend/Object/track'
         filepath = filepath.replace('\\', '/')
         assert filepath == path_mac
         directory = os.path.join(file_track05, inner_track05)
         directory = directory.replace('\\', '/')
-        dir_mac = 'C:/mumble/track05.blend/Object'
+        dir_mac = 'C:/mumble/track.blend/Object'
         assert directory == dir_mac
 
     def test_we_can_compute_wm_elements(self):
@@ -70,7 +70,7 @@ class TestFileWriting:
             filename = object_track05
             return filepath, directory, filename
 
-        file_track05_mac = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track05.blend'
+        file_track05_mac = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track.blend'
         inner_track05 = 'Object'
         object_track05 = 'track05'
         filepath, directory, filename = make_elements('track05')
