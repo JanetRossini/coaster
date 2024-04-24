@@ -67,19 +67,19 @@ class TestFileWriting:
             working = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects'
             filepath = os.path.join(working, name + '.blend')
             directory = os.path.join(filepath, 'Object')
-            filename = object_track05
+            filename = object_track
             return filepath, directory, filename
 
-        file_track05_mac = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track.blend'
-        inner_track05 = 'Object'
-        object_track05 = 'track05'
-        filepath, directory, filename = make_elements('track05')
+        file_track_mac = 'C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/track.blend'
+        inner_track = 'Object'
+        object_track = 'track'
+        filepath, directory, filename = make_elements('track')
         filepath = filepath.replace('\\', '/')
-        assert filepath == file_track05_mac
-        dir_mac = filepath + '/' + inner_track05
+        assert filepath == file_track_mac
+        dir_mac = filepath + '/' + inner_track
         directory = directory.replace('\\', '/')
         assert directory == dir_mac
-        assert filename == 'track05'
+        assert filename == 'track'
         # just to show how we use it:
         # bpy.ops.wm.append(
         bpy_ops_wm_append(
