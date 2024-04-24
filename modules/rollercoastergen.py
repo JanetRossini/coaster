@@ -400,9 +400,9 @@ class RCG_PT_sidebar(Panel):
         col.operator("curve.primitive_nurbs_path_add", text="Create Path Curve")
         col.label(text="Add a track object", icon='ANIM')
         row = col.row()
-        op05 = row.operator("rcg.importobject", text="Normal").rcg_file = "track"
+        row.operator("rcg.importobject", text="Normal").rcg_file = "track"
         row.operator("rcg.importobject", text="Inverted").rcg_file = "invtrack"
-        op05 = row.operator("rcg.importobject", text="Railway").rcg_file = "ngtrack"
+        row.operator("rcg.importobject", text="Railway").rcg_file = "ngtrack"
         col.label(text="Add a track ruler", icon='ARROW_LEFTRIGHT')
         row = col.row()
         row.operator("rcg.importobject", text="Ruler").rcg_file = "trackruler"
