@@ -398,28 +398,16 @@ class RCG_PT_sidebar(Panel):
         col.operator("rcg.inputnurbspath")
         col.operator("curve.primitive_bezier_curve_add", text="Create Bezier Curve")
         col.operator("curve.primitive_nurbs_path_add", text="Create Path Curve")
-        col.label(text="Add a track", icon='ANIM')
+        col.label(text="Add a track object", icon='ANIM')
         row = col.row()
-        op05 = row.operator("rcg.importobject", text="0.5m")
-        op05.rcg_file = "track05"
-        op05 = row.operator("rcg.importobject", text="1.0m")
-        op05.rcg_file = "track10"
-        op05 = row.operator("rcg.importobject", text="2.0m")
-        op05.rcg_file = "track20"
-        col.label(text="Add an inverted track", icon='ANIM')
-        row = col.row()
-        row.operator("rcg.importobject", text="0.5m").rcg_file = "invtrack05"
-        row.operator("rcg.importobject", text="1.0m").rcg_file = "invtrack10"
-        row.operator("rcg.importobject", text="2.0m").rcg_file = "invtrack20"
-        col.label(text="Add misc track", icon='ANIM')
-        row = col.row()
-        op05 = row.operator("rcg.importobject", text="Add 1m NG Track")
-        op05.rcg_file = "ngtrack1"
+        op05 = row.operator("rcg.importobject", text="Normal")
+        op05.rcg_file = "track"
+        row.operator("rcg.importobject", text="Inverted").rcg_file = "invtrack"
+        op05 = row.operator("rcg.importobject", text="Railway")
+        op05.rcg_file = "ngtrack"
         col.label(text="Add a track ruler", icon='ARROW_LEFTRIGHT')
         row = col.row()
-        row.operator("rcg.importobject", text="0.5m").rcg_file = "trackruler05"
-        row.operator("rcg.importobject", text="1.0m").rcg_file = "trackruler10"
-        row.operator("rcg.importobject", text="2.0m").rcg_file = "trackruler20"
+        row.operator("rcg.importobject", text="Ruler").rcg_file = "trackruler"
         col.label(text="Add a modifier", icon='MODIFIER')
         col.operator("rcg.addarray")
         col.operator("rcg.addbezcurve")
@@ -430,7 +418,7 @@ class RCG_PT_sidebar(Panel):
         self.make_two_arg_export_op(col, "Export Flat Path", False, False)
         self.make_two_arg_export_op(col, "Export Banked Path Abs", True, True)
         self.make_two_arg_export_op(col, "Export Flat Path Abs", True, False)
-        col.label(text="Supports", icon='ANIM')
+        col.label(text="Supports", icon='SNAP_VOLUME')
         col.operator("rcg.addcolumn")
         col.prop(settings, "column_spacing")
         col.prop(settings, "column_diameter")
