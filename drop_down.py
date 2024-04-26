@@ -10,6 +10,7 @@ dropdown_items = [
 
 # Define a property group to store the selected value
 class MyAddonProperties(bpy.types.PropertyGroup):
+    # noinspection SqlNoDataSourceInspection
     dropdown_property: bpy.props.EnumProperty(
         items=dropdown_items,
         name="Dropdown Menu",

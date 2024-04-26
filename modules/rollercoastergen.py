@@ -3,8 +3,8 @@ from v_mathutils import VtVector  # use in Blender if you like
 from vtfilewriter import VtFileWriter
 
 import bpy
-from bpy.types import Operator
-from bpy.types import Panel
+from bpy_types import Operator
+from bpy_types import Panel
 from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty
 
