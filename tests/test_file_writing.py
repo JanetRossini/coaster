@@ -124,3 +124,9 @@ class TestFileWriting:
         coords = [(back, up, front)]
         lines = VtFileWriter.make_lines(coords, True, False)
         assert lines[0] == '<2.000, 2.000, 2.000, 0>'
+
+    def test_slicing(self):
+        lis = [1, 2, 3, 4, 5, 6, 7]
+        pairs = [lis[i:i+2] for i in range(0, len(lis), 2)]
+        assert len(pairs[-2]) == 2
+        assert len(pairs[-1]) == 1
