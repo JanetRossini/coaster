@@ -9,6 +9,10 @@ from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty
 
 
+def make_pairs(items):
+    return [items[i:i + 2] for i in range(0, len(items)-1, 2)]
+
+
 def make_elements(name):
     home = os.path.expanduser('~')
     working = os.path.join(home, 'PycharmProjects', 'coaster',  'coasterobjects')
@@ -294,7 +298,7 @@ class RCG_OT_addcolumn(Operator):
         fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
         vertices = fins.data.vertices
         verts = vertices.values()
-        pos_up_pairs = [verts[i:i+2] for i in range(0, len(verts), 2)]
+        pos_up_pairs = make_pairs(verts)  # tested in test_file_writing.py
         every_nth_pair = pos_up_pairs[::column_spacing]
         for pair in every_nth_pair:
             self.place_column(pair, column_diameter, offset_desired)
@@ -457,3 +461,4 @@ def unregister():
 
 if __name__ == '__main__':
     register()
+

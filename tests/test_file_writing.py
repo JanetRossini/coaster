@@ -1,8 +1,5 @@
 import os
-
-import pytest
 from modules.v_mathutils import VtVector
-
 from modules.vtfilewriter import VtFileWriter
 
 program = """
@@ -15,6 +12,10 @@ do_something() {
     llSay(0,"doing something");
 }
 """
+
+
+def make_pairs(items):
+    return [items[i:i + 2] for i in range(0, len(items)-1, 2)]
 
 
 class TestFileWriting:
@@ -130,3 +131,11 @@ class TestFileWriting:
         pairs = [lis[i:i+2] for i in range(0, len(lis), 2)]
         assert len(pairs[-2]) == 2
         assert len(pairs[-1]) == 1
+
+    def test_make_pairs(self):
+        items = [1, 2, 3, 4, 5, 6]
+        assert len(make_pairs(items)) == 3
+        items = [1, 2, 3, 4, 5, 6, 7]
+        assert len(make_pairs(items)) == 3
+        items = [1, 2, 3, 4, 5, 6, 7, 8]
+        assert len(make_pairs(items)) == 4
