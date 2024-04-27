@@ -126,7 +126,7 @@ class SelectFileNurbs(bpy.types.Operator, ImportHelper):
 def create_nurbs_path(coordinates):
     nurbs_path = bpy.data.curves.new(name="NurbsPath", type='CURVE')
     nurbs_path.dimensions = '3D'
-    nurbs_path.resolution_u = 12
+    nurbs_path.resolution_u = 32
 
     spline = nurbs_path.splines.new('NURBS')
     spline.points.add(len(coordinates) - 1)  # Add points for each coordinate
