@@ -62,8 +62,8 @@ class SelectFileEmpties(bpy.types.Operator, ImportHelper):
                     .replace(' ', '')
                 coordinates = line_stripped.strip().split(',')
                 # Convert coordinates to floats and create a Vector
-                # vertex = VtVector((float(coordinates[0]), float(coordinates[1]), float(coordinates[2])))
-                vertices.append(coordinates)
+                vertex = (float(coordinates[0]), float(coordinates[1]), float(coordinates[2]))
+                vertices.append(vertex)
 
             #            # Create empties at each vertex
             for i, vertex in enumerate(vertices):
