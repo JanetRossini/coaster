@@ -1,5 +1,7 @@
 import os
-from v_mathutils import VtVector  # use in Blender if you like
+
+from utils import make_pairs, make_elements, activate_object_by_name
+from v_mathutils import VtVector
 from vtfilewriter import VtFileWriter
 
 import bpy
@@ -7,28 +9,6 @@ from bpy_types import Operator
 from bpy_types import Panel
 from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty
-
-
-def make_pairs(items):
-    return [items[i:i + 2] for i in range(0, len(items)-1, 2)]
-
-
-def make_elements(name):
-    home = os.path.expanduser('~')
-    working = os.path.join(home, 'PycharmProjects', 'coaster',  'coasterobjects')
-    filepath = os.path.join(working, name + '.blend')
-    directory = os.path.join(filepath, 'Object')
-    filename = name
-    return filepath, directory, filename
-
-
-def activate_object_by_name(partial_name):
-    for obj in bpy.context.scene.objects:
-        if partial_name in obj.name:
-            obj.select_set(True)
-            bpy.context.view_layer.objects.active = obj
-            return
-    print("didn't find it")
 
 
 class RCG_OT_importObject(Operator):
