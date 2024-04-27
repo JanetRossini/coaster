@@ -27,16 +27,16 @@ class RCG_OT_importObject(Operator):
         if self.rcg_file != "":
             name = self.rcg_file
         else:
-            name = "track05"
+            name = "track"
             self.report({"WARNING"}, "defaulting to " + name)
         self.report({"INFO"}, "adding " + name)
         filepath, directory, filename = make_elements(name)
         bpy.ops.wm.append(filepath=filepath,
                           directory=directory,
                           filename=filename)
-        track05 = bpy.data.objects[name]
-        track05.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = track05
+        track = bpy.data.objects[name]
+        track.select_set(state=True, view_layer=bpy.context.view_layer)
+        bpy.context.view_layer.objects.active = track
         return {'FINISHED'}
 
 
