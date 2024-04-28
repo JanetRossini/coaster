@@ -56,9 +56,9 @@ class SelectFileEmpties(bpy.types.Operator, ImportHelper):
         with open(file_path, 'r') as file:
             for line in file:
                 # Split each line into coordinates
-                line_stripped = line\
-                    .replace('<', '')\
-                    .replace('>', '')\
+                line_stripped = line \
+                    .replace('<', '') \
+                    .replace('>', '') \
                     .replace(' ', '')
                 coordinates = line_stripped.strip().split(',')
                 # Convert coordinates to floats and create a Vector
@@ -95,10 +95,10 @@ def read_coordinates(file_path):
     coordinates = []
     with open(file_path, 'r') as file:
         for line in file:
-            line_stripped = line\
-                .replace('<', '')\
-                .replace('>', '')\
-                .replace(' ', '')\
+            line_stripped = line \
+                .replace('<', '') \
+                .replace('>', '') \
+                .replace(' ', '') \
                 .replace(',', ' ')
             # Assuming coordinates are separated by space
             coords = line_stripped.strip().split()
@@ -153,21 +153,11 @@ class RCG_OT_inputnurbspath(Operator):
 
     def execute(self, context):
         bpy.ops.custom.select_nurbs('INVOKE_DEFAULT')
-        # Define the function to read coordinates from the text file
-
-        # File path containing the coordinates
-        #        file_path = "C:/Users/Terry/PycharmProjects/blenderPython/coasterobjects/nurbs.txt"
-
-        # Read coordinates from the file
-        #        coordinates = read_coordinates(file_path)
-
-        # Create a NURBS path using the coordinates
-        #        nurbs_path_object = create_nurbs_path(coordinates)
         return {'FINISHED'}
 
 
 class RCG_OT_addarray(Operator):
-    """ Set the render properties """
+    """ Add ARRAY Modifier """
     bl_idname = "rcg.addarray"
     bl_label = "Add ARRAY Modifier"
     bl_options = {"REGISTER", "UNDO"}
@@ -188,7 +178,7 @@ class RCG_OT_addarray(Operator):
 
 
 class RCG_OT_addbezcurve(Operator):
-    """ Set the render properties """
+    """ Add BEZIER Modifier """
     bl_idname = "rcg.addbezcurve"
     bl_label = "Add BEZIER Modifier"
     bl_options = {"REGISTER", "UNDO"}
@@ -206,7 +196,7 @@ class RCG_OT_addbezcurve(Operator):
 
 
 class RCG_OT_addnurbscurve(Operator):
-    """ Set the render properties """
+    """ Add NURBS Modifier """
     bl_idname = "rcg.addnurbscurve"
     bl_label = "Add NURBS Modifier"
     bl_options = {"REGISTER", "UNDO"}
@@ -221,6 +211,40 @@ class RCG_OT_addnurbscurve(Operator):
         bpy.context.object.modifiers["Curve"].object = bpy.data.objects["NurbsPath"]
 
         return {'FINISHED'}
+
+
+class RCG_OT_createbeziercurve(Operator):
+        """ Create a BEZIER path """
+        bl_idname = "rcg.createbeziercurve"
+        bl_label = "Create BEZIER Path"
+        bl_options = {"REGISTER", "UNDO"}
+
+        @classmethod
+        def poll(cls, context):
+            return context.mode == "OBJECT"
+
+        def execute(self, context):
+            bpy.ops.curve.primitive_bezier_curve_add(radius=1, location=(0, 0, 0))
+            bpy.context.object.data.resolution_u = 32
+
+            return {'FINISHED'}
+
+
+class RCG_OT_createnurbscurve(Operator):
+        """ Create a NURBS path """
+        bl_idname = "rcg.createnurbscurve"
+        bl_label = "Create NURBS Path"
+        bl_options = {"REGISTER", "UNDO"}
+
+        @classmethod
+        def poll(cls, context):
+            return context.mode == "OBJECT"
+
+        def execute(self, context):
+            bpy.ops.curve.primitive_nurbs_path_add(radius=1, location=(0, 0, 0))
+            bpy.context.object.data.resolution_u = 32
+
+            return {'FINISHED'}
 
 
 class RCGSettings(bpy.types.PropertyGroup):
@@ -251,7 +275,9 @@ class RCGSettings(bpy.types.PropertyGroup):
         step=0.1
     )
 
+
 class RCG_OT_addcolumn(Operator):
+    """ Add support columns"""
     bl_idname = "rcg.addcolumn"
     bl_label = "Add Supports"
     bl_options = {"REGISTER", "UNDO"}
@@ -291,12 +317,12 @@ class RCG_OT_addcolumn(Operator):
         up_vec = pos_up_pair[1].co
         raw_offset = - (up_vec - pos_vec)
         mul = offset_desired / 0.5
-        pos_vec = pos_vec + mul*raw_offset
+        pos_vec = pos_vec + mul * raw_offset
         z_size = pos_vec.z
         bpy.ops.mesh.primitive_cylinder_add(
-            location=(pos_vec.x,pos_vec.y, pos_vec.z - z_size / 2),
+            location=(pos_vec.x, pos_vec.y, pos_vec.z - z_size / 2),
             vertices=6,
-            radius=diameter/2.0,
+            radius=diameter / 2.0,
             depth=z_size,
             end_fill_type='NOTHING',
             enter_editmode=False)
@@ -309,13 +335,13 @@ class RCG_OT_addcolumn(Operator):
         columns = bpy.data.collections.new("RCG Supports")
         scene = bpy.context.scene
         scene.collection.children.link(columns)
-        bpy.context.view_layer.active_layer_collection\
+        bpy.context.view_layer.active_layer_collection \
             = bpy.context.view_layer.layer_collection.children["RCG Supports"]
         return root_collection
 
 
 class RCG_OT_apply(Operator):
-    """ Set the render properties """
+    """ Apply all modifiers """
     bl_idname = "rcg.apply"
     bl_label = "Apply All Modifiers"
     bl_options = {"REGISTER", "UNDO"}
@@ -332,7 +358,7 @@ class RCG_OT_apply(Operator):
 
 
 class RCG_OT_Export(Operator):
-    """ Set the render properties """
+    """ Export """
     bl_idname = "rcg.export"
     bl_label = "Export"
     bl_options = {"REGISTER", "UNDO"}
@@ -380,8 +406,8 @@ class RCG_PT_sidebar(Panel):
         col.label(text="Add/Create track curve", icon='CURVE_DATA')
         col.operator("rcg.inputempties")
         col.operator("rcg.inputnurbspath")
-        col.operator("curve.primitive_bezier_curve_add", text="Create Bezier Curve")
-        col.operator("curve.primitive_nurbs_path_add", text="Create Path Curve")
+        col.operator("rcg.createbeziercurve", text="Create Bezier Curve")
+        col.operator("rcg.createnurbscurve", text="Create Path Curve")
         col.label(text="Add a track object", icon='ANIM')
         row = col.row()
         row.operator("rcg.importobject", text="Normal").rcg_file = "track"
@@ -413,19 +439,21 @@ class RCG_PT_sidebar(Panel):
         op.rcg_bank = bank
 
 
-classes = [RCG_OT_addarray,
-           RCG_OT_addbezcurve,
-           RCG_OT_addcolumn,
-           RCG_OT_addnurbscurve,
-           RCG_OT_apply,
-           RCG_OT_Export,
-           RCG_OT_importObject,
-           RCG_OT_inputempties,
-           RCG_OT_inputnurbspath,
-           RCG_PT_sidebar,
-           RCGSettings,
-           SelectFileEmpties,
-           SelectFileNurbs, ]
+classes = [ RCG_OT_addarray,
+            RCG_OT_addbezcurve,
+            RCG_OT_addcolumn,
+            RCG_OT_addnurbscurve,
+            RCG_OT_apply,
+            RCG_OT_createbeziercurve,
+            RCG_OT_createnurbscurve,
+            RCG_OT_Export,
+            RCG_OT_importObject,
+            RCG_OT_inputempties,
+            RCG_OT_inputnurbspath,
+            RCG_PT_sidebar,
+            RCGSettings,
+            SelectFileEmpties,
+            SelectFileNurbs, ]
 
 
 def register():
@@ -441,4 +469,3 @@ def unregister():
 
 if __name__ == '__main__':
     register()
-
