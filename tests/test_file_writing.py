@@ -139,3 +139,13 @@ class TestFileWriting:
         assert len(make_pairs(items)) == 3
         items = [1, 2, 3, 4, 5, 6, 7, 8]
         assert len(make_pairs(items)) == 4
+
+    def test_make_filepath_directory_name(self):
+        file_path = 'C:/mumble/foo/fragglerats.blend'
+        path, file = os.path.split(file_path)
+        assert file == 'fragglerats.blend'
+        name, ext = os.path.splitext(file)
+        assert name == 'fragglerats'
+        assert ext == '.blend'
+        directory = os.path.join(file_path, 'Object')
+        assert directory == 'C:/mumble/foo/fragglerats.blend/Object'

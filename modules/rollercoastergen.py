@@ -34,10 +34,38 @@ class RCG_OT_importObject(Operator):
         bpy.ops.wm.append(filepath=filepath,
                           directory=directory,
                           filename=filename)
-        track = bpy.data.objects[name]
-        track.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = track
+        item = bpy.data.objects[name]
+        item.select_set(state=True, view_layer=bpy.context.view_layer)
+        bpy.context.view_layer.objects.active = item
         return {'FINISHED'}
+
+
+class RCG_OT_importfromfile(bpy.types.Operator, ImportHelper):
+    "Add object from file"
+    bl_idname = "rcg.importfromfile"
+    bl_label = "Import"
+    bl_options = {"REGISTER", "UNDO"}
+
+    filename_ext = '*.blend'
+    filter_glob: StringProperty(default="*.blend", options={'HIDDEN'})
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        file_path = self.filepath
+        directory = os.path.join(file_path, 'Object')
+        _path, file_with_ext = os.path.split(file_path)
+        filename, _ext = os.path.splitext(file_with_ext)
+        self.report({"INFO"}, "adding " + file_path)
+        bpy.ops.wm.append(filepath=file_path,
+                          directory=directory,
+                          filename=filename)
+        item = bpy.data.objects[filename]
+        item.select_set(state=True, view_layer=bpy.context.view_layer)
+        bpy.context.view_layer.objects.active = item
+        return {"FINISHED"}
 
 
 class SelectFileEmpties(bpy.types.Operator, ImportHelper):
@@ -413,6 +441,8 @@ class RCG_PT_sidebar(Panel):
         row.operator("rcg.importobject", text="Normal").rcg_file = "track"
         row.operator("rcg.importobject", text="Inverted").rcg_file = "invtrack"
         row.operator("rcg.importobject", text="Railway").rcg_file = "ngtrack"
+        col.label(text="Import Object from file", icon='SNAP_VOLUME')
+        col.operator("rcg.importfromfile", text="Object File")
         col.label(text="Add a track ruler", icon='ARROW_LEFTRIGHT')
         row = col.row()
         row.operator("rcg.importobject", text="Ruler").rcg_file = "trackruler"
@@ -448,6 +478,7 @@ classes = [ RCG_OT_addarray,
             RCG_OT_createnurbscurve,
             RCG_OT_Export,
             RCG_OT_importObject,
+            RCG_OT_importfromfile,
             RCG_OT_inputempties,
             RCG_OT_inputnurbspath,
             RCG_PT_sidebar,
