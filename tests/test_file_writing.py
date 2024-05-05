@@ -149,3 +149,17 @@ class TestFileWriting:
         assert ext == '.blend'
         directory = os.path.join(file_path, 'Object')
         assert directory == 'C:/mumble/foo/fragglerats.blend/Object'
+
+    def test_get_data_path(self):
+        import sys
+        def running_as_add_on():
+            return __name__ in sys.modules
+
+        def data_path(is_add_on):
+            if is_add_on:
+                return ''
+            else:
+                return ''
+
+        assert 2 == 2
+

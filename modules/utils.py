@@ -8,12 +8,17 @@ def make_pairs(items):
 
 
 def make_elements(name):
-    home = os.path.expanduser('~')
-    working = os.path.join(home, 'PycharmProjects', 'coaster',  'coasterobjects')
+    working = project_data_path()
     filepath = os.path.join(working, name + '.blend')
     directory = os.path.join(filepath, 'Object')
     filename = name
     return filepath, directory, filename
+
+
+def project_data_path():
+    home = os.path.expanduser('~')
+    working = os.path.join(home, 'PycharmProjects', 'coaster', 'coasterobjects')
+    return working
 
 
 def activate_object_by_name(partial_name):
