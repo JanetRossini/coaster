@@ -1,6 +1,6 @@
 import os
 
-from utils import make_pairs, make_elements, activate_object_by_name
+from utils import make_pairs, make_elements, activate_object_by_name, project_data_path
 from v_mathutils import VtVector
 from vtfilewriter import VtFileWriter
 
@@ -40,7 +40,7 @@ class RCG_OT_importObject(Operator):
         return {'FINISHED'}
 
 
-class RCG_OT_importfromfile(bpy.types.Operator, ImportHelper):
+class RCG_OT_importfromfile(bpy.types.Operator):
     "Add object from file"
     bl_idname = "rcg.importfromfile"
     bl_label = "Import"
@@ -48,10 +48,17 @@ class RCG_OT_importfromfile(bpy.types.Operator, ImportHelper):
 
     filename_ext = '*.blend'
     filter_glob: StringProperty(default="*.blend", options={'HIDDEN'})
+    filepath: bpy.props.StringProperty(subtype="FILE_PATH")
+    directory: bpy.props.StringProperty(subtype="DIR_PATH")
 
     @classmethod
     def poll(cls, context):
         return context.mode == "OBJECT"
+
+    def invoke(self, context, event):
+        self.directory = project_data_path()
+        context.window_manager.fileselect_add(self)
+        return {"RUNNING_MODAL"}
 
     def execute(self, context):
         file_path = self.filepath
