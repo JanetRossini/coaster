@@ -443,16 +443,16 @@ class RCG_PT_sidebar(Panel):
         col.operator("rcg.inputnurbspath")
         col.operator("rcg.createbeziercurve", text="Create Bezier Curve")
         col.operator("rcg.createnurbscurve", text="Create Path Curve")
-        col.label(text="Add a track object", icon='ANIM')
-        row = col.row()
-        row.operator("rcg.importobject", text="Normal").rcg_file = "track"
-        row.operator("rcg.importobject", text="Inverted").rcg_file = "invtrack"
-        row.operator("rcg.importobject", text="Railway").rcg_file = "ngtrack"
-        col.label(text="Import Object from file", icon='SNAP_VOLUME')
-        col.operator("rcg.importfromfile", text="Object File")
-        col.label(text="Add a track ruler", icon='ARROW_LEFTRIGHT')
-        row = col.row()
-        row.operator("rcg.importobject", text="Ruler").rcg_file = "trackruler"
+        # col.label(text="Add a track object", icon='ANIM')
+        # row = col.row()
+        # row.operator("rcg.importobject", text="Normal").rcg_file = "track"
+        # row.operator("rcg.importobject", text="Inverted").rcg_file = "invtrack"
+        # row.operator("rcg.importobject", text="Railway").rcg_file = "ngtrack"
+        col.label(text="Import track object", icon='ANIM')
+        col.operator("rcg.importfromfile", text="Select file")
+        # col.label(text="Add a track ruler", icon='ARROW_LEFTRIGHT')
+        # row = col.row()
+        # row.operator("rcg.importobject", text="Ruler").rcg_file = "trackruler"
         col.label(text="Add a modifier", icon='MODIFIER')
         col.operator("rcg.addarray")
         col.operator("rcg.addbezcurve")
