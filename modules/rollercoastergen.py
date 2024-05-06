@@ -61,6 +61,8 @@ class RCG_OT_importfromfile(bpy.types.Operator):
         return {"RUNNING_MODAL"}
 
     def execute(self, context):
+        addon_dir = os.path.dirname(__file__)
+        self.report({"INFO"}, "file path " + addon_dir)
         file_path = self.filepath
         directory = os.path.join(file_path, 'Object')
         _path, file_with_ext = os.path.split(file_path)
