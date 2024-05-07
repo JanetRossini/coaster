@@ -100,7 +100,7 @@ I think I can extract a method now.
 
 x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
 z_size = 4.0
-self.place_column(position_vert, column_diameter, offset)
+self.place_support(position_vert, column_diameter, offset)
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
 
@@ -147,7 +147,7 @@ extract, including that part in the extracted bit:
 
 
 x_pos, y_pos, z_pos = (0.0, 0.0, 4.0)
-self.place_column(position_vert, column_diameter, offset)
+self.place_support(position_vert, column_diameter, offset)
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
 
@@ -217,7 +217,7 @@ backs = verts[::3]
 column_verts = backs[::40]
 for vert in column_verts:
     co = vert.co
-    self.place_column(position_vert, column_diameter, offset)
+    self.place_support(position_vert, column_diameter, offset)
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
 ~~~
@@ -297,7 +297,7 @@ def execute(self, context):
     self.say_info(f'{len(column_verts)} column_verts')
     for vert in column_verts:
         co = vert.co
-        self.place_column(position_vert, column_diameter, offset)
+        self.place_support(position_vert, column_diameter, offset)
     bpy.context.view_layer.active_layer_collection = root_collection
     # self.report({"INFO"}, "Column set dimensions")
     return {'FINISHED'}
@@ -344,7 +344,7 @@ column_verts = backs[::10]
 self.say_info(f'{len(column_verts)} column_verts')
 for position_vert in column_verts:
     co = position_vert.co
-    self.place_column(position_vert, column_diameter, offset)
+    self.place_support(position_vert, column_diameter, offset)
 bpy.context.view_layer.active_layer_collection = root_collection
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
@@ -432,7 +432,7 @@ column_verts = backs[::10]
 self.say_info(f'{len(column_verts)} column_verts')
 for position_vert in column_verts:
     co = position_vert.co
-    self.place_column(position_vert, column_diameter, offset)
+    self.place_support(position_vert, column_diameter, offset)
 bpy.context.view_layer.active_layer_collection = root_collection
 # self.report({"INFO"}, "Column set dimensions")
 return {'FINISHED'}
@@ -456,7 +456,7 @@ backs = verts[::2]
 column_verts = backs[::10]
 for position_vert in column_verts:
     co = position_vert.co
-    self.place_column(position_vert, column_diameter, offset)
+    self.place_support(position_vert, column_diameter, offset)
 bpy.context.view_layer.active_layer_collection = root_collection
 return {'FINISHED'}
 ~~~
@@ -493,7 +493,7 @@ pos_up_pairs = [verts[i:i + 2] for i in range(0, len(verts), 2)]
 every_tenth_pair = pos_up_pairs[::10]
 for position_vert in every_tenth_pair:
     co = position_vert.co
-    self.place_column(position_vert, column_diameter, offset)
+    self.place_support(position_vert, column_diameter, offset)
 bpy.context.view_layer.active_layer_collection = root_collection
 return {'FINISHED'}
 ~~~
@@ -517,7 +517,7 @@ every_tenth_pair = pos_up_pairs[::10]
 for pair in every_tenth_pair:
     position_vert = pair[0]
     co = position_vert.co
-    self.place_column(position_vert, column_diameter, offset)
+    self.place_support(position_vert, column_diameter, offset)
 bpy.context.view_layer.active_layer_collection = root_collection
 return {'FINISHED'}
 ~~~
@@ -534,7 +534,7 @@ setup lines into `place_column` and then pass pair, like this:
 
 ...
 for pair in every_tenth_pair:
-    self.place_column(pair, column_diameter, offset)
+    self.place_support(pair, column_diameter, offset)
 bpy.context.view_layer.active_layer_collection = root_collection
 return {'FINISHED'}
 

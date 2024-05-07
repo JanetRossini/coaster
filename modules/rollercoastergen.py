@@ -315,17 +315,15 @@ class RCG_OT_addcolumn(Operator):
         pos_up_pairs = make_pairs(verts)  # tested in test_file_writing.py
         every_nth_pair = pos_up_pairs[::column_spacing]
         for pair in every_nth_pair:
-            self.place_column(pair, column_diameter, offset_desired)
+            self.place_support(pair, column_diameter, offset_desired)
         bpy.context.view_layer.active_layer_collection = root_collection  # reset collection
         return {'FINISHED'}
 
-    def place_column(self, pos_up_pair, diameter, offset_desired):
-        position_vert = pos_up_pair[0]
-        pos_vec = position_vert.co
-        up_vec = pos_up_pair[1].co
-        raw_offset = - (up_vec - pos_vec)
-        mul = offset_desired / 0.5
-        pos_vec = pos_vec + mul * raw_offset
+    def place_support(self, pos_up_pair, diameter, offset_desired):
+        pos_vec = self.get_position_vector(offset_desired, pos_up_pair)
+        self.add_support(pos_vec, diameter)
+
+    def add_support(self, pos_vec, diameter):
         z_size = pos_vec.z
         bpy.ops.mesh.primitive_cylinder_add(
             location=(pos_vec.x, pos_vec.y, pos_vec.z - z_size / 2),
@@ -337,6 +335,15 @@ class RCG_OT_addcolumn(Operator):
         ob = bpy.context.object
         ob.name = 'Support'
         bpy.ops.object.shade_smooth()
+
+    def get_position_vector(self, offset_desired, pos_up_pair):
+        position_vert = pos_up_pair[0]
+        pos_vec = position_vert.co
+        up_vec = pos_up_pair[1].co
+        raw_offset = - (up_vec - pos_vec)
+        mul = offset_desired / 0.5
+        pos_vec = pos_vec + mul * raw_offset
+        return pos_vec
 
     def set_rcg_collection_active(self):
         root_collection = bpy.context.view_layer.layer_collection.children[0]
