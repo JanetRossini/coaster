@@ -1,5 +1,7 @@
 import os
 
+from mathutils import Vector
+
 from utils import make_pairs, make_elements, activate_object_by_name, project_data_path
 from v_mathutils import VtVector
 from vtfilewriter import VtFileWriter
@@ -177,12 +179,11 @@ class RCG_OT_addarray(Operator):
 
     def execute(self, context):
         bpy.ops.object.modifier_add(type='ARRAY')
-        bpy.context.object.modifiers["Array"].count = 20
-        bpy.context.object.modifiers["Array"].use_merge_vertices = True
-        bpy.context.object.modifiers["Array"].constant_offset_displace[0] = 1
-        bpy.context.object.modifiers["Array"].relative_offset_displace[1] = 0
-        bpy.context.object.modifiers["Array"].relative_offset_displace[2] = 0
-        bpy.context.object.modifiers["Array"].fit_type = 'FIXED_COUNT'
+        modifier = bpy.context.object.modifiers["Array"]
+        modifier.count = 20
+        modifier.use_merge_vertices = True
+        modifier.constant_offset_displace = Vector((1.0, 0.0, 0.0))
+        modifier.fit_type = 'FIXED_COUNT'
         return {'FINISHED'}
 
 
