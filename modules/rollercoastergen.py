@@ -284,7 +284,7 @@ class RCGSettings(bpy.types.PropertyGroup):
     )
 
 
-class RCG_OT_addcolumn(Operator):
+class RCG_OT_addSupport(Operator):
     """ Add support columns"""
     bl_idname = "rcg.addcolumn"
     bl_label = "Add Supports"
@@ -298,26 +298,33 @@ class RCG_OT_addcolumn(Operator):
         self.report({"INFO"}, msg)
 
     def execute(self, context):
-        offset_desired = context.scene.rcg_settings.offset_distance
-        column_spacing = context.scene.rcg_settings.column_spacing
-        column_diameter = context.scene.rcg_settings.column_diameter
-        # self.say_info(f"Offset {offset_desired}")
         activate_object_by_name('ruler')
-        obj = bpy.context.object
-        if obj is None or obj.type != "MESH" or 'ruler' not in obj.name:
+        ruler = bpy.context.object
+        if ruler is None or ruler.type != "MESH" or 'ruler' not in ruler.name:
             self.report({'ERROR'}, 'You seem to have no ruler.')
             return {'CANCELLED'}
+
         bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+        every_nth_pair = self.get_support_positions(context, ruler)
+        self.place_supports(every_nth_pair, context)
+        return {'FINISHED'}
+
+    def place_supports(self, every_nth_pair, context):
+        offset_desired = context.scene.rcg_settings.offset_distance
+        column_diameter = context.scene.rcg_settings.column_diameter
         root_collection = self.set_rcg_collection_active()  # set to our collection
-        fins = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        for pair in every_nth_pair:
+            self.place_support(pair, column_diameter, offset_desired)
+        bpy.context.view_layer.active_layer_collection = root_collection  # reset collection
+
+    def get_support_positions(self, context, ruler):
+        column_spacing = context.scene.rcg_settings.column_spacing
+        fins = ruler.evaluated_get(bpy.context.view_layer.depsgraph)
         vertices = fins.data.vertices
         verts = vertices.values()
         pos_up_pairs = make_pairs(verts)  # tested in test_file_writing.py
         every_nth_pair = pos_up_pairs[::column_spacing]
-        for pair in every_nth_pair:
-            self.place_support(pair, column_diameter, offset_desired)
-        bpy.context.view_layer.active_layer_collection = root_collection  # reset collection
-        return {'FINISHED'}
+        return every_nth_pair
 
     def place_support(self, pos_up_pair, diameter, offset_desired):
         pos_vec = self.get_position_vector(offset_desired, pos_up_pair)
@@ -447,21 +454,21 @@ class RCG_PT_sidebar(Panel):
         op.rcg_bank = bank
 
 
-classes = [ RCG_OT_addarray,
-            RCG_OT_addbezcurve,
-            RCG_OT_addcolumn,
-            RCG_OT_addnurbscurve,
-            RCG_OT_apply,
-            RCG_OT_createbeziercurve,
-            RCG_OT_createnurbscurve,
-            RCG_OT_Export,
-            RCG_OT_importfromfile,
-            RCG_OT_inputempties,
-            RCG_OT_inputnurbspath,
-            RCG_PT_sidebar,
-            RCGSettings,
-            SelectFileEmpties,
-            SelectFileNurbs, ]
+classes = [RCG_OT_addarray,
+           RCG_OT_addbezcurve,
+           RCG_OT_addnurbscurve,
+           RCG_OT_addSupport,
+           RCG_OT_apply,
+           RCG_OT_createbeziercurve,
+           RCG_OT_createnurbscurve,
+           RCG_OT_Export,
+           RCG_OT_importfromfile,
+           RCG_OT_inputempties,
+           RCG_OT_inputnurbspath,
+           RCG_PT_sidebar,
+           RCGSettings,
+           SelectFileEmpties,
+           SelectFileNurbs, ]
 
 
 def register():
