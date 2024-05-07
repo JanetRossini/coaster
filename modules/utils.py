@@ -26,5 +26,5 @@ def activate_object_by_name(partial_name):
         if partial_name in obj.name:
             obj.select_set(True)
             bpy.context.view_layer.objects.active = obj
-            return
-    print("didn't find it")
+            return obj
+    return None

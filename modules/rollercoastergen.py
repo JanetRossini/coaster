@@ -300,8 +300,7 @@ class RCG_OT_addSupport(Operator):
         self.report({"INFO"}, msg)
 
     def execute(self, context):
-        activate_object_by_name('ruler')
-        ruler = bpy.context.object
+        ruler = activate_object_by_name('ruler')
         if ruler is None or ruler.type != "MESH" or 'ruler' not in ruler.name:
             self.report({'ERROR'}, 'You seem to have no ruler.')
             return {'CANCELLED'}
@@ -393,15 +392,14 @@ class RCG_OT_Export(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        activate_object_by_name('ruler')
-        obj = bpy.context.object
-        if obj is None or obj.type != "MESH" or 'ruler' not in obj.name:
+        ruler = activate_object_by_name('ruler')
+        if ruler is None or ruler.type != "MESH" or 'ruler' not in ruler.name:
             self.report({'ERROR'}, 'You seem to have no ruler.')
             return {'CANCELLED'}
         bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
 
         # Output geometry
-        obj_eval = obj.evaluated_get(bpy.context.view_layer.depsgraph)
+        obj_eval = ruler.evaluated_get(bpy.context.view_layer.depsgraph)
 
         verts = obj_eval.data.vertices
         home = os.path.expanduser('~')
