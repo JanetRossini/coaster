@@ -13,7 +13,7 @@ from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty
 
 
-class RCG_OT_importfromfile(bpy.types.Operator):
+class RCG_OT_importFromFile(bpy.types.Operator):
     "Add object from file"
     bl_idname = "rcg.importfromfile"
     bl_label = "Import"
@@ -86,7 +86,7 @@ class SelectFileEmpties(bpy.types.Operator, ImportHelper):
         return {'FINISHED'}
 
 
-class RCG_OT_inputempties(Operator):
+class RCG_OT_inputEmpties(Operator):
     """ Input a series of empties from a text file """
     bl_idname = "rcg.inputempties"
     bl_label = "Input Empties from file"
@@ -152,7 +152,7 @@ def create_nurbs_path(coordinates):
     return obj
 
 
-class RCG_OT_inputnurbspath(Operator):
+class RCG_OT_inputNurbsPath(Operator):
     """ Input a nurbs path from a text file """
     bl_idname = "rcg.inputnurbspath"
     bl_label = "Input Nurbs Path from file"
@@ -167,7 +167,7 @@ class RCG_OT_inputnurbspath(Operator):
         return {'FINISHED'}
 
 
-class RCG_OT_addarray(Operator):
+class RCG_OT_addArrayModifier(Operator):
     """ Add ARRAY Modifier """
     bl_idname = "rcg.addarray"
     bl_label = "Add ARRAY Modifier"
@@ -187,7 +187,7 @@ class RCG_OT_addarray(Operator):
         return {'FINISHED'}
 
 
-class RCG_OT_addbezcurve(Operator):
+class RCG_OT_addBezierModifier(Operator):
     """ Add BEZIER Modifier """
     bl_idname = "rcg.addbezcurve"
     bl_label = "Add BEZIER Modifier"
@@ -205,7 +205,7 @@ class RCG_OT_addbezcurve(Operator):
         return {'FINISHED'}
 
 
-class RCG_OT_addnurbscurve(Operator):
+class RCG_OT_addNurbsModifier(Operator):
     """ Add NURBS Modifier """
     bl_idname = "rcg.addnurbscurve"
     bl_label = "Add NURBS Modifier"
@@ -223,7 +223,7 @@ class RCG_OT_addnurbscurve(Operator):
         return {'FINISHED'}
 
 
-class RCG_OT_createbeziercurve(Operator):
+class RCG_OT_createBezierCurve(Operator):
         """ Create a BEZIER path """
         bl_idname = "rcg.createbeziercurve"
         bl_label = "Create BEZIER Path"
@@ -240,7 +240,7 @@ class RCG_OT_createbeziercurve(Operator):
             return {'FINISHED'}
 
 
-class RCG_OT_createnurbscurve(Operator):
+class RCG_OT_createNurbsCurve(Operator):
         """ Create a NURBS path """
         bl_idname = "rcg.createnurbscurve"
         bl_label = "Create NURBS Path"
@@ -362,7 +362,7 @@ class RCG_OT_addSupport(Operator):
         return root_collection
 
 
-class RCG_OT_apply(Operator):
+class RCG_OT_applyAllModifiers(Operator):
     """ Apply all modifiers """
     bl_idname = "rcg.apply"
     bl_label = "Apply All Modifiers"
@@ -455,17 +455,17 @@ class RCG_PT_sidebar(Panel):
         op.rcg_bank = bank
 
 
-classes = [RCG_OT_addarray,
-           RCG_OT_addbezcurve,
-           RCG_OT_addnurbscurve,
+classes = [RCG_OT_addArrayModifier,
+           RCG_OT_addBezierModifier,
+           RCG_OT_addNurbsModifier,
            RCG_OT_addSupport,
-           RCG_OT_apply,
-           RCG_OT_createbeziercurve,
-           RCG_OT_createnurbscurve,
+           RCG_OT_applyAllModifiers,
+           RCG_OT_createBezierCurve,
+           RCG_OT_createNurbsCurve,
            RCG_OT_Export,
-           RCG_OT_importfromfile,
-           RCG_OT_inputempties,
-           RCG_OT_inputnurbspath,
+           RCG_OT_importFromFile,
+           RCG_OT_inputEmpties,
+           RCG_OT_inputNurbsPath,
            RCG_PT_sidebar,
            RCGSettings,
            SelectFileEmpties,
