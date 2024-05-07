@@ -11,35 +11,6 @@ from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty
 
 
-class RCG_OT_importObject(Operator):
-    """ Add an object from a premade blender file """
-    bl_idname = "rcg.importobject"
-    bl_label = "Size"
-    bl_options = {"REGISTER", "UNDO"}
-
-    rcg_file: bpy.props.StringProperty(name="Default Value")
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        if self.rcg_file != "":
-            name = self.rcg_file
-        else:
-            name = "track"
-            self.report({"WARNING"}, "defaulting to " + name)
-        self.report({"INFO"}, "adding " + name)
-        filepath, directory, filename = make_elements(name)
-        bpy.ops.wm.append(filepath=filepath,
-                          directory=directory,
-                          filename=filename)
-        item = bpy.data.objects[name]
-        item.select_set(state=True, view_layer=bpy.context.view_layer)
-        bpy.context.view_layer.objects.active = item
-        return {'FINISHED'}
-
-
 class RCG_OT_importfromfile(bpy.types.Operator):
     "Add object from file"
     bl_idname = "rcg.importfromfile"
@@ -445,16 +416,8 @@ class RCG_PT_sidebar(Panel):
         col.operator("rcg.inputnurbspath")
         col.operator("rcg.createbeziercurve", text="Create Bezier Curve")
         col.operator("rcg.createnurbscurve", text="Create Path Curve")
-        # col.label(text="Add a track object", icon='ANIM')
-        # row = col.row()
-        # row.operator("rcg.importobject", text="Normal").rcg_file = "track"
-        # row.operator("rcg.importobject", text="Inverted").rcg_file = "invtrack"
-        # row.operator("rcg.importobject", text="Railway").rcg_file = "ngtrack"
         col.label(text="Import track object", icon='ANIM')
         col.operator("rcg.importfromfile", text="Select file")
-        # col.label(text="Add a track ruler", icon='ARROW_LEFTRIGHT')
-        # row = col.row()
-        # row.operator("rcg.importobject", text="Ruler").rcg_file = "trackruler"
         col.label(text="Add a modifier", icon='MODIFIER')
         col.operator("rcg.addarray")
         col.operator("rcg.addbezcurve")
@@ -486,7 +449,6 @@ classes = [ RCG_OT_addarray,
             RCG_OT_createbeziercurve,
             RCG_OT_createnurbscurve,
             RCG_OT_Export,
-            RCG_OT_importObject,
             RCG_OT_importfromfile,
             RCG_OT_inputempties,
             RCG_OT_inputnurbspath,
