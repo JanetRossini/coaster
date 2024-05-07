@@ -88,7 +88,7 @@ class SelectFileEmpties(bpy.types.Operator, ImportHelper):
 
 class RCG_OT_inputEmpties(Operator):
     """ Input a series of empties from a text file """
-    bl_idname = "rcg.inputempties"
+    bl_idname = "rcg.inputEmpties"
     bl_label = "Input Empties from file"
     bl_options = {"REGISTER", "UNDO"}
 
@@ -288,7 +288,7 @@ class RCGSettings(bpy.types.PropertyGroup):
 
 class RCG_OT_addSupport(Operator):
     """ Add support columns"""
-    bl_idname = "rcg.addcolumn"
+    bl_idname = "rcg.addSupport"
     bl_label = "Add Supports"
     bl_options = {"REGISTER", "UNDO"}
 
@@ -364,7 +364,7 @@ class RCG_OT_addSupport(Operator):
 
 class RCG_OT_applyAllModifiers(Operator):
     """ Apply all modifiers """
-    bl_idname = "rcg.apply"
+    bl_idname = "rcg.applyAllModifiers"
     bl_label = "Apply All Modifiers"
     bl_options = {"REGISTER", "UNDO"}
 
@@ -426,7 +426,7 @@ class RCG_PT_sidebar(Panel):
         settings = context.scene.rcg_settings
         col = self.layout.column(align=True)
         col.label(text="Add/Create track curve", icon='CURVE_DATA')
-        col.operator("rcg.inputempties")
+        col.operator("rcg.inputEmpties")
         col.operator("rcg.inputnurbspath")
         col.operator("rcg.createbeziercurve", text="Create Bezier Curve")
         col.operator("rcg.createnurbscurve", text="Create Path Curve")
@@ -436,14 +436,14 @@ class RCG_PT_sidebar(Panel):
         col.operator("rcg.addarray")
         col.operator("rcg.addbezcurve")
         col.operator("rcg.addnurbscurve")
-        col.operator("rcg.apply")
+        col.operator("rcg.applyAllModifiers")
         col.label(text="Export Data", icon='EXPORT')
         self.make_two_arg_export_op(col, "Export Banked Path", False, True)
         self.make_two_arg_export_op(col, "Export Flat Path", False, False)
         self.make_two_arg_export_op(col, "Export Banked Path Abs", True, True)
         self.make_two_arg_export_op(col, "Export Flat Path Abs", True, False)
         col.label(text="Supports", icon='SNAP_VOLUME')
-        col.operator("rcg.addcolumn")
+        col.operator("rcg.addSupport")
         col.prop(settings, "column_spacing")
         col.prop(settings, "column_diameter")
         col.prop(settings, "offset_distance")
