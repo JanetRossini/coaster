@@ -318,11 +318,10 @@ class RCG_OT_addSupport(Operator):
         bpy.context.view_layer.active_layer_collection = root_collection  # reset collection
 
     def get_support_positions(self, context, ruler):
-        column_spacing = context.scene.rcg_settings.column_spacing
         fins = ruler.evaluated_get(bpy.context.view_layer.depsgraph)
         vertices = fins.data.vertices
-        verts = vertices.values()
-        pos_up_pairs = make_pairs(verts)  # tested in test_file_writing.py
+        pos_up_pairs = make_pairs(vertices)  # tested in test_file_writing.py
+        column_spacing = context.scene.rcg_settings.column_spacing
         every_nth_pair = pos_up_pairs[::column_spacing]
         return every_nth_pair
 
