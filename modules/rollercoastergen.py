@@ -298,9 +298,9 @@ class RCG_OT_addcolumn(Operator):
         self.report({"INFO"}, msg)
 
     def execute(self, context):
-        offset_desired = context.scene.my_settings.offset_distance
-        column_spacing = context.scene.my_settings.column_spacing
-        column_diameter = context.scene.my_settings.column_diameter
+        offset_desired = context.scene.rcg_settings.offset_distance
+        column_spacing = context.scene.rcg_settings.column_spacing
+        column_diameter = context.scene.rcg_settings.column_diameter
         # self.say_info(f"Offset {offset_desired}")
         activate_object_by_name('ruler')
         obj = bpy.context.object
@@ -409,7 +409,7 @@ class RCG_PT_sidebar(Panel):
 
     # noinspection SpellCheckingInspection
     def draw(self, context):
-        settings = context.scene.my_settings
+        settings = context.scene.rcg_settings
         col = self.layout.column(align=True)
         col.label(text="Add/Create track curve", icon='CURVE_DATA')
         col.operator("rcg.inputempties")
@@ -461,7 +461,7 @@ classes = [ RCG_OT_addarray,
 def register():
     for c in classes:
         bpy.utils.register_class(c)
-    bpy.types.Scene.my_settings = bpy.props.PointerProperty(type=RCGSettings)
+    bpy.types.Scene.rcg_settings = bpy.props.PointerProperty(type=RCGSettings)
 
 
 def unregister():
