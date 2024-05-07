@@ -131,6 +131,7 @@ class SelectFileNurbs(bpy.types.Operator, ImportHelper):
         return {'FINISHED'}
 
 
+# Make this a method? No need to return object?
 def create_nurbs_path(coordinates):
     nurbs_path = bpy.data.curves.new(name="NurbsPath", type='CURVE')
     nurbs_path.dimensions = '3D'
