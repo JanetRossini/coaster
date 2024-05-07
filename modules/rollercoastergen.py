@@ -340,9 +340,8 @@ class RCG_OT_addcolumn(Operator):
 
     def set_rcg_collection_active(self):
         root_collection = bpy.context.view_layer.layer_collection.children[0]
-        columns = bpy.data.collections.new("RCG Supports")
-        scene = bpy.context.scene
-        scene.collection.children.link(columns)
+        support_collection = bpy.data.collections.new("RCG Supports")
+        bpy.context.scene.collection.children.link(support_collection)
         bpy.context.view_layer.active_layer_collection \
             = bpy.context.view_layer.layer_collection.children["RCG Supports"]
         return root_collection
