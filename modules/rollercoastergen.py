@@ -428,7 +428,7 @@ class RCG_PT_sidebar(Panel):
         col.operator("rcg.inputnurbspath")
         col.operator("rcg.createbeziercurve", text="Create Bezier Curve")
         col.operator("rcg.createnurbscurve", text="Create Path Curve")
-        col.label(text="Import track object", icon='ANIM')
+        col.label(text="Import track object", icon='SNAP_VOLUME')
         col.operator("rcg.importfromfile", text="Select file")
         col.label(text="Add a modifier", icon='MODIFIER')
         col.operator("rcg.addarray")
