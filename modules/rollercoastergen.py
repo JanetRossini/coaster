@@ -53,10 +53,11 @@ class RCG_OT_importFromFile(bpy.types.Operator):
 class SelectFileEmpties(bpy.types.Operator):
     """Select a text file"""
     bl_idname = "custom.select_empties"
-    bl_label = "Select File Empties"
+    bl_label = "Select Empties File"
 
     filename_ext = ".txt"
 
+    filepath: bpy.props.StringProperty(subtype="FILE_PATH")
     directory: bpy.props.StringProperty(subtype="DIR_PATH")
     filter_glob: StringProperty(default="*.txt", options={'HIDDEN'})
 
@@ -126,10 +127,11 @@ def read_coordinates(file_path):
 class SelectFileNurbs(bpy.types.Operator):
     """Select a text file"""
     bl_idname = "custom.select_nurbs"
-    bl_label = "Select File Empties"
+    bl_label = "Select Nurbs File"
 
     filename_ext = ".txt"
 
+    filepath: bpy.props.StringProperty(subtype="FILE_PATH")
     directory: bpy.props.StringProperty(subtype="DIR_PATH")
     filter_glob: StringProperty(default="*.txt", options={'HIDDEN'})
 
