@@ -123,7 +123,7 @@ def read_coordinates(file_path):
     return coordinates
 
 
-class SelectFileNurbs(bpy.types.Operator, ImportHelper):
+class SelectFileNurbs(bpy.types.Operator):
     """Select a text file"""
     bl_idname = "custom.select_nurbs"
     bl_label = "Select File Empties"
