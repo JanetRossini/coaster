@@ -2,7 +2,8 @@ import os
 
 from mathutils import Vector
 
-from utils import make_pairs, activate_object_by_name, coaster_objects_in_path, coaster_scripts_out_path
+from utils import make_pairs, activate_object_by_name, coaster_objects_in_path, coaster_scripts_out_path, \
+    coaster_data_in_path
 from vtfilewriter import VtFileWriter
 
 import bpy
@@ -49,14 +50,20 @@ class RCG_OT_importFromFile(bpy.types.Operator):
         return {"FINISHED"}
 
 
-class SelectFileEmpties(bpy.types.Operator, ImportHelper):
+class SelectFileEmpties(bpy.types.Operator):
     """Select a text file"""
     bl_idname = "custom.select_empties"
     bl_label = "Select File Empties"
 
     filename_ext = ".txt"
 
+    directory: bpy.props.StringProperty(subtype="DIR_PATH")
     filter_glob: StringProperty(default="*.txt", options={'HIDDEN'})
+
+    def invoke(self, context, event):
+        self.directory = coaster_data_in_path()
+        context.window_manager.fileselect_add(self)
+        return {"RUNNING_MODAL"}
 
     def execute(self, context):
         file_path = self.filepath
@@ -123,7 +130,13 @@ class SelectFileNurbs(bpy.types.Operator, ImportHelper):
 
     filename_ext = ".txt"
 
+    directory: bpy.props.StringProperty(subtype="DIR_PATH")
     filter_glob: StringProperty(default="*.txt", options={'HIDDEN'})
+
+    def invoke(self, context, event):
+        self.directory = coaster_data_in_path()
+        context.window_manager.fileselect_add(self)
+        return {"RUNNING_MODAL"}
 
     def execute(self, context):
         file_path = self.filepath
