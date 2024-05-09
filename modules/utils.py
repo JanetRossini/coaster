@@ -20,6 +20,22 @@ def project_data_path():
     working = os.path.join(home, 'PycharmProjects', 'coaster', 'coasterobjects')
     return working
 
+def coaster_base_path():
+    home = os.path.expanduser('~')
+    return os.path.join(home, 'coaster')
+
+
+def coaster_data_in_path():
+    return os.path.join(coaster_base_path(), 'data-in')
+
+
+def coaster_objects_in_path():
+    return os.path.join(coaster_base_path(), 'objects-in')
+
+
+def coaster_scripts_out_path():
+    return os.path.join(coaster_base_path(), 'scripts-out')
+
 
 def activate_object_by_name(partial_name):
     for obj in bpy.context.scene.objects:
