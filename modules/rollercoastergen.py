@@ -2,7 +2,7 @@ import os
 
 from mathutils import Vector
 
-from utils import make_pairs, make_elements, activate_object_by_name, project_data_path
+from utils import make_pairs, activate_object_by_name, coaster_objects_in_path
 from v_mathutils import VtVector
 from vtfilewriter import VtFileWriter
 
@@ -29,7 +29,7 @@ class RCG_OT_importFromFile(bpy.types.Operator):
         return context.mode == "OBJECT"
 
     def invoke(self, context, event):
-        self.directory = project_data_path()
+        self.directory = coaster_objects_in_path()
         context.window_manager.fileselect_add(self)
         return {"RUNNING_MODAL"}
 
