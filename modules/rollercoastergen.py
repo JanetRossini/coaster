@@ -2,8 +2,7 @@ import os
 
 from mathutils import Vector
 
-from utils import make_pairs, activate_object_by_name, coaster_objects_in_path
-from v_mathutils import VtVector
+from utils import make_pairs, activate_object_by_name, coaster_objects_in_path, coaster_scripts_out_path
 from vtfilewriter import VtFileWriter
 
 import bpy
@@ -403,12 +402,11 @@ class RCG_OT_Export(Operator):
 
         verts = obj_eval.data.vertices
         home = os.path.expanduser('~')
-        filepath = os.path.join(home, 'coasterdata')
+        filepath = coaster_scripts_out_path()
         basename = "test_data"
         size = 500
         writer = VtFileWriter(verts, filepath, basename, size)
         writer.write_files(basename, self.rcg_abs, self.rcg_bank)
-
         return {'FINISHED'}
 
 
