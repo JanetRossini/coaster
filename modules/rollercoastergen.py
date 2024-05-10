@@ -309,7 +309,7 @@ class RCG_OT_addSupport(Operator):
         root_collection = self.set_rcg_collection_active()  # set to our collection
         for pair in every_nth_pair:
             self.place_support(pair, column_diameter, offset_desired)
-        bpy.context.view_layer.active_layer_collection = root_collection  # reset collection
+        #bpy.context.view_layer.active_layer_collection = root_collection  # reset collection
 
     def get_support_positions(self, context, ruler):
         fins = ruler.evaluated_get(bpy.context.view_layer.depsgraph)
@@ -346,7 +346,8 @@ class RCG_OT_addSupport(Operator):
         return pos_vec
 
     def set_rcg_collection_active(self):
-        root_collection = bpy.context.view_layer.layer_collection.children[0]
+        #root_collection = bpy.context.view_layer.layer_collection.children[0]
+        root_collection = None
         support_collection = bpy.data.collections.new("RCG Supports")
         bpy.context.scene.collection.children.link(support_collection)
         bpy.context.view_layer.active_layer_collection \
