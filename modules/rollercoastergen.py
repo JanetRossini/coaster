@@ -50,16 +50,20 @@ class RCG_OT_importFromFile(bpy.types.Operator):
         return {"FINISHED"}
 
 
-class SelectFileEmpties(bpy.types.Operator):
-    """Select a text file"""
-    bl_idname = "custom.select_empties"
-    bl_label = "Select Empties File"
+class RCG_OT_inputEmpties(Operator):
+    """ Input a series of empties from a text file """
+    bl_idname = "rcg.inputempties"
+    bl_label = "Input Empties from file"
+    bl_options = {"REGISTER", "UNDO"}
 
-    filename_ext = ".txt"
-
+    filename_ext = '*.txt'
+    filter_glob: StringProperty(default="*.txt", options={'HIDDEN'})
     filepath: bpy.props.StringProperty(subtype="FILE_PATH")
     directory: bpy.props.StringProperty(subtype="DIR_PATH")
-    filter_glob: StringProperty(default="*.txt", options={'HIDDEN'})
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
 
     def invoke(self, context, event):
         self.directory = coaster_data_in_path()
@@ -89,22 +93,6 @@ class SelectFileEmpties(bpy.types.Operator):
                 # Rename the empty
                 empty = bpy.context.object
                 empty.name = f"Empty_{i}"
-
-        return {'FINISHED'}
-
-
-class RCG_OT_inputEmpties(Operator):
-    """ Input a series of empties from a text file """
-    bl_idname = "rcg.inputempties"
-    bl_label = "Input Empties from file"
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return context.mode == "OBJECT"
-
-    def execute(self, context):
-        bpy.ops.custom.select_empties('INVOKE_DEFAULT')
         return {'FINISHED'}
 
 
@@ -479,7 +467,6 @@ classes = [RCG_OT_addArrayModifier,
            RCG_OT_inputNurbsPath,
            RCG_PT_sidebar,
            RCGSettings,
-           SelectFileEmpties,
            SelectFileNurbs, ]
 
 
