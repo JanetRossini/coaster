@@ -112,28 +112,6 @@ def read_coordinates(file_path):
     return coordinates
 
 
-class SelectFileNurbs(bpy.types.Operator):
-    """Select a text file"""
-    bl_idname = "custom.select_nurbs"
-    bl_label = "Select Nurbs File"
-
-    filename_ext = ".txt"
-
-    filepath: bpy.props.StringProperty(subtype="FILE_PATH")
-    directory: bpy.props.StringProperty(subtype="DIR_PATH")
-    filter_glob: StringProperty(default="*.txt", options={'HIDDEN'})
-
-    def invoke(self, context, event):
-        self.directory = coaster_data_in_path()
-        context.window_manager.fileselect_add(self)
-        return {"RUNNING_MODAL"}
-
-    def execute(self, context):
-        file_path = self.filepath
-        coordinates = read_coordinates(file_path)
-        create_nurbs_path(coordinates)
-        return {'FINISHED'}
-
 
 # Make this a method? No need to return object?
 def create_nurbs_path(coordinates):
@@ -160,12 +138,25 @@ class RCG_OT_inputNurbsPath(Operator):
     bl_label = "Input Nurbs Path from file"
     bl_options = {"REGISTER", "UNDO"}
 
+    filename_ext = ".txt"
+
+    filepath: bpy.props.StringProperty(subtype="FILE_PATH")
+    directory: bpy.props.StringProperty(subtype="DIR_PATH")
+    filter_glob: StringProperty(default="*.txt", options={'HIDDEN'})
+
     @classmethod
     def poll(cls, context):
         return context.mode == "OBJECT"
 
+    def invoke(self, context, event):
+        self.directory = coaster_data_in_path()
+        context.window_manager.fileselect_add(self)
+        return {"RUNNING_MODAL"}
+
     def execute(self, context):
-        bpy.ops.custom.select_nurbs('INVOKE_DEFAULT')
+        file_path = self.filepath
+        coordinates = read_coordinates(file_path)
+        create_nurbs_path(coordinates)
         return {'FINISHED'}
 
 
@@ -467,7 +458,7 @@ classes = [RCG_OT_addArrayModifier,
            RCG_OT_inputNurbsPath,
            RCG_PT_sidebar,
            RCGSettings,
-           SelectFileNurbs, ]
+           ]
 
 
 def register():
