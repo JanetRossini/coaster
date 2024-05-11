@@ -2,7 +2,7 @@ import os
 
 from mathutils import Vector
 
-from utils import make_pairs, activate_object_by_name, coaster_objects_in_path, coaster_scripts_out_path, \
+from utils import make_pairs, activate_object_by_partial_name, coaster_objects_in_path, coaster_scripts_out_path, \
     coaster_data_in_path
 from vtfilewriter import VtFileWriter
 
@@ -293,7 +293,7 @@ class RCG_OT_addSupport(Operator):
         self.report({"INFO"}, msg)
 
     def execute(self, context):
-        ruler = activate_object_by_name('ruler')
+        ruler = activate_object_by_partial_name('ruler')
         if ruler is None or ruler.type != "MESH" or 'ruler' not in ruler.name:
             self.report({'ERROR'}, 'You seem to have no ruler.')
             return {'CANCELLED'}
@@ -385,7 +385,7 @@ class RCG_OT_Export(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        ruler = activate_object_by_name('ruler')
+        ruler = activate_object_by_partial_name('ruler')
         if ruler is None or ruler.type != "MESH" or 'ruler' not in ruler.name:
             self.report({'ERROR'}, 'You seem to have no ruler.')
             return {'CANCELLED'}

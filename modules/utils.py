@@ -24,7 +24,7 @@ def coaster_scripts_out_path():
     return os.path.join(coaster_base_path(), 'scripts-out')
 
 
-def activate_object_by_name(partial_name):
+def activate_object_by_partial_name(partial_name):
     for obj in bpy.context.scene.objects:
         if partial_name in obj.name:
             obj.select_set(True)
